@@ -1,0 +1,6 @@
+{
+    "require": {
+        "scssphp/scssphp": "^1.4.1",
+        "phpgt/dom": "^2.2"
+    }
+}

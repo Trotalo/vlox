@@ -1,0 +1,85 @@
+<template>
+  <b-modal
+      v-bind:id="'edit-content' + blockcontent.id"
+      v-bind:key="blockcontent.id"
+      v-bind:ref="'edit-content' + blockcontent.id"
+      @ok="save"
+      title="Edit block" size="xl" scrollable>
+    <div class="row smallForm mb-2">
+      <div class="col-12">
+        <div class="row p-2 mb-2">
+          <div class="col-12">
+            <div class="py-1">
+              <div class="form-group" v-for="(item, index) in blockcontent.properties.items" :key="index">
+                <div v-if="item.type === 'text'">
+                  <label>{{item.name}}</label>
+                  <!--<input type="text" class="form-control" v-model="item.content">-->
+                  <b-form-input v-model="item.content" placeholder="item.name" class="mb-3"></b-form-input>
+                </div>
+                <div v-else-if="item.type === 'textArea'">
+                  <h3>{{item.name}}</h3>
+                  <textarea class="form-control" rows="6" v-model="item.content"></textarea>
+                </div>
+                <div class="row" v-else-if="item.type === 'image'">
+                  <div class="col-6">
+                    <h3>{{item.name}}</h3>
+                    <input class="form-control" type="text" v-model="item.content"/>
+                  </div>
+                  <div class="col-6 w-100 h-100">
+                    <img class="img-thumbnail w-100 h-100" :src="'../../../' + item.content">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </b-modal>
+</template>
+
+<script>
+module.exports = {
+  name: "content-editor",
+  props: {
+    blockcontent: Object,
+    id: Number
+  },
+  methods: {
+    save() {
+      let finalObject = JSON.parse(JSON.stringify(this.blockcontent));
+      finalObject['items'] = this.blockcontent['properties']['items'];
+      delete finalObject['properties'];
+      let axiosConfig = {
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Apache-HttpClient/4.1.1',
+          "Access-Control-Allow-Origin": "*",
+        }
+      };
+      const modalRef = this.$bvModal;
+      // TODO reenable to use rigth api endpoint instead of this
+      //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
+      axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/index.php?_rest=Resources/'
+          + this.blockcontent.resourceId,
+          finalObject,
+          axiosConfig)
+          .then(response => {
+            modalRef.hide('add-content');
+            document.getElementById('demoIframe').src = document.getElementById('demoIframe').src;
+          })
+          .catch(error => {
+            console.log(error);
+            this.showErrorAjax();
+          });
+    },
+  }
+}
+</script>
+
+<style scoped>
+.smallForm {
+  max-width: 500px;
+  margin: 0 auto;
+}
+</style>
