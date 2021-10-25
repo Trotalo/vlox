@@ -1,0 +1,62 @@
+{
+  "name": "Kraken",
+  "lowCaseName": "kraken",
+  "description": "Simple integration to easily use VueJs inside modx",
+  "author": "@camicase82",
+  "version": "0.0.1",
+  "package": {
+    "elements": {
+      "plugins": [
+        {
+          "name": "krakenBlocksTab",
+          "file": "krakenBlocksTab.php",
+          "events": [
+            "OnDocFormPrerender"
+          ]
+        }
+      ],
+      "snippets": [
+        {
+          "name": "generateVueComponentsFiles",
+          "file": "generateVueComponentsFiles.php"
+        },
+        {
+          "name": "krakenBlockRenderer",
+          "file": "krakenBlockRenderer.php"
+        },
+        {
+          "name": "krakenBlocks",
+          "file": "krakenBlocks.php"
+        },
+        {
+          "name": "vueImportRenderer",
+          "file": "vueImportRenderer.php"
+        }
+      ],
+      "chunks": [
+        {
+          "name": "head",
+          "file": "head.html"
+        }
+      ],
+      "templates": [
+        {
+          "name": "krakenTemplate",
+          "file": "krakenTemplate.html"
+        }
+      ]
+    },
+    "systemSettings": [
+      {
+        "key": "api_url",
+        "value": "https://sepiariver.com/assets/gpm-doodles/doodles.json"
+      }
+    ]
+  },
+  "database": {
+    "tables": [
+      "krakenBlocksResourceContent",
+      "krakenBlock"
+    ]
+  }
+}
