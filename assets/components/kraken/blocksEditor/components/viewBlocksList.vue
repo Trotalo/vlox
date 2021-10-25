@@ -43,7 +43,7 @@ module.exports = {
   methods: {
     selectBlock(blockData) {
       const modalRef = this.$bvModal;
-      axios.get(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/blocks/' + blockData.id)
+      axios.get(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/blocks/' + blockData.id)
           .then(response => {
             this.blockObject = response.data.object;
             this.$emit('block-selected', this.blockObject);
@@ -54,7 +54,8 @@ module.exports = {
           });
     },
     loadBLockList() {
-      axios.get(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/blocks?limit=100')
+      axios.get(window.location.protocol + "//" + window.location.host +
+          Vue.prototype.$restRoute + '/rest/blocks?limit=100')
           .then(response => {
             this.blockList = response.data;
           })
@@ -66,7 +67,8 @@ module.exports = {
       this.$dialog
           .confirm('Are your sure you want to delete ' + block.chunkName)
           .then(dialog => {
-            axios.delete(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/blocks/' + block.id)
+            axios.delete(window.location.protocol + "//" + window.location.host +
+                          Vue.prototype.$restRoute + '/rest/blocks/' + block.id)
                 .then(response => {
                   if (response.data.success) {
                     this.$dialog.alert('Block deleted successfully');

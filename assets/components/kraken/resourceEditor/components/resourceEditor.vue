@@ -70,7 +70,7 @@ module.exports = {
     },
     loadData() {
       //TODO aca se debe pasar el id para hacer la consulta
-      axios.get(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/' + this.resourceId)
+      axios.get(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/Resources/' + this.resourceId)
           .then(response => {
             if (response) {
               this.resultsList = response.data.results;
@@ -108,7 +108,7 @@ module.exports = {
         }
       };
       //TODO revisar este put aca esta mandando todo lo que cargo
-      axios.put(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/index.php?_rest=Resources',
+      axios.put(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/index.php?_rest=Resources',
           this.resultsList,
           axiosConfig)
           .then(response => {

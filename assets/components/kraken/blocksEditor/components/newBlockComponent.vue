@@ -45,7 +45,7 @@
 
 <script>
 let blockList = [];
-axios.get(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/blocks')
+axios.get(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/blocks')
     .then(response => {
       blockList = response.data;
     })
@@ -88,7 +88,7 @@ module.exports = {
       };
       const modalRef = this.$bvModal;
       // TODO reenable to use rigth api endpoint instead of this
-      axios.put(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/index.php?_rest=Blocks/',
+      axios.put(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/index.php?_rest=Blocks/',
           data,
           axiosConfig)
           .then(response => {

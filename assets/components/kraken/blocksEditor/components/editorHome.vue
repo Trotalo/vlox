@@ -364,7 +364,8 @@ module.exports = {
       const modalRef = this.$bvModal;
       // TODO reenable to use rigth api endpoint instead of this
       //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
-      axios.put(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/index.php?_rest=Blocks/'
+      axios.put(window.location.protocol + "//" + window.location.host +
+                  Vue.prototype.$restRoute + '/rest/index.php?_rest=Blocks/'
           + this.blockData.id,
           this.blockData,
           axiosConfig)
