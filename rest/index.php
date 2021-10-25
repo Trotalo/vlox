@@ -12,7 +12,7 @@ if ($modx->getRequest()) {
 }
 
 //TODO this MUST go away from here to its own controller
-if(!$modx->addPackage('krakenBlocks', MODX_CORE_PATH . 'components/krakenBlocks/model/')) {
+if(!$modx->addPackage('kraken', MODX_CORE_PATH . 'components/krakenBlocks/model/')) {
   $this->modx->log(xPDO::LOG_LEVEL_ERROR, "krakenBlocks package not found");
   throw new Exception("krakenBlocks package not found");
 }

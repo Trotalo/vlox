@@ -5,6 +5,23 @@
   "author": "@camicase82",
   "version": "0.0.1",
   "package": {
+    "actions": [{
+      "id": 1,
+      "controller": "init",
+      "hasLayout": 1,
+      "langTopics": "package:default",
+      "assets": ""
+    }],
+    "menus": [{
+      "text": "Kraken blocks",
+      "description": "El packete de juanito",
+      "action": "init",
+      "parent": "components",
+      "icon": "",
+      "menuIndex": 0,
+      "params": "",
+      "handler": ""
+    }],
     "elements": {
       "plugins": [
         {
@@ -45,13 +62,7 @@
           "file": "krakenTemplate.html"
         }
       ]
-    },
-    "systemSettings": [
-      {
-        "key": "api_url",
-        "value": "https://sepiariver.com/assets/gpm-doodles/doodles.json"
-      }
-    ]
+    }
   },
   "database": {
     "tables": [

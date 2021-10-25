@@ -1,7 +1,7 @@
 <?php
 
 
-class ModxMonsterInitManagerController  extends modExtraManagerController {
+class KrakenInitManagerController  extends modExtraManagerController {
 
   public function initialize() {
     return parent::initialize();
