@@ -1,8 +1,5 @@
 <?php
 
-require_once MODX_BASE_PATH . "modxMonster/vendor/autoload.php";
-
-use ScssPhp\ScssPhp\Compiler;
 
 class KrakenBlocks extends  modRestController {
   /** @var string $classKey The xPDO class to use */
@@ -11,9 +8,6 @@ class KrakenBlocks extends  modRestController {
   public $defaultSortField = 'id';
   /** @var string $defaultSortDirection The default direction to sort in the getList method */
   public $defaultSortDirection = 'ASC';
-
-  /** @var ScssPhp\ScssPhp\Compiler $scss*/
-  private $scss;
 
   private $defaultContent = <<<STR
       <template>
@@ -36,7 +30,6 @@ class KrakenBlocks extends  modRestController {
 
   public function __construct(modX $modx,modRestServiceRequest $request,array $config = array()){
     parent::__construct($modx, $request, $config);
-    $this->scss = new Compiler();
   }
 
 

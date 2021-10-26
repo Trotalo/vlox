@@ -1,6 +1,6 @@
 <?php
 require_once MODX_BASE_PATH . 'config.core.php';
-require_once MODX_BASE_PATH . "kraken/vendor/autoload.php";
+require_once __DIR__ . "vendor/autoload.php";
 require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
 
 
@@ -21,8 +21,8 @@ class KrakenBlocksController {
     $this->modx = new modX;
     $this->scss = new Compiler();
     $this->modx->initialize('web');
-    if (!$this->modx->addPackage('krakenBlocks', MODX_CORE_PATH . 'components/krakenBlocks/model/')) {
-      $this->modx->log(xPDO::LOG_LEVEL_ERROR, "krakenBlock package not found");
+    if (!$this->modx->addPackage('kraken', MODX_CORE_PATH . 'components/kraken/model/')) {
+      $this->modx->log(xPDO::LOG_LEVEL_ERROR, "kraken package not found");
       throw new Exception("krakenBlock package not found");
     }
   }
@@ -31,7 +31,7 @@ class KrakenBlocksController {
   public static function loadService($modx): void {
     $admUserMgr = $modx->getService('KrakenBlocksController',
       'KrakenBlocksController',
-      '/modxMonster/kraken/controllers');
+      MODX_CORE_PATH . 'components/krakenBlocks/kraken/controllers');
     if (!($admUserMgr instanceof KrakenBlocksController)) {
       $modx->log(modX::LOG_LEVEL_ERROR, 'Could not load KrakenBlockResourceContentTable class');
     }

@@ -1,6 +1,5 @@
 <?php
 
-require_once MODX_BASE_PATH . "modxMonster/vendor/autoload.php";
 
 class KrakenFiles extends  modRestController {
   /** @var string $classKey The xPDO class to use */

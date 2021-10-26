@@ -60,6 +60,7 @@ module.exports = {
             this.blockList = response.data;
           })
           .catch(error => {
+            console.error(error);
             this.showAjaxError();
           });
     },
