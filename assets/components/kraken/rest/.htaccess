@@ -1,6 +1,6 @@
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-s
-RewriteRule ^(.*)$ https://%{HTTP_HOST}/assets/components/kraken/rest/index.php?_rest=$1 [QSA,NC,L]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/kraken/assets/components/kraken/rest/index.php?_rest=$1 [QSA,NC,L]
 RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^(.*)$ https://%{HTTP_HOST}/assets/components/kraken/rest/index.php [QSA,NC,L]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/kraken/assets/components/kraken/rest/index.php [QSA,NC,L]
