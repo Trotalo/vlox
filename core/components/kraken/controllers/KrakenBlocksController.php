@@ -1,6 +1,6 @@
 <?php
 require_once MODX_BASE_PATH . 'config.core.php';
-require_once __DIR__ . "vendor/autoload.php";
+require_once "/vendor/autoload.php";
 require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
 
 
