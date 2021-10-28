@@ -87,6 +87,25 @@ module.exports = {
         }
       };
       const modalRef = this.$bvModal;
+      //first validate that the block does not exists
+      debugger;
+      /*axios.get(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/index.php?_rest=Blocks/',
+          data,
+          axiosConfig)
+          .then(response => {
+            this.$emit('block-selected', response.data.object);
+            //this.$root.$emit('reload-bocks-list', data);
+            this.$store.commit('change', true);
+            this.blockData.chunkName = '';
+            this.blockData.description = '';
+            modalRef.hide('new-block');
+
+            //document.getElementById('demoIframe').src = document.getElementById('demoIframe').src;
+          })
+          .catch(error => {
+            console.log(error);
+            this.showErrorAjax();
+          });*/
       // TODO reenable to use rigth api endpoint instead of this
       axios.put(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/index.php?_rest=Blocks/',
           data,

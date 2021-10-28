@@ -52,19 +52,24 @@ class KrakenBlocks extends  modRestController {
       $htmlSection = $document->querySelector("template")->innerHTML;
       $scriptSection = $document->querySelector("script")->textContent;
       $styleSection = $document->querySelector("style")->textContent;*/
-      $templateEnd = strrpos($blockContent, '</template>');
-      $scriptEnd = strpos($blockContent, '</script>', $templateEnd);
-      $styleEnd = strpos($blockContent, '</style>');
-      $scriptStart = strpos($blockContent, '<script>');
-      $styleStart = strpos($blockContent, '<style');
-      $htmlSection = substr($blockContent, strpos($blockContent, '<template>') + 10, $templateEnd - 10);
-      $scriptSection = substr($blockContent,  $scriptStart + 8, ( $scriptEnd - $scriptStart ) - 8) ;
-      $styleSection = substr($blockContent, $styleStart + 13, ($styleEnd - $styleStart) - 13) ;
+      /*$doc = new DOMDocument($blockContent);
+      $something = $doc->getElementsByTagName('template');
 
+      $templateStart = strpos($blockContent, '<template>') + strlen('<template>');
+      $templateEnd = strrpos($blockContent, '</template>') - strlen('</template>');
+      $scriptStart = strpos($blockContent, '<script>') + strlen('<script>');
+      $scriptEnd = strpos($blockContent, '</script>', $templateEnd) - strlen('</script>') - 1;
+      $styleStart = strpos($blockContent, '<style') + strlen('<style');
+      $styleEnd = strpos($blockContent, '</style>') - strlen('</style>') - 1;
+
+      $htmlSection = substr($blockContent, $templateStart, $templateEnd);
+      $scriptSection = substr($blockContent,  $scriptStart, ( $scriptEnd - $scriptStart )) ;
+      $styleSection = substr($blockContent, $styleStart, ($styleEnd - $styleStart)) ;
+      */
       $returnObject = array(
-        'htmlSection' => $htmlSection,
-        'scriptSection' => $scriptSection,
-        'styleSection' => $styleSection
+        'htmlSection' => $blockContent,
+        //'scriptSection' => $scriptSection,
+        //'styleSection' => $styleSection
       );
       $returnObject =  array_merge( $returnObject, (array) $this->object->_fields);
       //Before creating a new registry, we make sure the respurce its clean
@@ -122,14 +127,14 @@ class KrakenBlocks extends  modRestController {
       $document->querySelector("script")->textContent = $resContent['scriptSection'];
       $document->querySelector("style")->textContent = $resContent['styleSection'];
       $finalBlock = $document->body->innerHTML;*/
-      $finalBlock = "<template>\n";
+      /*$finalBlock = "<template>\n";
       $finalBlock .= $resContent['htmlSection'];
       $finalBlock .= "</template>\n<script>";
       $finalBlock .= $resContent['scriptSection'];
       $finalBlock .= "</script><style scope>";
       $finalBlock .= $resContent['styleSection'];
-      $finalBlock .= "</style>";
-      $chunk->set('snippet', $finalBlock);
+      $finalBlock .= "</style>";*/
+      $chunk->set('snippet', $resContent['htmlSection']);
       $chunk->save();
 
     } else {

@@ -67,7 +67,7 @@
     <b-container v-if="showControls">
       <b-row class="mt-4">
         <b-tabs content-class="mt-2 position-relative" class="col-12">
-          <b-tab title="Input Fields">
+          <!--b-tab title="Input Fields">
             <b-row>
               <b-col cols="12" class="text-right">
                 <b-button
@@ -120,7 +120,7 @@
                 </b-table>
               </b-col>
             </b-row>
-          </b-tab>
+          </b-tab-->
           <b-tab title="Code Editor" active>
             <b-row class="codeEditorBlocks mb-3">
               <b-col id="htmlEditor" cols="12" md="12">
@@ -128,14 +128,14 @@
                 <b-button variant="outline-primary" v-on:click="save()" class="updatePrev">Update Preview</b-button>
                 <vue-ace-editor v-model="blockData.htmlSection" v-bind:options="htmlEdtOptions" id="editor1"/>
               </b-col>
-              <b-col id="styleEditor" cols="12" md="6">
+<!--              <b-col id="styleEditor" cols="12" md="6">
                 <h3>SCSS</h3>
                 <vue-ace-editor v-model="blockData.styleSection" v-bind:options="styleEdtOptions" id="editor2"/>
               </b-col>
               <b-col id="jsEditor" cols="12" md="6" class="mb-3">
                 <h3>Vue <small>V2.6.2</small></h3>
                 <vue-ace-editor v-model="blockData.scriptSection" v-bind:options="codeEdtOptions" id="editor3"/>
-              </b-col>
+              </b-col>-->
             </b-row>
           </b-tab>
         </b-tabs>
@@ -275,7 +275,7 @@ module.exports = {
         highlightGutterLine: false,
         newLineMode: "auto",
         foldStyle: "manual",
-        maxLines: 20,
+        maxLines: 500,
         minLines: 20,
       },
       styleEdtOptions: {
