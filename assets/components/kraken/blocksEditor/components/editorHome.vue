@@ -259,7 +259,7 @@ module.exports = {
       showInput: false,
       showControls: false,
       inputFieldData: {},
-      localAddress: window.location.protocol + "//" + window.location.host + '/singlecomponetrenderer.html',
+      localAddress: window.location.protocol + "//" + window.location.host + '/krakenrenderer.html',
       renderDesktop: true,
       //Ace editor section
       editorcontent: '',

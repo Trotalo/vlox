@@ -21,9 +21,9 @@
 </template>
 
 <script>
-export default {
-  name: "addContentModal",
-  props: ['resInputId'],
+module.exports = {
+  name: "add-content-modal",
+  props: ['resinputid'],
   data() {
     return {
       blockList : [],
@@ -39,7 +39,7 @@ export default {
       finalObject.title = blockData.title;
       finalObject.blockId = blockData.id;
       finalObject.properties = blockData.properties;
-      finalObject.resourceId = this.resInputId;
+      finalObject.resourceId = this.resinputid;
       let axiosConfig = {
         headers: {
           'Content-Type': 'application/json',

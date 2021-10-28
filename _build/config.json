@@ -12,11 +12,22 @@
       "langTopics": "package:default",
       "assets": ""
     }],
-    "menus": [{
+    "menus": [
+      {
+        "text": "Monster",
+        "description": "ModX with super powers",
+        "action": "",
+        "parent": "topnav",
+        "icon": "",
+        "menuIndex": 4,
+        "params": "",
+        "handler": ""
+      },
+      {
       "text": "Kraken blocks",
-      "description": "El packete de juanito",
+      "description": "Your Vue components",
       "action": "init",
-      "parent": "components",
+      "parent": "Monster",
       "icon": "",
       "menuIndex": 0,
       "params": "",

@@ -68,14 +68,31 @@ class KrakenBlocks extends  modRestController {
       );
       $returnObject =  array_merge( $returnObject, (array) $this->object->_fields);
       //Before creating a new registry, we make sure the respurce its clean
-      $this->modx->removeCollection('krakenBlocksResourceContent', array('resourceId'=> 3));
+      //first we make sure that the kraken renderer exists
+      $renderer = $this->modx->getObject('modResource', array('pagetitle' => 'krakenrenderer'));
+      if (empty($renderer)) {
+        //If the resources isn't crated
+        //Load the kraken template
+        $template = $this->modx->getObject('modTemplate', array('templatename' => 'krakenTemplate'));
+
+        $renderer = $this->modx->newObject('modResource',
+          array('pagetitle'=> 'krakenrenderer',
+            'longtitle'=> 'krakenrenderer',
+            'description'=>'krakenrenderer',
+            'alias'=> 'krakenrenderer',
+            'template'=> $template->id,
+            'published'=> 1));
+        $renderer->save();
+      }
+
+      $this->modx->removeCollection('krakenBlocksResourceContent', array('resourceId'=> $renderer->id));
       /** @var krakenBlocksResourceContent $blockPreviewObj */
       $blockPreviewObj = $this->modx->newObject('krakenBlocksResourceContent',
         array('position'=> 1,
-          'title'=> 'algo',
-          'description'=>'add algo',
+          'title'=> 'compoRenderer',
+          'description'=>'compoRenderer',
           'blockId'=> $this->object->_fields['id'],
-          'resourceId'=> 3,
+          'resourceId'=> $renderer->id,
           'properties'=> $this->object->_fields['properties']));
       $blockPreviewObj->save();
       $this->modx->cacheManager->refresh();
@@ -116,11 +133,19 @@ class KrakenBlocks extends  modRestController {
       $chunk->save();
 
     } else {
+      //First we get the cat id for kraken
+      $category = $this->modx->getObject('modCategory', array('category'=> 'Kraken'));
+      if (empty($category)) {
+        throw new Exception("category Kraken not found, please reinstall the plugin");
+      }
       /** @var modChunk $chunk */
-      $chunk = $this->modx->newObject('modChunk');
-      $chunk->set('name',$chunkName);
-      //$chunk->setContent('<p>Create some content!</p>');
+      $chunk = $this->modx->newObject('modChunk',
+                              array('name'=>$chunkName,
+                                    'category'=>$category->id,
+                                    'content'=>$this->defaultContent));
+      /*$chunk->set('name',$chunkName);
       $chunk->setContent($this->defaultContent);
+      $chunk->setCategory($category->id);*/
       $storedChunk =  $chunk->save();
       //and now we store the data into the kraken table
       /** @var krakenBlock $krakenBlock */

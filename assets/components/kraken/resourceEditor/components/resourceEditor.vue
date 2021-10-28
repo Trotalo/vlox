@@ -19,6 +19,9 @@
               class="btn btn-success addkrakenBlock"
               type="button">Add Block
           </b-button>
+          <add-content-modal v-bind:resinputid="resourceId"
+                                    @updated="updated()">
+          </add-content-modal>
 <!--          <b-modal id="add-content" title="Add Block" size="xl" scrollable :hide-footer="true">
             <kraken-block-add-content v-bind:resInputId="resourceId"
                                       @updated="updated()">
@@ -51,6 +54,7 @@ module.exports = {
   name: "resource-editor",
   components: {
     'resource-content': httpVueLoader('./resourceContent.vue'),
+    'add-content-modal': httpVueLoader('./addContentModal.vue'),
   },
   data() {
     return {
@@ -137,7 +141,7 @@ module.exports = {
     }
   },
   beforeMount() {
-    const resId = document.referrer.substring(document.referrer.lastIndexOf('=') + 1)
+    const resId = (new URL(document.referrer.toString())).searchParams.get("id");
     this.frontPreview = window.location.protocol + "//" + window.location.host + "/index.php?id=" + resId;
     this.resourceId = resId;
     this.loadData();
