@@ -24,7 +24,7 @@ class KrakenBlocksController {
     $this->modx = new modX;
     $this->scss = new Compiler();
     $this->modx->initialize('web');
-    $isDev= $this->modx->getOption('monster_dev');
+    $isDev= $this->modx->getOption('kraken.monster_dev');
     $packagePath = $isDev ?
                           MODX_BASE_PATH . 'kraken/core/components/kraken/model/' :
                           MODX_CORE_PATH . 'components/kraken/model/';

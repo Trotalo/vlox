@@ -68,12 +68,11 @@
 <div id="app">
   <transition name="fade">
     <div class="loading" v-if="showLoading"><i class="fas fa-spinner fa-spin"></i></div>
-    <div v-bind:style="{ display: 'block'}" class="errorHandler" v-if="showError">
+    <!--<div v-bind:style="{ display: 'block'}" class="errorHandler" v-if="showError">
       <div class="errorMessage">
         <div class="closeError" @click="closeAndGoHome"><i class="fas fa-window-close"></i></div>
-        {{errorMsg}}
       </div>
-    </div>
+    </div>-->
   </transition>
   [[!krakenBlocks]]
 </div>
@@ -90,7 +89,6 @@
       return {
         showLoading: false,
         showError: false,
-        errorMsg: 'Fuuucking hell, this shit is going to explote!!!'
       }
     },
     methods: {

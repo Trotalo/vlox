@@ -6,10 +6,10 @@ switch ($modx->event->name) {
     if ($mode === "upd") {
       $template = $modx->getObject('modTemplate', array('templatename' => 'krakenTemplate'));
       if ($template->id === $resource->template) {
-        $url = $modx->getOption('monster_dev') ?
+        $url = $modx->getOption('kraken.monster_dev') ?
                         '/kraken/assets/components/kraken/krakenTab.html' :
                         '/assets/components/kraken/krakenTab.html';
-        $modx->regClientStartupHTMLBlock('
+        $modx->regClientStartupHTMLBlock(' 
           <script type="text/javascript">
               MODx.on("ready",function() {
                   MODx.addTab("modx-resource-tabs",{
@@ -17,7 +17,7 @@ switch ($modx->event->name) {
                       id: "custom-resource-tab",
                       width: "95%",
                       autoLoad: {
-                        url: $url,
+                        url: "' . $url . '",
                         scripts : true
                       }
                   });
