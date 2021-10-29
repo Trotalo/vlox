@@ -73,7 +73,13 @@
           "file": "krakenTemplate.html"
         }
       ]
-    }
+    },
+    "systemSettings": [{
+      "key": "monster_dev",
+      "type": "boolean",
+      "area": "kraken",
+      "value": "true"
+    }]
   },
   "database": {
     "tables": [

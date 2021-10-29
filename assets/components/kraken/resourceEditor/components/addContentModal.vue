@@ -71,7 +71,8 @@ module.exports = {
           this.blockList = response.data;
         })
         .catch(error => {
-          this.showAjaxError();
+          console.error(error);
+          this.$dialog.alert('Error contacting webservice, check server logs!');
         });
   }
 }

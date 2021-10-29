@@ -12,6 +12,9 @@ class KrakenInitManagerController  extends modExtraManagerController {
     return 'ModxMonster Blocks editor';
   }
   public function getTemplateFile() {
-    return '/var/www/html/kraken/assets/components/kraken/blocksEditor/blocksEditor.html';
+    //return '/var/www/html/kraken/assets/components/kraken/blocksEditor/blocksEditor.html';
+    return $this->modx->getOption('kraken.monster_dev') ?
+                      '/var/www/html/kraken/assets/components/kraken/blocksEditor/blocksEditor.html' :
+                      '/var/www/html/assets/components/kraken/blocksEditor/blocksEditor.html';
   }
 }
