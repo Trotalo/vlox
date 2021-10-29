@@ -7,17 +7,10 @@
       <button class="btn editIcon" type="button" v-on:click="showEdit()">
         <i class="fas fa-edit"></i>
       </button>
-      <b-modal
-          v-bind:id="'edit-content' + krakencontent.id"
-          v-bind:key="krakencontent.id"
-          v-bind:ref="'edit-content' + krakencontent.id"
-          @ok="save"
-          title="Edit block" size="xl" scrollable>
-        <content-editor
-            :blockContent = "krakencontent"
-            :id = "krakencontent.id">
-        </content-editor>
-      </b-modal>
+      <content-editor
+          :blockContent = "krakencontent"
+          :id = "krakencontent.id">
+      </content-editor>
       <button class="btn showHideIcon" type="button">
         <i class="far fa-eye"></i>
       </button>

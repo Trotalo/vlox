@@ -88,7 +88,6 @@ module.exports = {
       };
       const modalRef = this.$bvModal;
       //first validate that the block does not exists
-      debugger;
       /*axios.get(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/index.php?_rest=Blocks/',
           data,
           axiosConfig)

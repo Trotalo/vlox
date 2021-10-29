@@ -189,7 +189,7 @@ button, button i:after, button span {
   padding: 0;
 }
 .krakenOptionView .col-8, .krakenOptionView .col-4 {
-  height: inherit;
+  height: 90vh;
 }
 .previewButtons {
   text-align: center;
