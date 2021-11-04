@@ -88,6 +88,13 @@ class KrakenBlocks extends  modRestController {
             'template'=> $template->id,
             'published'=> 1));
         $renderer->save();
+        //Finally, we set the friendly url on, so we can load the right elements
+        $setting = $this->modx->getObject('modSystemSetting', 'friendly_urls');
+        $setting->set('value', 1);
+        $setting->save();
+        $cacheRefreshOptions =  array( 'system_settings' => array() );
+        $this->modx->cacheManager-> refresh($cacheRefreshOptions);
+
       }
 
       $this->modx->removeCollection('krakenBlocksResourceContent', array('resourceId'=> $renderer->id));
@@ -133,7 +140,7 @@ class KrakenBlocks extends  modRestController {
       $chunk = $this->modx->newObject('modChunk',
                               array('name'=>$chunkName,
                                     'category'=>$category->id,
-                                    'snippet'=>$resContent['htmlSection'],
+                                    'snippet'=>$this->defaultContent,
                                     'content'=>$this->defaultContent));
       $chunk->save();
       //and now we store the data into the kraken table

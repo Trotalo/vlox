@@ -90,7 +90,7 @@ class KrakenResources extends modRestController {
   public function get() {
     $pk = $this->getProperty($this->primaryKeyField);
 
-    $this->modx->log(modX::LOG_LEVEL_ERROR, "LoadingRespoure2 $pk");
+    $this->modx->log(modX::LOG_LEVEL_INFO, "LoadingRespoure $pk");
     if (empty($pk)) {
       return $this->getList();
     }

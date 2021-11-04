@@ -146,7 +146,7 @@ class KrakenBlocksController {
       // Parse uncached tags and remove anything that could not be processed
       $parser->processElementTags('', $blockContent, true, true, '[[', ']]', [], $maxIterations);
 
-      echo $blockContent;
+      //echo $blockContent;
 
       //$document->querySelector("style")->textContent = $compiledStyle;
       $finalBlock = $blockContent;
