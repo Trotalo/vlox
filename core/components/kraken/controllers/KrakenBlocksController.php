@@ -24,17 +24,13 @@ class KrakenBlocksController {
     $this->modx = new modX;
     $this->scss = new Compiler();
     $this->modx->initialize('web');
-    $isDev= $this->modx->getOption('kraken.monster_dev');
-    $packagePath = $isDev ?
-                          MODX_BASE_PATH . 'kraken/core/components/kraken/model/' :
-                          MODX_CORE_PATH . 'components/kraken/model/';
+    $packagePath = $this->modx->getOption('kraken.core_path') . 'model/';
     if (!$this->modx->addPackage('kraken', $packagePath)) {
       $this->modx->log(xPDO::LOG_LEVEL_ERROR, "kraken package not found");
       throw new Exception("krakenBlock package not found");
     }
-    $this->COMPONENTS_ROUTE = $isDev ?
-                                'kraken/assets/components/kraken/renderedBlocks/' :
-                                'assets/components/kraken/renderedBlocks/';
+    $assetsLocation = $this->modx->getOption('kraken.assets_path');
+    $this->COMPONENTS_ROUTE = $$assetsLocation . 'renderedBlocks/';
   }
 
   /** @param modX $modx */

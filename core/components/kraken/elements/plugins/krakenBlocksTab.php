@@ -6,9 +6,8 @@ switch ($modx->event->name) {
     if ($mode === "upd") {
       $template = $modx->getObject('modTemplate', array('templatename' => 'krakenTemplate'));
       if ($template->id === $resource->template) {
-        $url = $modx->getOption('kraken.monster_dev') ?
-                        '/kraken/assets/components/kraken/krakenTab.html' :
-                        '/assets/components/kraken/krakenTab.html';
+        $assetsLocation = $modx->getOption('kraken.assets_url');
+        $url = $assetsLocation. 'krakenTab.html' ;
         $modx->regClientStartupHTMLBlock(' 
           <script type="text/javascript">
               MODx.on("ready",function() {

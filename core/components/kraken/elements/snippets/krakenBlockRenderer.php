@@ -1,11 +1,12 @@
 <?php
-//require_once(dirname($modx->getOption('base_path')) . '/html/kraken/core/components/kraken/controllers/KrakenBlocksController.php');
-//require_once($modx->getOption('core_path') . '/components/kraken/controllers/KrakenBlocksController.php');
-if ($modx->getOption('kraken.monster_dev')) {
+$coreLocation = $modx->getOption('kraken.core_path') . 'controllers/KrakenBlocksController.php';
+
+require_once($coreLocation);
+/*if (Utils::getInstance()->isDevMode()) {
   require_once(dirname($modx->getOption('base_path')) . '/html/kraken/core/components/kraken/controllers/KrakenBlocksController.php');
 } else {
   require_once($modx->getOption('core_path') . '/components/kraken/controllers/KrakenBlocksController.php');
-}
+}*/
 
 KrakenBlocksController::loadService($modx);
 

@@ -13,14 +13,12 @@ if ($modx->getRequest()) {
   $modx->request->sanitizeRequest();
 }
 
-$modelLocation = $modx->getOption('kraken.monster_dev') ?
-                      MODX_BASE_PATH . 'kraken/core/components/kraken/model/' :
-                      MODX_CORE_PATH . 'components/kraken/model/';
+$coreLocation = $modx->getOption('kraken.core_path') . 'model/';
 
 //TODO this MUST go away from here to its own controller
-if(!$modx->addPackage('kraken', $modelLocation)) {
-  $modx->log(xPDO::LOG_LEVEL_ERROR, "krakenBlocks package not found at " . $modelLocation);
-  throw new Exception("krakenBlocks package not found at $modelLocation");
+if(!$modx->addPackage('kraken', $coreLocation)) {
+  $modx->log(xPDO::LOG_LEVEL_ERROR, "krakenBlocks package not found at " . $coreLocation);
+  throw new Exception("krakenBlocks package not found at $coreLocation");
 }
 
 $rest = $modx->getService('rest', 'rest.modRestService', '', array(

@@ -48,24 +48,6 @@ class KrakenBlocks extends  modRestController {
       $chunk = $this->modx->getObject('modChunk', array('name'=>$chunkName));
       $blockContent = $chunk->get('snippet');
 
-      /*$document = new \Gt\Dom\HTMLDocument($blockContent);
-      $htmlSection = $document->querySelector("template")->innerHTML;
-      $scriptSection = $document->querySelector("script")->textContent;
-      $styleSection = $document->querySelector("style")->textContent;*/
-      /*$doc = new DOMDocument($blockContent);
-      $something = $doc->getElementsByTagName('template');
-
-      $templateStart = strpos($blockContent, '<template>') + strlen('<template>');
-      $templateEnd = strrpos($blockContent, '</template>') - strlen('</template>');
-      $scriptStart = strpos($blockContent, '<script>') + strlen('<script>');
-      $scriptEnd = strpos($blockContent, '</script>', $templateEnd) - strlen('</script>') - 1;
-      $styleStart = strpos($blockContent, '<style') + strlen('<style');
-      $styleEnd = strpos($blockContent, '</style>') - strlen('</style>') - 1;
-
-      $htmlSection = substr($blockContent, $templateStart, $templateEnd);
-      $scriptSection = substr($blockContent,  $scriptStart, ( $scriptEnd - $scriptStart )) ;
-      $styleSection = substr($blockContent, $styleStart, ($styleEnd - $styleStart)) ;
-      */
       $returnObject = array(
         'htmlSection' => $blockContent,
         //'scriptSection' => $scriptSection,
