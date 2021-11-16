@@ -24,13 +24,16 @@ class KrakenBlocksController {
     $this->modx = new modX;
     $this->scss = new Compiler();
     $this->modx->initialize('web');
-    $packagePath = $this->modx->getOption('kraken.core_path') . 'model/';
+    //$packagePath = $this->modx->getOption('kraken.core_path') . 'model/';
+    $packagePath = $this->modx->getOption('kraken.core_path', null,
+        $this->modx->getOption('core_path') . 'components/kraken/'). 'model/';
     if (!$this->modx->addPackage('kraken', $packagePath)) {
       $this->modx->log(xPDO::LOG_LEVEL_ERROR, "kraken package not found");
       throw new Exception("krakenBlock package not found");
     }
-    $assetsLocation = $this->modx->getOption('kraken.assets_path');
-    $this->COMPONENTS_ROUTE = $$assetsLocation . 'renderedBlocks/';
+    //$assetsLocation = $this->modx->getOption('kraken.assets_path');
+    $assetsLocation = $this->modx->getOption('kraken.assets_path', null, $this->modx->getOption('assets_path') . 'components/kraken/');
+    $this->COMPONENTS_ROUTE = $assetsLocation . 'renderedBlocks/';
   }
 
   /** @param modX $modx */
@@ -148,7 +151,7 @@ class KrakenBlocksController {
       $finalBlock = $blockContent;
       //And finally we save the partial vue component
       //$vueFileName = MODX_BASE_PATH . 'modxMonster/renderedBlocks/' . $compName . '.vue';
-      $vueFileName = MODX_BASE_PATH . $this->COMPONENTS_ROUTE . $compName . '.vue';
+      $vueFileName = $this->COMPONENTS_ROUTE . $compName . '.vue';
       $vueFile = fopen($vueFileName, "w");
       if (!$vueFile) {
         $lastError = error_get_last();
@@ -177,7 +180,7 @@ class KrakenBlocksController {
       //$fileName = str_replace('.vue', $resBlockId . '.vue', $chunkName);
       $fileName = $compName . '.vue';
       $returnValue .= "'$compName': httpVueLoader('". $this->modx->getOption('site_url') .
-                          $this->COMPONENTS_ROUTE . "$fileName'), ";
+        str_replace(MODX_BASE_PATH, '', $this->COMPONENTS_ROUTE) . "$fileName'), ";
     }
     $returnValue .= "}";
     if (empty($returnValue)) {

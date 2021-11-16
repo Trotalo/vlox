@@ -1,7 +1,7 @@
 <?php
-$coreLocation = $modx->getOption('kraken.core_path') . 'controllers/KrakenBlocksController.php';
-
-require_once($coreLocation);
+//$coreLocation = $modx->getOption('kraken.core_path') . 'controllers/KrakenBlocksController.php';
+$coreLocation = $modx->getOption('kraken.core_path', null, $modx->getOption('core_path') . 'components/kraken/');
+require_once($coreLocation . 'controllers/KrakenBlocksController.php');
 
 KrakenBlocksController::loadService($modx);
 

@@ -13,7 +13,9 @@ if ($modx->getRequest()) {
   $modx->request->sanitizeRequest();
 }
 
-$coreLocation = $modx->getOption('kraken.core_path') . 'model/';
+//$coreLocation = $modx->getOption('kraken.core_path') . 'model/';
+$coreLocation = $modx->getOption('kraken.core_path', null, $modx->getOption('core_path')
+                                                                                    . 'components/kraken/') . 'model/';
 
 //TODO this MUST go away from here to its own controller
 if(!$modx->addPackage('kraken', $coreLocation)) {
