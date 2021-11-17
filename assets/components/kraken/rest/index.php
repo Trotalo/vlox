@@ -1,17 +1,6 @@
 <?php
 
-define('MODX_BASE_PATH', dirname(__FILE__, 7) . '/html/');
-define('MODX_CORE_PATH', dirname(__FILE__, 7) . '/coreM0dXF1L3s/');
-
-define('KRAKEN_PATH', MODX_BASE_PATH . 'modxMonster');
-define('MODX_MANAGER_PATH', MODX_BASE_PATH . 'manager/');
-define('MODX_CONNECTORS_PATH', MODX_BASE_PATH . 'connectors/');
-define('MODX_ASSETS_PATH', MODX_BASE_PATH . 'assets/');
-
-define('MODX_BASE_URL','/modx/');
-define('MODX_MANAGER_URL', MODX_BASE_URL . 'manager/');
-define('MODX_CONNECTORS_URL', MODX_BASE_URL . 'connectors/');
-define('MODX_ASSETS_URL', MODX_BASE_URL . 'assets/');
+require_once(dirname(__DIR__, 4) . '/config.core.php');
 
 include_once MODX_CORE_PATH . 'model/modx/modx.class.php';
 
@@ -24,11 +13,14 @@ if ($modx->getRequest()) {
   $modx->request->sanitizeRequest();
 }
 
+//$coreLocation = $modx->getOption('kraken.core_path') . 'model/';
+$coreLocation = $modx->getOption('kraken.core_path', null, $modx->getOption('core_path')
+                                                                                    . 'components/kraken/') . 'model/';
+
 //TODO this MUST go away from here to its own controller
-//if(!$modx->addPackage('kraken', MODX_CORE_PATH . 'components/krakenBlocks/model/')) {
-if(!$modx->addPackage('kraken', MODX_BASE_PATH . 'kraken/core/components/kraken/model/')) {
-  $modx->log(xPDO::LOG_LEVEL_ERROR, "krakenBlocks package not found at " . MODX_CORE_PATH . 'components/krakenBlocks/model/');
-  throw new Exception("krakenBlocks package not found");
+if(!$modx->addPackage('kraken', $coreLocation)) {
+  $modx->log(xPDO::LOG_LEVEL_ERROR, "krakenBlocks package not found at " . $coreLocation);
+  throw new Exception("krakenBlocks package not found at $coreLocation");
 }
 
 $rest = $modx->getService('rest', 'rest.modRestService', '', array(

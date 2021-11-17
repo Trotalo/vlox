@@ -277,6 +277,8 @@ module.exports = {
         foldStyle: "manual",
         maxLines: 500,
         minLines: 20,
+        useSoftTabs: true,
+        tabSize: 2
       },
       styleEdtOptions: {
         mode:'scss',
@@ -306,7 +308,7 @@ module.exports = {
         "keep_array_indentation": false,
         "break_chained_methods": false,
         "indent_scripts": "normal",
-        "brace_style": "expand",
+        "brace_style": "none",
         "space_before_conditional": false,
         "unescape_strings": false,
         "jslint_happy": false,
@@ -354,7 +356,7 @@ module.exports = {
       this.showInput = false;
     },
     save() {
-      this.blockData.htmlSection = html_beautify(this.blockData.htmlSection, this.beautifyConfig);
+      //this.blockData.htmlSection = html_beautify(this.blockData.htmlSection, this.beautifyConfig);
       let axiosConfig = {
         headers: {
           'Content-Type': 'application/json',

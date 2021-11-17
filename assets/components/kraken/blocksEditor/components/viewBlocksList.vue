@@ -61,7 +61,7 @@ module.exports = {
           })
           .catch(error => {
             console.error(error);
-            this.showAjaxError();
+            this.$dialog.alert('Error contacting webservice, check server logs!');
           });
     },
     deleteBlock(block) {

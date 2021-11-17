@@ -48,24 +48,6 @@ class KrakenBlocks extends  modRestController {
       $chunk = $this->modx->getObject('modChunk', array('name'=>$chunkName));
       $blockContent = $chunk->get('snippet');
 
-      /*$document = new \Gt\Dom\HTMLDocument($blockContent);
-      $htmlSection = $document->querySelector("template")->innerHTML;
-      $scriptSection = $document->querySelector("script")->textContent;
-      $styleSection = $document->querySelector("style")->textContent;*/
-      /*$doc = new DOMDocument($blockContent);
-      $something = $doc->getElementsByTagName('template');
-
-      $templateStart = strpos($blockContent, '<template>') + strlen('<template>');
-      $templateEnd = strrpos($blockContent, '</template>') - strlen('</template>');
-      $scriptStart = strpos($blockContent, '<script>') + strlen('<script>');
-      $scriptEnd = strpos($blockContent, '</script>', $templateEnd) - strlen('</script>') - 1;
-      $styleStart = strpos($blockContent, '<style') + strlen('<style');
-      $styleEnd = strpos($blockContent, '</style>') - strlen('</style>') - 1;
-
-      $htmlSection = substr($blockContent, $templateStart, $templateEnd);
-      $scriptSection = substr($blockContent,  $scriptStart, ( $scriptEnd - $scriptStart )) ;
-      $styleSection = substr($blockContent, $styleStart, ($styleEnd - $styleStart)) ;
-      */
       $returnObject = array(
         'htmlSection' => $blockContent,
         //'scriptSection' => $scriptSection,
@@ -88,6 +70,13 @@ class KrakenBlocks extends  modRestController {
             'template'=> $template->id,
             'published'=> 1));
         $renderer->save();
+        //Finally, we set the friendly url on, so we can load the right elements
+        $setting = $this->modx->getObject('modSystemSetting', 'friendly_urls');
+        $setting->set('value', 1);
+        $setting->save();
+        $cacheRefreshOptions =  array( 'system_settings' => array() );
+        $this->modx->cacheManager-> refresh($cacheRefreshOptions);
+
       }
 
       $this->modx->removeCollection('krakenBlocksResourceContent', array('resourceId'=> $renderer->id));
@@ -120,20 +109,6 @@ class KrakenBlocks extends  modRestController {
     $chunk = $this->modx->getObject('modChunk', array('name'=>$chunkName));
     if (isset($chunk)) {
       //With te stored chunck now we
-
-      /*$document = new \Gt\Dom\HTMLDocument($this->defaultContent);
-      $document->formatOutput = true;
-      $document->querySelector("template")->innerHTML = $resContent['htmlSection'];
-      $document->querySelector("script")->textContent = $resContent['scriptSection'];
-      $document->querySelector("style")->textContent = $resContent['styleSection'];
-      $finalBlock = $document->body->innerHTML;*/
-      /*$finalBlock = "<template>\n";
-      $finalBlock .= $resContent['htmlSection'];
-      $finalBlock .= "</template>\n<script>";
-      $finalBlock .= $resContent['scriptSection'];
-      $finalBlock .= "</script><style scope>";
-      $finalBlock .= $resContent['styleSection'];
-      $finalBlock .= "</style>";*/
       $chunk->set('snippet', $resContent['htmlSection']);
       $chunk->save();
 
@@ -147,19 +122,17 @@ class KrakenBlocks extends  modRestController {
       $chunk = $this->modx->newObject('modChunk',
                               array('name'=>$chunkName,
                                     'category'=>$category->id,
+                                    'snippet'=>$this->defaultContent,
                                     'content'=>$this->defaultContent));
-      /*$chunk->set('name',$chunkName);
-      $chunk->setContent($this->defaultContent);
-      $chunk->setCategory($category->id);*/
-      $storedChunk =  $chunk->save();
+      $chunk->save();
       //and now we store the data into the kraken table
       /** @var krakenBlock $krakenBlock */
       $krakenBlock = $this->modx->newObject('krakenBlock');
       $krakenBlock->set('chunkName',$chunkName);
       $krakenBlock->set('title',$chunkName);
       $krakenBlock->set('description',$description);
-      $objectToStore = (object)[name=> $chunkName,
-                                items=> []];
+      $objectToStore = (object)['name'=> $chunkName,
+                                'items'=> []];
       $krakenBlock->set('properties',json_encode($objectToStore));
       $krakenBlock->save();
 

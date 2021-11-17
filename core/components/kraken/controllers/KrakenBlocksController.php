@@ -18,28 +18,29 @@ class KrakenBlocksController {
   /** @var ScssPhp\ScssPhp\Compiler $scss*/
   private $scss;
 
-  const COMPONENTS_ROUTE = 'kraken/assets/components/kraken/renderedBlocks/'; //'modxMonster/renderedBlocks/'
+  private $COMPONENTS_ROUTE; //'kraken/assets/components/kraken/renderedBlocks/'
 
   function __construct() {
     $this->modx = new modX;
     $this->scss = new Compiler();
     $this->modx->initialize('web');
-    //TODO agreagra configuracion para poder cambiar de dev a prod, o corregir el error que sea que hay
-    //if (!$this->modx->addPackage('kraken', MODX_CORE_PATH . 'components/kraken/model/')) {
-    //MODX_BASE_PATH . 'kraken/core/components/kraken/model/'
-    if (!$this->modx->addPackage('kraken', MODX_BASE_PATH . 'kraken/core/components/kraken/model/')) {
+    //$packagePath = $this->modx->getOption('kraken.core_path') . 'model/';
+    $packagePath = $this->modx->getOption('kraken.core_path', null,
+        $this->modx->getOption('core_path') . 'components/kraken/'). 'model/';
+    if (!$this->modx->addPackage('kraken', $packagePath)) {
       $this->modx->log(xPDO::LOG_LEVEL_ERROR, "kraken package not found");
       throw new Exception("krakenBlock package not found");
     }
+    //$assetsLocation = $this->modx->getOption('kraken.assets_path');
+    $assetsLocation = $this->modx->getOption('kraken.assets_path', null, $this->modx->getOption('assets_path') . 'components/kraken/');
+    $this->COMPONENTS_ROUTE = $assetsLocation . 'renderedBlocks/';
   }
 
   /** @param modX $modx */
   public static function loadService($modx): void {
     $admUserMgr = $modx->getService('KrakenBlocksController',
       'KrakenBlocksController',
-      MODX_BASE_PATH . 'kraken/core/components/kraken/controllers/');
-    //TODO improve and fix de prod/dev issue
-      //MODX_CORE_PATH . 'components/krakenBlocks/kraken/controllers');
+      MODX_CORE_PATH . 'components/kraken/controllers');
     if (!($admUserMgr instanceof KrakenBlocksController)) {
       $modx->log(modX::LOG_LEVEL_ERROR, 'Could not load KrakenBlockResourceContentTable class');
     }
@@ -144,13 +145,13 @@ class KrakenBlocksController {
       // Parse uncached tags and remove anything that could not be processed
       $parser->processElementTags('', $blockContent, true, true, '[[', ']]', [], $maxIterations);
 
-      echo $blockContent;
+      //echo $blockContent;
 
       //$document->querySelector("style")->textContent = $compiledStyle;
       $finalBlock = $blockContent;
       //And finally we save the partial vue component
       //$vueFileName = MODX_BASE_PATH . 'modxMonster/renderedBlocks/' . $compName . '.vue';
-      $vueFileName = MODX_BASE_PATH . self::COMPONENTS_ROUTE . $compName . '.vue';
+      $vueFileName = $this->COMPONENTS_ROUTE . $compName . '.vue';
       $vueFile = fopen($vueFileName, "w");
       if (!$vueFile) {
         $lastError = error_get_last();
@@ -179,7 +180,7 @@ class KrakenBlocksController {
       //$fileName = str_replace('.vue', $resBlockId . '.vue', $chunkName);
       $fileName = $compName . '.vue';
       $returnValue .= "'$compName': httpVueLoader('". $this->modx->getOption('site_url') .
-                          self::COMPONENTS_ROUTE . "$fileName'), ";
+        str_replace(MODX_BASE_PATH, '', $this->COMPONENTS_ROUTE) . "$fileName'), ";
     }
     $returnValue .= "}";
     if (empty($returnValue)) {
