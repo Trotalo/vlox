@@ -356,7 +356,6 @@ module.exports = {
       this.showInput = false;
     },
     save() {
-      //this.blockData.htmlSection = html_beautify(this.blockData.htmlSection, this.beautifyConfig);
       let axiosConfig = {
         headers: {
           'Content-Type': 'application/json',
@@ -388,8 +387,6 @@ module.exports = {
   updated() {
     if (document.getElementById("editor1") && !this.loaded) {
       this.loaded = true;
-      this.blockData.htmlSection = html_beautify(this.blockData.htmlSection, this.beautifyConfig);
-
     }
   }
 };

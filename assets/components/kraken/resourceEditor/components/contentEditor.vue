@@ -1,10 +1,10 @@
 <template>
-  <b-modal
+<!--  <b-modal
       v-bind:id="'edit-content' + blockcontent.id"
       v-bind:key="blockcontent.id"
       v-bind:ref="'edit-content' + blockcontent.id"
       @ok="save"
-      title="Edit block" size="xl" scrollable>
+      title="Edit block" size="xl" scrollable>-->
     <div class="row smallForm mb-2">
       <div class="col-12">
         <div class="row p-2 mb-2">
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-  </b-modal>
+<!--  </b-modal>-->
 </template>
 
 <script>
@@ -61,7 +61,7 @@ module.exports = {
       // TODO reenable to use rigth api endpoint instead of this
       //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
       axios.post(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/index.php?_rest=Resources/'
-          + this.blockcontent.resourceId,
+          + this.blockcontent.id,
           finalObject,
           axiosConfig)
           .then(response => {
@@ -73,6 +73,9 @@ module.exports = {
             this.showErrorAjax();
           });
     },
+  },
+  mounted() {
+    console.log('zzzzzzzzzzzzzzzzz');
   }
 }
 </script>

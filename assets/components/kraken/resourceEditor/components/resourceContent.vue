@@ -7,10 +7,17 @@
       <button class="btn editIcon" type="button" v-on:click="showEdit()">
         <i class="fas fa-edit"></i>
       </button>
-      <content-editor
-          :blockContent = "krakencontent"
-          :id = "krakencontent.id">
-      </content-editor>
+      <b-modal
+          v-bind:id="'edit-content' + krakencontent.id"
+          v-bind:key="krakencontent.id"
+          v-bind:ref="'edit-content' + krakencontent.id"
+          @ok="save"
+          title="Edit block" size="xl" scrollable>
+        <content-editor
+            :blockContent = "krakencontent"
+            :id = "krakencontent.id">
+        </content-editor>
+      </b-modal>
       <button class="btn showHideIcon" type="button">
         <i class="far fa-eye"></i>
       </button>
@@ -86,7 +93,7 @@ module.exports = {
       // TODO reenable to use rigth api endpoint instead of this
       //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
       axios.post(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/index.php?_rest=Resources/'
-          + this.krakencontent.resourceId,
+          + this.krakencontent.id,
           finalObject,
           axiosConfig)
           .then(response => {

@@ -43,10 +43,11 @@ class KrakenResources extends modRestController {
         $resId = $properties['id'];
         $blockId = $properties['blockId'];
         /** @var krakenBlocksResourceContent $resource */
-        $resource = $this->modx->getObject('krakenBlocksResourceContent', array(
+        /*$resource = $this->modx->getObject('krakenBlocksResourceContent', array(
           'blockId' => $blockId,
           'resourceId' => $resId
-        ));
+        ));*/
+        $resource = $this->modx->getObject('krakenBlocksResourceContent', ['id' => $resId]);
         if (is_null($resource)) {
           return $this->failure("Block content with blockId: $blockId resId: $resId not found!");
         }
