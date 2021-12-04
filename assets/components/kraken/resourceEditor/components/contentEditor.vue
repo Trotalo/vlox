@@ -13,12 +13,19 @@
               <div class="form-group" v-for="(item, index) in blockcontent.properties.items" :key="index">
                 <div v-if="item.type === 'text'">
                   <label>{{item.name}}</label>
-                  <!--<input type="text" class="form-control" v-model="item.content">-->
                   <b-form-input v-model="item.content" placeholder="item.name" class="mb-3"></b-form-input>
                 </div>
                 <div v-else-if="item.type === 'textArea'">
                   <h3>{{item.name}}</h3>
                   <textarea class="form-control" rows="6" v-model="item.content"></textarea>
+                </div>
+                <div v-else-if="item.type === 'object'">
+                  <div v-for="(arrayItem, index) in item.content" :key="index">
+                    <div v-for="(internalField, index) in Object.keys(arrayItem)" :key="index">
+                      <h3>{{internalField}}</h3>
+                      <textarea class="form-control" rows="6" v-model="arrayItem[internalField]"></textarea>
+                    </div>
+                  </div>
                 </div>
                 <div class="row" v-else-if="item.type === 'image'">
                   <div class="col-6">

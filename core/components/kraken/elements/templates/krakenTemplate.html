@@ -17,9 +17,10 @@
      rel="stylesheet"
      href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"
    />-->
-  <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>-->
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-  <link type="text/css" rel="stylesheet" href="kraken/assets/components/kraken/css/style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>-->
+  <!--<link type="text/css" rel="stylesheet" href="assets/components/kraken/css/style.css"/>-->
+  <link type="text/css" rel="stylesheet" href="assets/style.css"/>
 
   <!-- Load polyfills to support older browsers -->
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"></script>
@@ -37,9 +38,9 @@
   <!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
   <!--<script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>-->
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"
           integrity="sha512-Eak/29OTpb36LLo2r47IpVzPBLXnAMPAVypbSZiZ4Qkf8p/7S/XRG5xp7OKWPPYfJT6metI+IORkR5G8F900+g=="
-          crossorigin="anonymous" async></script>
+          crossorigin="anonymous" async></script>-->
 
   <!--<script src="https://kit.fontawesome.com/440327f28d.js" crossorigin="anonymous"></script>-->
 
@@ -53,14 +54,15 @@
   <!--<script src="https://cdn.jsdelivr.net/npm/vee-validate@3.4.9/dist/vee-validate.full.min.js"></script>-->
 
   <!--Include vuejs-dialog plugin-->
-  <link href="https://cdn.jsdelivr.net/npm/vuejs-dialog@1.4.2/dist/vuejs-dialog.min.css" rel="stylesheet">
+  <!--<link href="https://cdn.jsdelivr.net/npm/vuejs-dialog@1.4.2/dist/vuejs-dialog.min.css" rel="stylesheet">
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vuejs-dialog@1.4.2/dist/vuejs-dialog.min.js"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vuejs-dialog@1.4.2/dist/vuejs-dialog-mixin.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vuejs-dialog@1.4.2/dist/vuejs-dialog-mixin.min.js"></script>-->
 
   <!-- Zircle from CDN-->
-  <script type="text/javascript" src="https://unpkg.com/zircle"></script>
+  <!--<script type="text/javascript" src="https://unpkg.com/zircle"></script>
   <link href="https://unpkg.com/zircle/dist/zircle.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>-->
+  <script src="https://ssense.github.io/vue-carousel/js/vue-carousel.min.js"></script>
 
   [[!generateVueComponentsFiles]]
 </head>
@@ -68,19 +70,13 @@
 <div id="app">
   <transition name="fade">
     <div class="loading" v-if="showLoading"><i class="fas fa-spinner fa-spin"></i></div>
-    <!--<div v-bind:style="{ display: 'block'}" class="errorHandler" v-if="showError">
-      <div class="errorMessage">
-        <div class="closeError" @click="closeAndGoHome"><i class="fas fa-window-close"></i></div>
-      </div>
-    </div>-->
+
   </transition>
   [[!krakenBlocks]]
 </div>
 
 <script>
-  /*Vue.component("Menu", window["vue-burger-menu"].Menu);
-  Vue.component("Slide", window["vue-burger-menu"].Slide);*/
-  Vue.use(VuejsDialog.main.default);
+  /*Vue.use(VuejsDialog.main.default);*/
 
   new Vue({
     el: '#app',
