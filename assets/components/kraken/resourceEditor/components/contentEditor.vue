@@ -20,11 +20,33 @@
                   <textarea class="form-control" rows="6" v-model="item.content"></textarea>
                 </div>
                 <div v-else-if="item.type === 'object'">
-                  <div v-for="(arrayItem, index) in item.content" :key="index">
+<!--                  <div v-for="(arrayItem, index) in item.content" :key="index">
                     <div v-for="(internalField, index) in Object.keys(arrayItem)" :key="index">
                       <h3>{{internalField}}</h3>
                       <textarea class="form-control" rows="6" v-model="arrayItem[internalField]"></textarea>
                     </div>
+                  </div>-->
+                  <div id="task-config" class="accordion" role="tablist">
+                    <h3>{{item.name}}</h3>
+                    <div>
+                      <b-button variant="success" @click="addItem(item)">Agregar item</b-button>
+                    </div>
+                    <b-card no-body class="mb-1" v-for="(arrayItem, index) in item.content" :key="index">
+                      <b-card-header header-tag="header" class="p-1" role="tab">
+                        <b-button :id="index" block v-b-toggle="['accordion' + index]"
+                                  variant="info">{{'element ' + index}}</b-button>
+                      </b-card-header>
+                      <b-collapse :id="'accordion' + index"
+                                  accordion="'my-acordion-' + index"
+                                  role="tabpanel">
+                        <b-card-body>
+                          <div v-for="(internalField, index) in Object.keys(arrayItem)" :key="index">
+                            <h3>{{internalField}}</h3>
+                            <b-form-input class="form-control" rows="6" v-model="arrayItem[internalField]"></b-form-input>
+                          </div>
+                        </b-card-body>
+                      </b-collapse>
+                    </b-card>
                   </div>
                 </div>
                 <div class="row" v-else-if="item.type === 'image'">
@@ -80,6 +102,11 @@ module.exports = {
             this.showErrorAjax();
           });
     },
+    addItem(item){
+      const cloneObj = Object.assign({}, item.content[0]);
+      for (var member in cloneObj) cloneObj[member] = '';
+      item.content.push(cloneObj);
+    }
   },
   mounted() {
     console.log('zzzzzzzzzzzzzzzzz');

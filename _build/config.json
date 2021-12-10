@@ -24,7 +24,7 @@
         "handler": ""
       },
       {
-      "text": "Kraken blocks",
+      "text": "Kraken",
       "description": "Your Vue components",
       "action": "init",
       "parent": "Monster",
@@ -80,5 +80,10 @@
       "krakenBlocksResourceContent",
       "krakenBlock"
     ]
+  },
+  "build":{
+    "readme": "docs/readme.txt",
+    "license": "docs/license.txt",
+    "changelog": "docs/changelog.txt"
   }
 }

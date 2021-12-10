@@ -1,0 +1,20 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+ 
+Currently, we are stabilizing the development version, first stable release will include webpack compilation
+and assets optimization for better performance
+ 
+## [Unreleased] - 2021-12-07
+ 
+Basic components to allow the creation, addition and edition of Vue components inside resources of ModX CMS
+ 
+### Added
+    - Rendering of single components
+    - Placeholder support in components for content management
+    - Base template for Vue pages
+    - Rendering of snippets and ModX placeholders inside Vue components
+    - Components manager with code editor and preview of component
+    - Resource tab to add components to a given resource and edit its placeholders
+### Changed
+
+### Fixed
