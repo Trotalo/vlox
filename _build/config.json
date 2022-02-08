@@ -1,6 +1,6 @@
 {
-  "name": "Kraken",
-  "lowCaseName": "kraken",
+  "name": "VloX",
+  "lowCaseName": "vlox",
   "description": "Simple integration to easily use VueJs inside modx",
   "author": "@camicase82",
   "version": "0.0.1",
@@ -14,7 +14,7 @@
     }],
     "menus": [
       {
-        "text": "Monster",
+        "text": "Trotalo",
         "description": "ModX with super powers",
         "action": "",
         "parent": "topnav",
@@ -24,10 +24,10 @@
         "handler": ""
       },
       {
-      "text": "Kraken",
+      "text": "VloX",
       "description": "Your Vue components",
       "action": "init",
-      "parent": "Monster",
+      "parent": "Trotalo",
       "icon": "",
       "menuIndex": 0,
       "params": "",
@@ -36,8 +36,8 @@
     "elements": {
       "plugins": [
         {
-          "name": "krakenBlocksTab",
-          "file": "krakenBlocksTab.php",
+          "name": "vuexBlocksTab",
+          "file": "vuexBlocksTab.php",
           "events": [
             "OnDocFormPrerender"
           ]
@@ -49,12 +49,12 @@
           "file": "generateVueComponentsFiles.php"
         },
         {
-          "name": "krakenBlockRenderer",
-          "file": "krakenBlockRenderer.php"
+          "name": "vloxRenderer",
+          "file": "vloxRenderer.php"
         },
         {
-          "name": "krakenBlocks",
-          "file": "krakenBlocks.php"
+          "name": "vlox",
+          "file": "vlox.php"
         },
         {
           "name": "vueImportRenderer",
@@ -69,8 +69,8 @@
       ],
       "templates": [
         {
-          "name": "krakenTemplate",
-          "file": "krakenTemplate.html"
+          "name": "vloxTemplate",
+          "file": "vloxTemplate.html"
         }
       ]
     }
