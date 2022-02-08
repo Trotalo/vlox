@@ -1,13 +1,13 @@
-# kraken
+# Vlox
 
-Kraken it's an extra (aka plugin) designed to work with the [CMS ModX](https://modx.com/) to easily integrate VueJS and let you 
+Vlox it's an extra (aka plugin) designed to work with the [CMS ModX](https://modx.com/) to easily integrate VueJS and let you 
 easily create digital experiences in a simple and straightforward way.
 
 By integrating a powerful development framework focused on content management, and Vue, you'll get most of the complex 
 functionalities, like security management, webservices, out of the box, while being free to build any kind of user 
 interface interactions that you can imagine.
 
-## Using kraken
+## Using vlox
 
 You'll need a [Modx installation](https://docs.modx.com/current/en/getting-started/installation), if you want, you can
 dive into the ModX documentation, or just use the docker configuration that we have to launch a fully working 
