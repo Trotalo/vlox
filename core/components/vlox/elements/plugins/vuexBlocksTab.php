@@ -7,8 +7,8 @@ switch ($modx->event->name) {
       $template = $modx->getObject('modTemplate', array('templatename' => 'krakenTemplate'));
       if ($template->id === $resource->template) {
         //$assetsLocation = $modx->getOption('kraken.assets_url');
-        $assetsLocation =  $modx->getOption('kraken.assets_url', null,
-                        $modx->getOption('assets_url') . 'components/kraken/');
+        $assetsLocation =  $modx->getOption('vlox.assets_url', null,
+                        $modx->getOption('assets_url') . 'components/vlox/');
         $url = $assetsLocation. 'vloxTab.html' ;
         $modx->regClientStartupHTMLBlock(' 
           <script type="text/javascript">

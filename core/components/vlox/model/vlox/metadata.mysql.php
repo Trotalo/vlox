@@ -3,7 +3,7 @@
 $xpdo_meta_map = array (
   'xPDOSimpleObject' => 
   array (
-    0 => 'krakenBlocksResourceContent',
-    1 => 'krakenBlock',
+    0 => 'vloxResourceContent',
+    1 => 'vloxBlocks',
   ),
 );

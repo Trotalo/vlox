@@ -1,6 +1,7 @@
 <?php
 //$coreLocation = $modx->getOption('kraken.core_path');
-$coreLocation = $modx->getOption('kraken.core_path', null, $modx->getOption('core_path') . 'components/kraken/');
+$coreLocation = $modx->getOption('kraken.core_path', null,
+                          $modx->getOption('core_path') . 'components/vlox/');
 
 require_once($coreLocation . 'controllers/VloxController.php');
 

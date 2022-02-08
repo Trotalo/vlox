@@ -19,8 +19,8 @@ $coreLocation = $modx->getOption('kraken.core_path', null, $modx->getOption('cor
 
 //TODO this MUST go away from here to its own controller
 if(!$modx->addPackage('kraken', $coreLocation)) {
-  $modx->log(xPDO::LOG_LEVEL_ERROR, "krakenBlocks package not found at " . $coreLocation);
-  throw new Exception("krakenBlocks package not found at $coreLocation");
+  $modx->log(xPDO::LOG_LEVEL_ERROR, "vloxBlockss package not found at " . $coreLocation);
+  throw new Exception("vloxBlockss package not found at $coreLocation");
 }
 
 $rest = $modx->getService('rest', 'rest.modRestService', '', array(

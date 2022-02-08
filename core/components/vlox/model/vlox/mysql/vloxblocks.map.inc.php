@@ -1,11 +1,8 @@
 <?php
-/**
- * @package kraken
- */
-$xpdo_meta_map['krakenBlock']= array (
-  'package' => 'kraken',
+$xpdo_meta_map['vloxBlocks']= array (
+  'package' => 'vlox',
   'version' => '1.0',
-  'table' => 'kraken_blocks',
+  'table' => 'vlox_blocks',
   'extends' => 'xPDOSimpleObject',
   'tableMeta' => 
   array (

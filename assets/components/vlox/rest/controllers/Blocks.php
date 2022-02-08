@@ -79,9 +79,9 @@ class KrakenBlocks extends  modRestController {
 
       }
 
-      $this->modx->removeCollection('krakenBlocksResourceContent', array('resourceId'=> $renderer->id));
-      /** @var krakenBlocksResourceContent $blockPreviewObj */
-      $blockPreviewObj = $this->modx->newObject('krakenBlocksResourceContent',
+      $this->modx->removeCollection('vloxResourceContent', array('resourceId'=> $renderer->id));
+      /** @var vloxResourceContent $blockPreviewObj */
+      $blockPreviewObj = $this->modx->newObject('vloxResourceContent',
         array('position'=> 1,
           'title'=> 'compoRenderer',
           'description'=>'compoRenderer',
@@ -92,7 +92,7 @@ class KrakenBlocks extends  modRestController {
       $this->modx->cacheManager->refresh();
       return $this->success('Succesful call!', $returnObject);
     } else {
-      $block = $this->modx->getObject('krakenBlock', array('chunkName'=>$id));
+      $block = $this->modx->getObject('vloxBlocks', array('chunkName'=>$id));
       return $this->success('Succesful call!', $block);
     }
 
@@ -126,17 +126,17 @@ class KrakenBlocks extends  modRestController {
                                     'content'=>$this->defaultContent));
       $chunk->save();
       //and now we store the data into the kraken table
-      /** @var krakenBlock $krakenBlock */
-      $krakenBlock = $this->modx->newObject('krakenBlock');
-      $krakenBlock->set('chunkName',$chunkName);
-      $krakenBlock->set('title',$chunkName);
-      $krakenBlock->set('description',$description);
+      /** @var vloxBlocks $vloxBlocks */
+      $vloxBlocks = $this->modx->newObject('vloxBlocks');
+      $vloxBlocks->set('chunkName',$chunkName);
+      $vloxBlocks->set('title',$chunkName);
+      $vloxBlocks->set('description',$description);
       $objectToStore = (object)['name'=> $chunkName,
                                 'items'=> []];
-      $krakenBlock->set('properties',json_encode($objectToStore));
-      $krakenBlock->save();
+      $vloxBlocks->set('properties',json_encode($objectToStore));
+      $vloxBlocks->save();
 
-      return $this->read($krakenBlock->get('id'));
+      return $this->read($vloxBlocks->get('id'));
     }
     return $this->success('updated', $resContent);
   }
@@ -149,9 +149,9 @@ class KrakenBlocks extends  modRestController {
         'field' => $this->primaryKeyField,
       )));
     }
-    $block = $this->modx->getObject('krakenBlock', $id);
+    $block = $this->modx->getObject('vloxBlocks', $id);
     //Now we check if the block is in use, its is the case an error should be thrown
-    $resBlocks = $this->modx->getCollection('krakenBlocksResourceContent', array('blockId' => $id) );
+    $resBlocks = $this->modx->getCollection('vloxResourceContent', array('blockId' => $id) );
     if (isset($resBlocks) && !empty($resBlocks)) {
       if (sizeof($resBlocks) === 1 && array_values($resBlocks)[0]->title === 'algo') {
         array_values($resBlocks)[0]->remove();

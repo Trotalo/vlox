@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model package="kraken" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM" version="1.0">
-    <object class="krakenBlocksResourceContent" table="kraken_block_resource_content" extends="xPDOSimpleObject">
+<model package="vlox" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM" version="1.0">
+    <object class="vloxResourceContent" table="vlox_resource_content" extends="xPDOSimpleObject">
         <field key="position" dbtype="int" phptype="integer" null="false" default=""/>
         <field key="title" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
 		<field key="description" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
@@ -12,7 +12,7 @@
         <aggregate alias="EditedBy" class="modUser" local="editedby" foreign="id" cardinality="one" owner="foreign"/>
     </object>
 	
-	<object class="krakenBlock" table="kraken_blocks" extends="xPDOSimpleObject">
+	<object class="vloxBlocks" table="vlox_blocks" extends="xPDOSimpleObject">
 	    <field key="chunkName" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
         <field key="title" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
         <field key="description" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>

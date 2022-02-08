@@ -59,6 +59,10 @@
         {
           "name": "vueImportRenderer",
           "file": "vueImportRenderer.php"
+        },
+        {
+          "name": "generateSchema",
+          "file": "generateSchema.php"
         }
       ],
       "chunks": [
@@ -77,8 +81,8 @@
   },
   "database": {
     "tables": [
-      "krakenBlocksResourceContent",
-      "krakenBlock"
+      "vloxResourceContent",
+      "vloxBlocks"
     ]
   },
   "build":{

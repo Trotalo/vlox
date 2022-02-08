@@ -3,7 +3,7 @@
 
 class KrakenResources extends modRestController {
   /** @var string $classKey The xPDO class to use */
-  public $classKey = 'krakenBlocksResourceContent';
+  public $classKey = 'vloxResourceContent';
   /** @var string $defaultSortField The default field to sort by in the getList method */
   public $defaultSortField = 'position';
   /** @var string $defaultSortDirection The default direction to sort in the getList method */
@@ -29,7 +29,7 @@ class KrakenResources extends modRestController {
         $row = $query->fetch();
         $currentMaxPost = isset($row['position']) ? intval($row['position']) : 0;
         $currentMaxPost = ++$currentMaxPost;
-        $resBlock = $this->modx->newObject('krakenBlocksResourceContent', array(
+        $resBlock = $this->modx->newObject('vloxResourceContent', array(
           'position' => $currentMaxPost,
           'title' => $properties["title"],
           'description' => 'Add a description!',
@@ -42,12 +42,12 @@ class KrakenResources extends modRestController {
       } elseif (!is_null($properties['items'])) {
         $resId = $properties['id'];
         $blockId = $properties['blockId'];
-        /** @var krakenBlocksResourceContent $resource */
-        /*$resource = $this->modx->getObject('krakenBlocksResourceContent', array(
+        /** @var vloxResourceContent $resource */
+        /*$resource = $this->modx->getObject('vloxResourceContent', array(
           'blockId' => $blockId,
           'resourceId' => $resId
         ));*/
-        $resource = $this->modx->getObject('krakenBlocksResourceContent', ['id' => $resId]);
+        $resource = $this->modx->getObject('vloxResourceContent', ['id' => $resId]);
         if (is_null($resource)) {
           return $this->failure("Block content with blockId: $blockId resId: $resId not found!");
         }
@@ -74,8 +74,8 @@ class KrakenResources extends modRestController {
     $resContent = $this->getProperties();
     if (isset($resContent)) {
       foreach ($resContent as $blockContent) {
-        //** @var krakenBlocksResourceContent  $resBlockContent*/
-        $resBlockContent = $this->modx->getObject('krakenBlocksResourceContent', $blockContent['id']);
+        //** @var vloxResourceContent  $resBlockContent*/
+        $resBlockContent = $this->modx->getObject('vloxResourceContent', $blockContent['id']);
         $resBlockContent->set('position', $blockContent['position']);
         $resBlockContent->save();
         $this->modx->log(ModX::LOG_LEVEL_DEBUG, json_encode($resBlockContent));
@@ -96,7 +96,7 @@ class KrakenResources extends modRestController {
       return $this->getList();
     }
     $objects = $this->modx->getCollection(
-            'krakenBlocksResourceContent',
+            'vloxResourceContent',
                       ['resourceId'=> $pk]);
     //$string = print_r($objects, true);
     //$this->modx->log(modX::LOG_LEVEL_ERROR, "database info $string");

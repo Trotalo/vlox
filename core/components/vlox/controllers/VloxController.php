@@ -25,14 +25,15 @@ class VloxController {
     $this->scss = new Compiler();
     $this->modx->initialize('web');
     //$packagePath = $this->modx->getOption('kraken.core_path') . 'model/';
-    $packagePath = $this->modx->getOption('kraken.core_path', null,
-        $this->modx->getOption('core_path') . 'components/kraken/'). 'model/';
-    if (!$this->modx->addPackage('kraken', $packagePath)) {
-      $this->modx->log(xPDO::LOG_LEVEL_ERROR, "kraken package not found");
-      throw new Exception("krakenBlock package not found");
+    $packagePath = $this->modx->getOption('vlox.core_path', null,
+        $this->modx->getOption('core_path') . 'components/vlox/'). 'model/';
+    if (!$this->modx->addPackage('vlox', $packagePath)) {
+      $this->modx->log(xPDO::LOG_LEVEL_ERROR, "vlox package not found");
+      throw new Exception("vlox package not found");
     }
     //$assetsLocation = $this->modx->getOption('kraken.assets_path');
-    $assetsLocation = $this->modx->getOption('kraken.assets_path', null, $this->modx->getOption('assets_path') . 'components/kraken/');
+    $assetsLocation = $this->modx->getOption('vlox.assets_path', null,
+                                      $this->modx->getOption('assets_path') . 'components/vlox/');
     $this->COMPONENTS_ROUTE = $assetsLocation . 'renderedBlocks/';
   }
 
@@ -40,9 +41,9 @@ class VloxController {
   public static function loadService($modx): void {
     $admUserMgr = $modx->getService('VloxController',
       'VloxController',
-      MODX_CORE_PATH . 'components/kraken/controllers');
+      MODX_CORE_PATH . 'components/vlox/controllers');
     if (!($admUserMgr instanceof VloxController)) {
-      $modx->log(modX::LOG_LEVEL_ERROR, 'Could not load KrakenBlockResourceContentTable class');
+      $modx->log(modX::LOG_LEVEL_ERROR, 'Could not load VloxResourceContentTable class');
     }
   }
 
@@ -54,11 +55,7 @@ class VloxController {
    */
   public function getResBlockContent($blockId, $resId) {
     $jsonObject = array();
-    /** @var krakenBlocksResourceContent $resource */
-    /*TODO comente $resource = $this->modx->getObject('krakenBlocksResourceContent', array(
-      'blockId' => $blockId,
-      'resourceId' => $resourceId
-    ));*/
+
     $query = $this->modx->query(" 
       select blocks.chunkName, resourceContent.*
       from modx_kraken_blocks as blocks, modx_kraken_block_resource_content as resourceContent
