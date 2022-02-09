@@ -14,11 +14,11 @@ if ($modx->getRequest()) {
 }
 
 //$coreLocation = $modx->getOption('kraken.core_path') . 'model/';
-$coreLocation = $modx->getOption('kraken.core_path', null, $modx->getOption('core_path')
-                                                                                    . 'components/kraken/') . 'model/';
+$coreLocation = $modx->getOption('vlox.core_path', null, $modx->getOption('core_path')
+                                                                                    . 'components/vlox/') . 'model/';
 
 //TODO this MUST go away from here to its own controller
-if(!$modx->addPackage('kraken', $coreLocation)) {
+if(!$modx->addPackage('vlox', $coreLocation)) {
   $modx->log(xPDO::LOG_LEVEL_ERROR, "vloxBlockss package not found at " . $coreLocation);
   throw new Exception("vloxBlockss package not found at $coreLocation");
 }

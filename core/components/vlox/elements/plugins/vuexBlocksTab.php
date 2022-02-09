@@ -14,7 +14,7 @@ switch ($modx->event->name) {
           <script type="text/javascript">
               MODx.on("ready",function() {
                   MODx.addTab("modx-resource-tabs",{
-                      title: "KrakenBlocks",
+                      title: "VloX",
                       id: "custom-resource-tab",
                       width: "95%",
                       autoLoad: {

@@ -1,5 +1,5 @@
 <template>
-  <b-modal ref="new-block" id="new-block" title="New KrakenBlock" size="xl" scrollable>
+  <b-modal ref="new-block" id="new-block" title="New VloX" size="xl" scrollable>
     <b-form class="smallForm">
       <b-form-group
           id="input-group-1"

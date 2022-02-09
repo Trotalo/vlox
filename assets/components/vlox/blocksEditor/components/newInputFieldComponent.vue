@@ -1,6 +1,6 @@
 <template>
   <b-modal ref="new-input" id="new-input" v-bind:title="'New Input Field' + ' for ' + $attrs.blockdatainput.chunkName"
-           size="xl" scrollable @ok="save(blockData)">
+           size="xl" scrollable @ok="save(inputData)">
     <b-form class="smallForm">
 
       <b-form-group

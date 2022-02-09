@@ -1,7 +1,7 @@
 <template>
   <b-modal
       v-model="showBlocksList"
-      id="select-block" title="Kraken Blocks List" size="xl" scrollable>
+      id="select-block" title="VloX List" size="xl" scrollable>
     <b-container fluid>
       <b-row>
         <b-col cols="12" lg="6" xl="4" v-if="blockList.results" v-for="(block,index) in blockList.results" :key="block.id">
@@ -43,7 +43,8 @@ module.exports = {
   methods: {
     selectBlock(blockData) {
       const modalRef = this.$bvModal;
-      axios.get(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/blocks/' + blockData.id)
+      axios.get(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute +
+          '/rest/blocks/' + blockData.id)
           .then(response => {
             this.blockObject = response.data.object;
             this.$emit('block-selected', this.blockObject);

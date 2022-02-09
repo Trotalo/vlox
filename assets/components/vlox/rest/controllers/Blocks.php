@@ -3,7 +3,7 @@
 
 class KrakenBlocks extends  modRestController {
   /** @var string $classKey The xPDO class to use */
-  public $classKey = 'krakenBlock';
+  public $classKey = 'vloxBlocks';
   /** @var string $defaultSortField The default field to sort by in the getList method */
   public $defaultSortField = 'id';
   /** @var string $defaultSortDirection The default direction to sort in the getList method */
@@ -56,17 +56,17 @@ class KrakenBlocks extends  modRestController {
       $returnObject =  array_merge( $returnObject, (array) $this->object->_fields);
       //Before creating a new registry, we make sure the respurce its clean
       //first we make sure that the kraken renderer exists
-      $renderer = $this->modx->getObject('modResource', array('pagetitle' => 'krakenrenderer'));
+      $renderer = $this->modx->getObject('modResource', array('pagetitle' => 'vloxrenderer'));
       if (empty($renderer)) {
         //If the resources isn't crated
         //Load the kraken template
-        $template = $this->modx->getObject('modTemplate', array('templatename' => 'krakenTemplate'));
+        $template = $this->modx->getObject('modTemplate', array('templatename' => 'vloxTemplate'));
 
         $renderer = $this->modx->newObject('modResource',
-          array('pagetitle'=> 'krakenrenderer',
-            'longtitle'=> 'krakenrenderer',
-            'description'=>'krakenrenderer',
-            'alias'=> 'krakenrenderer',
+          array('pagetitle'=> 'vloxrenderer',
+            'longtitle'=> 'vloxrenderer',
+            'description'=>'vloxrenderer',
+            'alias'=> 'vloxrenderer',
             'template'=> $template->id,
             'published'=> 1));
         $renderer->save();
@@ -114,9 +114,9 @@ class KrakenBlocks extends  modRestController {
 
     } else {
       //First we get the cat id for kraken
-      $category = $this->modx->getObject('modCategory', array('category'=> 'Kraken'));
+      $category = $this->modx->getObject('modCategory', array('category'=> 'Vlox'));
       if (empty($category)) {
-        throw new Exception("category Kraken not found, please reinstall the plugin");
+        throw new Exception("category Vlox not found, please reinstall the plugin");
       }
       /** @var modChunk $chunk */
       $chunk = $this->modx->newObject('modChunk',
