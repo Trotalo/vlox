@@ -158,10 +158,10 @@ class VloxController {
       fclose($vueFile);
 
     }
-    if (empty($returnValue)) {
+    /*if (empty($returnValue)) {
       $returnValue = "<h1>There aren't any blocks assigned to this resource</h1>";
-    }
-    return '';
+    }*/
+    //return '';
   }
 
   public function renderComponentImports($resId) {
@@ -214,7 +214,7 @@ class VloxController {
   private function loadResourceBlocks($resId) {
     $query = $this->modx->query(" 
       select blocks.chunkName, resourceContent.*
-      from vlox_blocks as blocks, vlox_resource_content as resourceContent
+      from modx_vlox_blocks as blocks, modx_vlox_resource_content as resourceContent
       where blocks.id = resourceContent.blockId
       and resourceContent.resourceId = $resId 
       order by resourceContent.position");

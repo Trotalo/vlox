@@ -4,7 +4,7 @@ switch ($modx->event->name) {
   case 'OnDocFormPrerender':
     //validate that its an existing resource, and it has the right template
     if ($mode === "upd") {
-      $template = $modx->getObject('modTemplate', array('templatename' => 'krakenTemplate'));
+      $template = $modx->getObject('modTemplate', array('templatename' => 'vloxTemplate'));
       if ($template->id === $resource->template) {
         //$assetsLocation = $modx->getOption('kraken.assets_url');
         $assetsLocation =  $modx->getOption('vlox.assets_url', null,

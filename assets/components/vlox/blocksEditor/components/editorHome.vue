@@ -3,7 +3,7 @@
     <b-container class="mt-4">
       <b-row class="align-items-center">
         <b-col cols="12" lg="3" class="mb-3">
-          <img v-if="showControls" src="./images/ModXMonster-logo.png" class="krakenLogo" />
+          <img v-if="showControls" src="./images/vlox.png" class="krakenLogo" />
         </b-col>
         <b-col v-if="showControls" cols="12" md="6" lg="5">
           <b-button
@@ -46,19 +46,19 @@
         "></iframe>
           <div v-else class="firstScreen">
             <new-block-component v-on:block-selected="onSelectBlock"></new-block-component>
-            <img src="./images/ModXMonster-logo.png" />
+            <img src="./images/vlox.png" />
             <b-button
                 variant="outline-primary"
                 v-b-modal.select-block
                 class="addkrakenBlockBig"
-                type="button">Release the Kraken!
+                type="button">View your VloX!
             </b-button>
           </div>
         </b-col>
       </b-row>
       <div v-if="!showControls" class="modXMonsterLogo">
-        <a href="https://modxmonster.com" target="_blank">
-          <img class="img-fluid" src="./images/ModXMonster-logoH.png" />
+        <a href="https://trotalo.com" target="_blank">
+          <img class="img-fluid" src="./images/logoMenu.svg" />
         </a>
         <p>All Rights Reserved © 2020</p>
       </div>
