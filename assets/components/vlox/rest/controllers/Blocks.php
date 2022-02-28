@@ -18,7 +18,7 @@ class KrakenBlocks extends  modRestController {
         name: "[[+componentName]]",
         data() {
           return {
-            krakenBlock: [[+blockContent]]
+            vloxBlock: [[+blockContent]]
           };
         },
       };
@@ -41,7 +41,7 @@ class KrakenBlocks extends  modRestController {
   public function read($id) {
 
     if (is_numeric( $id )) {
-      /** @var krakenBlock $respurce */
+      /** @var vloxBlock $respurce */
       parent::read($id);
       //with the stored block we read the file and retrieve ewach section to be editable on the front
       $chunkName = $this->object->get('chunkName');
@@ -55,11 +55,11 @@ class KrakenBlocks extends  modRestController {
       );
       $returnObject =  array_merge( $returnObject, (array) $this->object->_fields);
       //Before creating a new registry, we make sure the respurce its clean
-      //first we make sure that the kraken renderer exists
+      //first we make sure that the vlox renderer exists
       $renderer = $this->modx->getObject('modResource', array('pagetitle' => 'vloxrenderer'));
       if (empty($renderer)) {
         //If the resources isn't crated
-        //Load the kraken template
+        //Load the vlox template
         $template = $this->modx->getObject('modTemplate', array('templatename' => 'vloxTemplate'));
 
         $renderer = $this->modx->newObject('modResource',
@@ -113,7 +113,7 @@ class KrakenBlocks extends  modRestController {
       $chunk->save();
 
     } else {
-      //First we get the cat id for kraken
+      //First we get the cat id for vlox
       $category = $this->modx->getObject('modCategory', array('category'=> 'Vlox'));
       if (empty($category)) {
         throw new Exception("category Vlox not found, please reinstall the plugin");
@@ -125,7 +125,7 @@ class KrakenBlocks extends  modRestController {
                                     'snippet'=>$this->defaultContent,
                                     'content'=>$this->defaultContent));
       $chunk->save();
-      //and now we store the data into the kraken table
+      //and now we store the data into the vlox table
       /** @var vloxBlocks $vloxBlocks */
       $vloxBlocks = $this->modx->newObject('vloxBlocks');
       $vloxBlocks->set('chunkName',$chunkName);

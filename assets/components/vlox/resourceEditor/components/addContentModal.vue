@@ -2,8 +2,8 @@
   <b-modal id="add-content" title="Add Block" size="xl" scrollable :hide-footer="true">
     <div class="content">
       <div class="row">
-        <div class="krakenBlockListContainer col-12 col-xl-6 p-1" v-if="blockList.results" v-for="(block,index) in blockList.results">
-          <button class="krakenBlockList my-2" v-on:click="addComponentToResource(block)">
+        <div class="vloxBlockListContainer col-12 col-xl-6 p-1" v-if="blockList.results" v-for="(block,index) in blockList.results">
+          <button class="vloxBlockList my-2" v-on:click="addComponentToResource(block)">
             <div class="row h-100 align-items-center">
               <div class="col-4">
                 <h5>{{block.title}}</h5>
@@ -92,11 +92,11 @@ module.exports = {
 .modal-body {
   background: #f8f8f8;
 }
-.krakenBlockListContainer {
+.vloxBlockListContainer {
   position: relative;
   height: 200px;
 }
-.krakenBlockList {
+.vloxBlockList {
   width: 100%;
   height: 100%;
   background: no-repeat;
@@ -104,11 +104,11 @@ module.exports = {
   background-color: white;
   padding: 0;
 }
-.krakenBlockList h5, .krakenBlockList p {
+.vloxBlockList h5, .vloxBlockList p {
   word-break: break-all;
   margin: 0 .5rem;
 }
-.krakenBlockList:hover {
+.vloxBlockList:hover {
   background-color: #ebebeb;
 }
 .blockPrev {

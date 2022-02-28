@@ -1,21 +1,21 @@
 <template>
-  <div class="krakenBlock">
-    <h5>{{krakencontent.title}}</h5>
-    <p class="m-0">{{krakencontent.description}}</p>
+  <div class="vloxBlock">
+    <h5>{{vloxcontent.title}}</h5>
+    <p class="m-0">{{vloxcontent.description}}</p>
     <button class="selectScrollArea" v-on:click="scrollToElement()"></button>
     <div class="iconsLeft">
       <button class="btn editIcon" type="button" v-on:click="showEdit()">
         <i class="fas fa-edit"></i>
       </button>
       <b-modal
-          v-bind:id="'edit-content' + krakencontent.id"
-          v-bind:key="krakencontent.id"
-          v-bind:ref="'edit-content' + krakencontent.id"
+          v-bind:id="'edit-content' + vloxcontent.id"
+          v-bind:key="vloxcontent.id"
+          v-bind:ref="'edit-content' + vloxcontent.id"
           @ok="save"
           title="Edit block" size="xl" scrollable>
         <content-editor
-            :blockContent = "krakencontent"
-            :id = "krakencontent.id">
+            :blockContent = "vloxcontent"
+            :id = "vloxcontent.id">
         </content-editor>
       </b-modal>
       <button class="btn showHideIcon" type="button">
@@ -37,13 +37,13 @@ module.exports = {
   components: {
     'content-editor': httpVueLoader('./contentEditor.vue'),
   },
-  props: ['krakencontent'],
+  props: ['vloxcontent'],
   methods: {
     showEdit() {
-      if (this.$refs['edit-content' + this.krakencontent.id]) {
-        this.$refs['edit-content' + this.krakencontent.id].show();
+      if (this.$refs['edit-content' + this.vloxcontent.id]) {
+        this.$refs['edit-content' + this.vloxcontent.id].show();
       } else {
-        alert('Error opening: ' + 'edit-content' + this.krakencontent.id);
+        alert('Error opening: ' + 'edit-content' + this.vloxcontent.id);
       }
 
     },
@@ -52,8 +52,8 @@ module.exports = {
       //TODO this neds to be changed to use VueBoostrap's components
       const answer = confirm("You sure you want to proceed?");
       if (answer == true) {
-        let finalObject = JSON.parse(JSON.stringify(this.krakencontent));
-        finalObject['items'] = this.krakencontent['properties']['items'];
+        let finalObject = JSON.parse(JSON.stringify(this.vloxcontent));
+        finalObject['items'] = this.vloxcontent['properties']['items'];
         delete finalObject['properties'];
         let axiosConfig = {
           headers: {
@@ -65,7 +65,7 @@ module.exports = {
         // TODO reenable to use rigth api endpoint instead of this
         //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
         axios.delete(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/index.php?_rest=Resources/'
-            + this.krakencontent.id,
+            + this.vloxcontent.id,
             finalObject,
             axiosConfig)
             .then(response => {
@@ -79,8 +79,8 @@ module.exports = {
       }
     },
     save(bvModalEvt) {
-      let finalObject = JSON.parse(JSON.stringify(this.krakencontent));
-      finalObject['items'] = this.krakencontent['properties']['items'];
+      let finalObject = JSON.parse(JSON.stringify(this.vloxcontent));
+      finalObject['items'] = this.vloxcontent['properties']['items'];
       delete finalObject['properties'];
       let axiosConfig = {
         headers: {
@@ -93,7 +93,7 @@ module.exports = {
       // TODO reenable to use rigth api endpoint instead of this
       //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
       axios.post(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/index.php?_rest=Resources/'
-          + this.krakencontent.id,
+          + this.vloxcontent.id,
           finalObject,
           axiosConfig)
           .then(response => {
@@ -113,10 +113,10 @@ module.exports = {
       while (selectedBlocks.length)
         selectedBlocks[0].className = selectedBlocks[0].className.replace(/\bblockSelected\b/g, "");
 
-      const scrollToElement = childDocument.getElementById(this.krakencontent.id + '-' +
-          this.krakencontent.title);
+      const scrollToElement = childDocument.getElementById(this.vloxcontent.id + '-' +
+          this.vloxcontent.title);
       if (!scrollToElement) {
-        alert(this.krakencontent.id + '-' + this.krakencontent.title + " not present on DOM, please check your blocks!");
+        alert(this.vloxcontent.id + '-' + this.vloxcontent.title + " not present on DOM, please check your blocks!");
       } else {
         scrollToElement.className = "blockSelected";
         var rect = scrollToElement.getBoundingClientRect();
@@ -135,15 +135,15 @@ module.exports = {
 .btn-check:focus+.btn, .btn:focus, .btn-check:active+.btn-outline-primary:focus, .btn-check:checked+.btn-outline-primary:focus, .btn-outline-primary.active:focus, .btn-outline-primary.dropdown-toggle.show:focus, .btn-outline-primary:active:focus {
   box-shadow: none !important;
 }
-.krakenBlock button {
+.vloxBlock button {
   outline: none !important;
   border: 0 !important;
 }
-.krakenContainer, .krakenWrap {
+.vloxContainer, .vloxWrap {
   height: calc(100% - 35px);
   overflow-y: auto;
 }
-.krakenBlock {
+.vloxBlock {
   position: relative;
   padding: 0.5rem 3.2rem 0.5rem 48px;
   margin-bottom: .5rem;
@@ -151,7 +151,7 @@ module.exports = {
   min-height: 5.5rem;
   overflow: hidden;
 }
-.krakenBlock h5 {
+.vloxBlock h5 {
   position: absolute;
   top: 29px;
   width: 68%;
@@ -162,7 +162,7 @@ module.exports = {
   max-height: 38px;
   transform: translateY(-50%);
 }
-.krakenBlock p {
+.vloxBlock p {
   position: absolute;
   top: 64px;
   font-size: 14px;
@@ -172,7 +172,7 @@ module.exports = {
   overflow: hidden;
   transform: translateY(-50%);
 }
-.krakenBlock button svg, .krakenBlock a svg{
+.vloxBlock button svg, .vloxBlock a svg{
   width: 20px;
   height: 20px;
   color: grey;
@@ -210,11 +210,11 @@ module.exports = {
   height: calc(100% - 10px);
   border-right: 1px solid lightgrey;
 }
-.krakenGhost {
+.vloxGhost {
   opacity: 0.5;
   background: #c1c1c1;
 }
-.krakenGhost h5, .krakenGhost p {
+.vloxGhost h5, .vloxGhost p {
   color: black;
 }
 .selectScrollArea {
@@ -230,7 +230,7 @@ module.exports = {
 
 /*
 
-.krakenWidth {
+.vloxWidth {
     max-width: 1980px;
 }
 button {

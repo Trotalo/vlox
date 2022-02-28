@@ -92,7 +92,7 @@
         <b-button
             variant="outline-primary"
             v-b-modal.new-input
-            class="addkrakenBlock"
+            class="addvloxBlock"
             v-on:click="save(inputData)"
             type="button">Add Input
         </b-button>

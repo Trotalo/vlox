@@ -1,11 +1,11 @@
 <template>
-  <section class="row krakenOptionView">
+  <section class="row vloxOptionView">
     <div class="col-8 col-xl-9">
       <div class="previewButtons">
         <button v-bind:class="[!renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(false)"><i class="fas fa-mobile-alt"></i> <span>576px</span></button>
         <button v-bind:class="[renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(true)"><i class="fas fa-desktop"></i> <span>1200px</span></button>
       </div>
-      <div class="krakenPreview" :class="[renderDesktop ? 'previewDesktop' : 'previewMobile']">
+      <div class="vloxPreview" :class="[renderDesktop ? 'previewDesktop' : 'previewMobile']">
         <iframe id="demoIframe" sandbox="allow-same-origin allow-forms allow-scripts" style="width: 100%;height: 100%" :src="frontPreview"></iframe>
       </div>
     </div>
@@ -13,33 +13,33 @@
     <div class="col-4 col-xl-3">
       <div class="mb-4 saveAddButtonsWrap">
         <div class="col-12">
-          <button class="btn btn-outline-primary krakenSaveDraft">Save Draft</button>
+          <button class="btn btn-outline-primary vloxSaveDraft">Save Draft</button>
           <b-button
               v-b-modal.add-content
-              class="btn btn-success addkrakenBlock"
+              class="btn btn-success addvloxBlock"
               type="button">Add Block
           </b-button>
           <add-content-modal v-bind:resinputid="resourceId"
                                     @updated="updated()">
           </add-content-modal>
 <!--          <b-modal id="add-content" title="Add Block" size="xl" scrollable :hide-footer="true">
-            <kraken-block-add-content v-bind:resInputId="resourceId"
+            <vlox-block-add-content v-bind:resInputId="resourceId"
                                       @updated="updated()">
-            </kraken-block-add-content>
+            </vlox-block-add-content>
           </b-modal>-->
         </div>
       </div>
-      <div class="krakenContainer">
-        <div class="col-12 krakenWrap">
+      <div class="vloxContainer">
+        <div class="col-12 vloxWrap">
           <draggable
-              ghost-class="krakenGhost"
+              ghost-class="vloxGhost"
               :list="resultsList"
               :component-data="getComponentData()">
             <resource-content
                 v-if="resultsList"
                 v-for="(blockSection,index) in resultsList"
                 :key="blockSection.id"
-                :krakenContent = "blockSection"
+                :vloxContent = "blockSection"
                 @updated="updated()">
             </resource-content>
           </draggable>
@@ -150,7 +150,7 @@ module.exports = {
 </script>
 
 <style scoped>
-html, body, #app, .krakenOptionView{
+html, body, #app, .vloxOptionView{
   height: 100%;
   overflow: hidden;
   margin: 0;
@@ -178,17 +178,17 @@ html, body, #app, .krakenOptionView{
   background-color: #f8a000;
   border-color: #b07100;
 }
-.krakenWidth {
+.vloxWidth {
   max-width: 2030px;
 }
 button, button i:after, button span {
   transition: .5s !important;
 }
-.krakenOptionView .col-8 {
+.vloxOptionView .col-8 {
   background: #d4d4d4;
   padding: 0;
 }
-.krakenOptionView .col-8, .krakenOptionView .col-4 {
+.vloxOptionView .col-8, .vloxOptionView .col-4 {
   height: 90vh;
 }
 .previewButtons {
@@ -211,7 +211,7 @@ button, button i:after, button span {
   font-size: .8rem;
   font-weight: normal;
 }
-.krakenPreview {
+.vloxPreview {
   position: relative;
   overflow: hidden;
   width: 97%;
@@ -249,7 +249,7 @@ button, button i:after, button span {
   height: 100%;
   margin: 0 auto;
 }
-.addkrakenBlock {
+.addvloxBlock {
   float: right;
 }
 .blockSelected {

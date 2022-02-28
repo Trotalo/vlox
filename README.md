@@ -1,6 +1,6 @@
 # Vlox
 
-Vlox it's an extra (aka plugin) designed to work with the [CMS ModX](https://modx.com/) to easily integrate VueJS and let you 
+Vlox it's an extra (aka plugin) designed to work with the [CMS ModX](https://modx.com/) to integrate VueJS and let you 
 easily create digital experiences in a simple and straightforward way.
 
 By integrating a powerful development framework focused on content management, and Vue, you'll get most of the complex 
@@ -13,10 +13,10 @@ You'll need a [Modx installation](https://docs.modx.com/current/en/getting-start
 dive into the ModX documentation, or just use the docker configuration that we have to launch a fully working 
 infrastructure.
 
-[Here](https://github.com/modxMonster/modxBaseEnviroment/blob/master/README.md) you can find details on how to set up 
+[Here](https://github.com/Trotalo/modxBaseEnviroment/blob/master/README.md) you can find details on how to set up 
 a docker configuration on W10 using WSL2
 
-1. Run the following command `git clone git@github.com:modxMonster/modxBaseEnviroment.git yourProjectName` DON'T forget
+1. Run the following command `git clone git@github.com:Trotalo/modxBaseEnviroment.git yourProjectName` DON'T forget
 to update the `yourProjectName` value
 2. Edit the `docker-compose.yml` file and set the `YOUR_IP` to your local ip address
 3. Enter yourProjectName folder, and execute the command `docker-compose up`
@@ -27,26 +27,26 @@ downloaded and configured
 7. Click the ***Go to the manager*** big green button
 8. Enter the manager using admin/admin as credentials
 
-At this point you can install kraken in 2 possible ways, first you can just install the extra and start developing 
-your site, or you can configure the project to develop new features or view the kraken code.
+At this point you can install vlox in 2 possible ways, first you can just install the extra and start developing 
+your site, or you can configure the project to develop new features or view the vlox code.
 
 ###Installing the extra to build my site
-1. Download [the package file](https://github.com/modxMonster/kraken/raw/master/_packages/kraken-0.0.1-pl.transport.zip)
+1. Download [the package file](https://github.com/Trotalo/vlox/raw/master/_packages/vlox-0.0.1-pl.transport.zip)
 2. Enter the ModX manager using the browser and open https://YOUR_IP/manager
 3. In the top menu, Go to `extras -> installer` this will take you to the **Package Management** page
 4. Press the arrow next to the **Download Extras** button, this will open a small menu
 5. From the menu select the option that reads **Upload a package**
-6. Click the choose file button, and use the file browser to locate the `kraken-0.0.1-pl.transport.zip` file that you 
+6. Click the choose file button, and use the file browser to locate the `vlox-0.0.1-pl.transport.zip` file that you 
 downloaded on the first step
 7. Once the file is loaded into the window, press **Upload** then **Close**
-8. Now you'll see `kraken` in the list, and a **Not Installed** message next to it
-9. Click the **Install** button below the text `kraken`
+8. Now you'll see `vlox` in the list, and a **Not Installed** message next to it
+9. Click the **Install** button below the text `vlox`
 10. Press continue to install the package.
 11. Refresh the page
 12. Check the new **Monster** option of the top menu
 13. Now you are all set to start working
 
-###Install the project to work on kraken
+###Install the project to work on vlox
 1. We need to install the [amazing GPM](https://github.com/theboxer/Git-Package-Management) to be able to easily build 
 a ModX extra
 2. Download the [package file](https://github.com/theboxer/Git-Package-Management/raw/master/_packages/gitpackagemanagement-0.14.0-alpha9.transport.zip)
@@ -68,17 +68,17 @@ a ModX extra
     sudo chown -R www-data:www-data ../*
     sudo chmod -R 0777 * ../*
 ```
-16. Clone the kraken repository by running `git clone git@github.com:modxMonster/kraken.git`
+16. Clone the vlox repository by running `git clone git@github.com:modxMonster/vlox.git`
 17. Now we need to install the PHP dependencies, for this you need to retrieve the name of the docker container, for 
 run `docker ps`
 18. You should see an entry similar to `yourprojectname_web_1` with the name you assigned, copy that entry
 19. Update the **yourprojectname** value and run the following command, this will run composer inside the container
 and install the dependencies
-`docker exec -ti yourprojectname_web_1 sh -c "cd /var/www/html/kraken/core/components/kraken/controllers && composer install"`
+`docker exec -ti yourprojectname_web_1 sh -c "cd /var/www/html/vlox/core/components/vlox/controllers && composer install"`
 20. Refresh the page
-21. Now we need to install the kraken extra, using GPM, go to `Extras -> Git Package Management`
+21. Now we need to install the vlox extra, using GPM, go to `Extras -> Git Package Management`
 22. Click the **Add package** button
-23. In the popup window type `kraken` inside the **Folder** text input and press the **save** option
+23. In the popup window type `vlox` inside the **Folder** text input and press the **save** option
 24. If you experience any permission errors, run step 15 again.
 25. Refresh the page
 26. Check the new **Monster** option of the top menu
@@ -115,7 +115,7 @@ in the HTML section of the page you are on.
     name: "[[+componentName]]",
     data() {
       return {
-        krakenBlock: [[+blockContent]]
+        vloxBlock: [[+blockContent]]
       };
     },
   };

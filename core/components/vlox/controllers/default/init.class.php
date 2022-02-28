@@ -13,8 +13,8 @@ class VloxInitManagerController  extends modExtraManagerController {
     return 'ModxMonster Blocks editor';
   }
   public function getTemplateFile() {
-    //return '/var/www/html/kraken/assets/components/kraken/blocksEditor/blocksEditor.html';
-    //$assetsLocation = $this->modx->getOption('kraken.assets_path');
+    //return '/var/www/html/vlox/assets/components/vlox/blocksEditor/blocksEditor.html';
+    //$assetsLocation = $this->modx->getOption('vlox.assets_path');
     $assetsLocation = $this->modx->getOption('vlox.assets_path', null, $this->modx->getOption('assets_path') . 'components/vlox/');
     return $assetsLocation . 'blocksEditor/vloxEditor.html';
   }

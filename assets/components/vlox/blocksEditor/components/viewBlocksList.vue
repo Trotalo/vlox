@@ -5,13 +5,13 @@
     <b-container fluid>
       <b-row>
         <b-col cols="12" lg="6" xl="4" v-if="blockList.results" v-for="(block,index) in blockList.results" :key="block.id">
-          <div class="krakenBlock my-2">
-            <button class="krakenBlockWSelect"
+          <div class="vloxBlock my-2">
+            <button class="vloxBlockWSelect"
                     v-on:click="selectBlock(block)">
               <h5>{{ block.title }}</h5>
               <p>{{ block.description }}</p>
             </button>
-            <button v-on:click="deleteBlock(block)" class="krakenBlockDelete btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button>
+            <button v-on:click="deleteBlock(block)" class="vloxBlockDelete btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button>
           </div>
         </b-col>
       </b-row>
@@ -21,7 +21,7 @@
           <b-button
               variant="outline-primary"
               v-b-modal.new-block
-              class="addkrakenBlock"
+              class="addvloxBlock"
               @click="showBlocksList=false"
               type="button">Create a New Block
           </b-button>
@@ -101,14 +101,14 @@ module.exports = {
 };
 </script>
 <style>
-  #krakenAddBlockModal .modal-body button {
+  #vloxAddBlockModal .modal-body button {
     background: #EEEEEE;
   }
-  .krakenBlock {
+  .vloxBlock {
     position: relative;
     height: 160px;
   }
-  .krakenBlock .krakenBlockWSelect {
+  .vloxBlock .vloxBlockWSelect {
     width: 100%;
     height: 100%;
     padding: 2rem 0;
@@ -116,10 +116,10 @@ module.exports = {
     border: 1px solid #b6b6b6;
     background-color: white;
   }
-  .krakenBlock .krakenBlockWSelect:hover {
+  .vloxBlock .vloxBlockWSelect:hover {
     background-color: #ebebeb;
   }
-  .krakenBlock .krakenBlockDelete {
+  .vloxBlock .vloxBlockDelete {
     position: absolute;
     right: 10px;
     top: 100%;

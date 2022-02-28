@@ -1,12 +1,13 @@
 <?php
-//$coreLocation = $modx->getOption('kraken.core_path') . ;
-$coreLocation = $modx->getOption('kraken.core_path', null, $modx->getOption('core_path') . 'components/kraken/');
+//$coreLocation = $modx->getOption('vlox.core_path') . ;
+$coreLocation = $modx->getOption('vlox.core_path', null,
+  $modx->getOption('core_path') . 'components/vlox/');
 
 require_once($coreLocation . 'controllers/VloxController.php');
 /*if (Utils::getInstance()->isDevMode()) {
-  require_once(dirname($modx->getOption('base_path')) . '/html/kraken/core/components/kraken/controllers/VloxController.php');
+  require_once(dirname($modx->getOption('base_path')) . '/html/vlox/core/components/vlox/controllers/VloxController.php');
 } else {
-  require_once($modx->getOption('core_path') . '/components/kraken/controllers/VloxController.php');
+  require_once($modx->getOption('core_path') . '/components/vlox/controllers/VloxController.php');
 }*/
 
 VloxController::loadService($modx);

@@ -1,5 +1,5 @@
 <?php
-//$coreLocation = $modx->getOption('kraken.core_path');
+//$coreLocation = $modx->getOption('vlox.core_path');
 $coreLocation = $modx->getOption('vlox.core_path', null,
                           $modx->getOption('core_path') . 'components/vlox/');
 

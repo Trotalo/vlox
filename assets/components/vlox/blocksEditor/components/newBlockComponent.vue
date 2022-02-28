@@ -12,7 +12,6 @@
               v-model="blockData.chunkName"
               placeholder="Enter at least 5 characters"
               :state="validName"
-              @keydown.native="save(blockData)"
               required>
           </b-form-input>
           <span class="text-danger">{{ errors[0] }}</span>
@@ -36,7 +35,7 @@
       <div class="addButton w-100">
         <b-button
             variant="outline-primary"
-            class="addkrakenBlock"
+            class="addvloxBlock"
             @click="save(blockData)"
             type="button">Create Block
         </b-button>

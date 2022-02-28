@@ -9,7 +9,7 @@ use ScssPhp\ScssPhp\Compiler;
 
 
 /**
- * Loads the json from kraken_resource_content table
+ * Loads the json from vlox_resource_content table
  */
 class VloxController {
 
@@ -18,20 +18,20 @@ class VloxController {
   /** @var ScssPhp\ScssPhp\Compiler $scss*/
   private $scss;
 
-  private $COMPONENTS_ROUTE; //'kraken/assets/components/kraken/renderedBlocks/'
+  private $COMPONENTS_ROUTE; //'vlox/assets/components/vlox/renderedBlocks/'
 
   function __construct() {
     $this->modx = new modX;
     $this->scss = new Compiler();
     $this->modx->initialize('web');
-    //$packagePath = $this->modx->getOption('kraken.core_path') . 'model/';
+    //$packagePath = $this->modx->getOption('vlox.core_path') . 'model/';
     $packagePath = $this->modx->getOption('vlox.core_path', null,
         $this->modx->getOption('core_path') . 'components/vlox/'). 'model/';
     if (!$this->modx->addPackage('vlox', $packagePath)) {
       $this->modx->log(xPDO::LOG_LEVEL_ERROR, "vlox package not found");
       throw new Exception("vlox package not found");
     }
-    //$assetsLocation = $this->modx->getOption('kraken.assets_path');
+    //$assetsLocation = $this->modx->getOption('vlox.assets_path');
     $assetsLocation = $this->modx->getOption('vlox.assets_path', null,
                                       $this->modx->getOption('assets_path') . 'components/vlox/');
     $this->COMPONENTS_ROUTE = $assetsLocation . 'renderedBlocks/';
@@ -58,7 +58,7 @@ class VloxController {
 
     $query = $this->modx->query(" 
       select blocks.chunkName, resourceContent.*
-      from modx_kraken_blocks as blocks, modx_vlox_resource_content as resourceContent
+      from modx_vlox_blocks as blocks, modx_vlox_resource_content as resourceContent
       where blocks.id = resourceContent.blockId
       and resourceContent.resourceId = $resId
       and resourceContent.blockId = $blockId 

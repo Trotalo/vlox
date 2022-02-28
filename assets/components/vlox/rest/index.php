@@ -13,7 +13,7 @@ if ($modx->getRequest()) {
   $modx->request->sanitizeRequest();
 }
 
-//$coreLocation = $modx->getOption('kraken.core_path') . 'model/';
+//$coreLocation = $modx->getOption('vlox.core_path') . 'model/';
 $coreLocation = $modx->getOption('vlox.core_path', null, $modx->getOption('core_path')
                                                                                     . 'components/vlox/') . 'model/';
 

@@ -3,20 +3,20 @@
     <b-container class="mt-4">
       <b-row class="align-items-center">
         <b-col cols="12" lg="3" class="mb-3">
-          <img v-if="showControls" src="./images/vlox.png" class="krakenLogo" />
+          <img v-if="showControls" src="./images/vlox.png" class="vloxLogo" />
         </b-col>
         <b-col v-if="showControls" cols="12" md="6" lg="5">
           <b-button
               variant="outline-primary"
               v-b-modal.new-block
-              class="addkrakenBlock"
+              class="addvloxBlock"
               type="button">Create a New Block
           </b-button>
           <new-block-component v-on:block-selected="onSelectBlock"></new-block-component>
           <b-button
               variant="outline-primary"
               v-b-modal.select-block
-              class="addkrakenBlock"
+              class="addvloxBlock"
               type="button">Select A Block
           </b-button>
         </b-col>
@@ -50,7 +50,7 @@
             <b-button
                 variant="outline-primary"
                 v-b-modal.select-block
-                class="addkrakenBlockBig"
+                class="addvloxBlockBig"
                 type="button">View your VloX!
             </b-button>
           </div>
@@ -73,7 +73,7 @@
                 <b-button
                     variant="outline-primary"
                     v-b-modal.new-input
-                    class="addkrakenBlock"
+                    class="addvloxBlock"
                     type="button">Add Input Field
                 </b-button>
                 <new-input-component v-bind:blockDataInput="blockData"></new-input-component>
@@ -484,7 +484,7 @@ td .btn-group button {
 .table.b-table > tbody > .table-active, .table.b-table > tbody > .table-active > th, .table.b-table > tbody > .table-active > td {
   background-color: #eeeeee;
 }
-.addkrakenBlockBig {
+.addvloxBlockBig {
   margin: 2rem auto 0;
   padding: 1.3rem 3rem;
   background: whitesmoke;

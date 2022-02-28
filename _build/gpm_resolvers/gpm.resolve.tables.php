@@ -4,7 +4,7 @@
  *
  * THIS RESOLVER IS AUTOMATICALLY GENERATED, NO CHANGES WILL APPLY
  *
- * @package kraken
+ * @package vlox
  * @subpackage build
  *
  * @var mixed $object
@@ -17,9 +17,9 @@ if ($object->xpdo) {
     switch ($options[xPDOTransport::PACKAGE_ACTION]) {
         case xPDOTransport::ACTION_INSTALL:
         case xPDOTransport::ACTION_UPGRADE:
-            $modelPath = $modx->getOption('kraken.core_path', null, $modx->getOption('core_path') . 'components/kraken/') . 'model/';
+            $modelPath = $modx->getOption('vlox.core_path', null, $modx->getOption('core_path') . 'components/vlox/') . 'model/';
             
-            $modx->addPackage('kraken', $modelPath, null);
+            $modx->addPackage('vlox', $modelPath, null);
 
 
             $manager = $modx->getManager();

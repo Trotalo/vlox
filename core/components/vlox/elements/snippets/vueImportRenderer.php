@@ -1,7 +1,7 @@
 <?php
-//require_once(dirname($modx->getOption('base_path')) . '/html/kraken/core/components/kraken/controllers/VloxController.php');
-//require_once($modx->getOption('core_path') . '/components/kraken/controllers/VloxController.php');
-//$coreLocation = $modx->getOption('kraken.core_path');
+//require_once(dirname($modx->getOption('base_path')) . '/html/vlox/core/components/vlox/controllers/VloxController.php');
+//require_once($modx->getOption('core_path') . '/components/vlox/controllers/VloxController.php');
+//$coreLocation = $modx->getOption('vlox.core_path');
 $coreLocation = $modx->getOption('vlox.core_path', null,
                           $modx->getOption('core_path') . 'components/vlox/');
 

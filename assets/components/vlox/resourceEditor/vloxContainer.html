@@ -38,7 +38,7 @@
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vuejs-dialog@1.4.2/dist/vuejs-dialog-mixin.min.js"></script>
 
 </head>
-<body class="container krakenWidth">
+<body class="container vloxWidth">
 
 	<div id="app">
 		<resource-editor></resource-editor>
@@ -48,7 +48,7 @@
 	<script>
 		Vue.use(VuejsDialog.main.default);
 
-		Vue.prototype.$restRoute = '/vlox/assets/components/vlox'; //kraken
+		Vue.prototype.$restRoute = '/vlox/assets/components/vlox'; //vlox
 
 		new Vue({
 			el: '#app',
