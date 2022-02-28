@@ -58,7 +58,7 @@ class VloxController {
 
     $query = $this->modx->query(" 
       select blocks.chunkName, resourceContent.*
-      from modx_kraken_blocks as blocks, modx_kraken_block_resource_content as resourceContent
+      from modx_kraken_blocks as blocks, modx_vlox_resource_content as resourceContent
       where blocks.id = resourceContent.blockId
       and resourceContent.resourceId = $resId
       and resourceContent.blockId = $blockId 

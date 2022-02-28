@@ -128,14 +128,6 @@
                 <b-button variant="outline-primary" v-on:click="save()" class="updatePrev">Update Preview</b-button>
                 <vue-ace-editor v-model="blockData.htmlSection" v-bind:options="htmlEdtOptions" id="editor1"/>
               </b-col>
-<!--              <b-col id="styleEditor" cols="12" md="6">
-                <h3>SCSS</h3>
-                <vue-ace-editor v-model="blockData.styleSection" v-bind:options="styleEdtOptions" id="editor2"/>
-              </b-col>
-              <b-col id="jsEditor" cols="12" md="6" class="mb-3">
-                <h3>Vue <small>V2.6.2</small></h3>
-                <vue-ace-editor v-model="blockData.scriptSection" v-bind:options="codeEdtOptions" id="editor3"/>
-              </b-col>-->
             </b-row>
           </b-tab>
         </b-tabs>

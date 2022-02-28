@@ -21,7 +21,7 @@ class KrakenResources extends modRestController {
         //first we need to retrieve the current max position
         $query = $this->modx->query(" 
           select max(resourceContent.position) as position
-          from modx_kraken_block_resource_content as resourceContent");
+          from modx_vlox_resource_content as resourceContent");
         if (is_null($query)) {
           throw new Exception("No data found for position, maybe new res??");
         }
