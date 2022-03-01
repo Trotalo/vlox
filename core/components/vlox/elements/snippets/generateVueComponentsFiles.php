@@ -1,4 +1,13 @@
 <?php
+/*
+ * This file is part of VloX.
+ *
+ * Copyright (c) TROTALO, SAS. All Rights Reserved.
+ *
+ * For complete copyright and license information, see the COPYRIGHT and LICENSE
+ * files found in the top-level directory of this distribution.
+ */
+
 //$coreLocation = $modx->getOption('vlox.core_path');
 $coreLocation = $modx->getOption('vlox.core_path', null,
                           $modx->getOption('core_path') . 'components/vlox/');

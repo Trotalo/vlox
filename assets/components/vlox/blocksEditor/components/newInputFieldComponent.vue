@@ -1,3 +1,12 @@
+<!--
+  - This file is part of VloX.
+  -
+  - Copyright (c) TROTALO, SAS. All Rights Reserved.
+  -
+  - For complete copyright and license information, see the COPYRIGHT and LICENSE
+  - files found in the top-level directory of this distribution.
+  -->
+
 <template>
   <b-modal ref="new-input" id="new-input" v-bind:title="'New Input Field' + ' for ' + $attrs.blockdatainput.chunkName"
            size="xl" scrollable @ok="save(inputData)">

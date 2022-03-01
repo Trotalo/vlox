@@ -1,3 +1,12 @@
+<!--
+  - This file is part of VloX.
+  -
+  - Copyright (c) TROTALO, SAS. All Rights Reserved.
+  -
+  - For complete copyright and license information, see the COPYRIGHT and LICENSE
+  - files found in the top-level directory of this distribution.
+  -->
+
 <template>
   <b-modal id="add-content" title="Add Block" size="xl" scrollable :hide-footer="true">
     <div class="content">

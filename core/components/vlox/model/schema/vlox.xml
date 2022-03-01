@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This file is part of VloX.
+  ~
+  ~ Copyright (c) TROTALO, SAS. All Rights Reserved.
+  ~
+  ~ For complete copyright and license information, see the COPYRIGHT and LICENSE
+  ~ files found in the top-level directory of this distribution.
+  -->
+
 <model package="vlox" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM" version="1.0">
     <object class="vloxResourceContent" table="vlox_resource_content" extends="xPDOSimpleObject">
         <field key="position" dbtype="int" phptype="integer" null="false" default=""/>
