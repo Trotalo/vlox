@@ -1,6 +1,6 @@
 # Vlox
 
-Vlox it's an extra (aka plugin) designed to work with the [CMS ModX](https://modx.com/) to integrate VueJS and let you 
+Vlox it's an extra (aka plugin) designed to work with the [CMS MODX](https://modx.com/) to integrate VueJS and let you 
 easily create digital experiences in a simple and straightforward way.
 
 By integrating a powerful development framework focused on content management, and Vue, you'll get most of the complex 
@@ -9,8 +9,8 @@ interface interactions that you can imagine.
 
 ## Using vlox
 
-You'll need a [Modx installation](https://docs.modx.com/current/en/getting-started/installation), if you want, you can
-dive into the ModX documentation, or just use the docker configuration that we have to launch a fully working 
+You'll need a [MODX installation](https://docs.modx.com/current/en/getting-started/installation), if you want, you can
+dive into the MODX documentation, or just use the docker configuration that we have to launch a fully working 
 infrastructure.
 
 [Here](https://github.com/Trotalo/modxBaseEnviroment/blob/master/README.md) you can find details on how to set up 
@@ -23,7 +23,7 @@ to update the `yourProjectName` value
 4. Go for a coffee, depending on your connection this can take some time, as mysql and apache services are being 
 downloaded and configured
 5. Once you see `AH00094: Command line: 'apache2 -D FOREGROUND'` in the console, the service will be up and running.
-6. Open `https://YOUR_IP` on your browser, and you should see the ModX welcome page
+6. Open `https://YOUR_IP` on your browser, and you should see the MODX welcome page
 7. Click the ***Go to the manager*** big green button
 8. Enter the manager using admin/admin as credentials
 
@@ -32,7 +32,7 @@ your site, or you can configure the project to develop new features or view the 
 
 ###Installing the extra to build my site
 1. Download [the package file](https://github.com/Trotalo/vlox/raw/master/_packages/vlox-0.0.1-pl.transport.zip)
-2. Enter the ModX manager using the browser and open https://YOUR_IP/manager
+2. Enter the MODX manager using the browser and open https://YOUR_IP/manager
 3. In the top menu, Go to `extras -> installer` this will take you to the **Package Management** page
 4. Press the arrow next to the **Download Extras** button, this will open a small menu
 5. From the menu select the option that reads **Upload a package**
@@ -48,7 +48,7 @@ downloaded on the first step
 
 ###Install the project to work on vlox
 1. We need to install the [amazing GPM](https://github.com/theboxer/Git-Package-Management) to be able to easily build 
-a ModX extra
+a MODX extra
 2. Download the [package file](https://github.com/theboxer/Git-Package-Management/raw/master/_packages/gitpackagemanagement-0.14.0-alpha9.transport.zip)
 3. In the top menu, Go to `extras -> installer` this will take you to the **Package Management** page
 4. Press the arrow next to the **Download Extras** button, this will open a small menu
@@ -137,7 +137,7 @@ in the HTML section of the page you are on.
 6. Press **SAVE&PUBLISH**
 7. Go to the **Resources** section on the left-hand panel
 8. Click the plus sign next to the **Website** text, this will open up the **New Document** window
-In ModX, resources equals pages in your website, name your new page
+In MODX, resources equals pages in your website, name your new page
 9. Select the **KrakenTemplate** option from the **Uses Template** drop down
 10. Click yes on the warning popup
 11. Click **Save** on the upper right section of the page
