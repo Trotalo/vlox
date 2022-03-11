@@ -21,7 +21,7 @@ class KrakenBlocks extends  modRestController {
       <p>Create some content!</p>
       </template>
       <script>
-      module.exports = {
+      export default {
         name: "[[+componentName]]",
         data() {
           return {
@@ -30,7 +30,7 @@ class KrakenBlocks extends  modRestController {
         },
       };
       </script>
-      <style scope>
+      <style scope lang="scss">
       //Place styles here
       </style>
     STR;

@@ -1,15 +1,22 @@
+/*
+ * This file is part of VloX.
+ *
+ * Copyright (c) TROTALO, SAS. All Rights Reserved.
+ *
+ * For complete copyright and license information, see the COPYRIGHT and LICENSE
+ * files found in the top-level directory of this distribution.
+ */
+var fs = require('fs');
+
 const path = require('path')
 
-const isMainApp = process.env.APP_TYPE === 'app1'
-console.log('asdf' + process.env.APP_TYPE);
-const appDir = isMainApp ? 'app1' : 'app2'
+/*const isMainApp = process.env.APP_TYPE === 'app1'
+console.log('asdf' + process.env.APP_TYPE);*/
+const appDir = process.env.APP_TYPE;
 
 module.exports = {
   outputDir: path.resolve(__dirname, `${appDir}/dist`),
   chainWebpack: config => {
-
-    // I've ommited all the non-relevant config stuff
-
     config.resolve.alias.set('@I', path.resolve(__dirname, '../interfaces'))
     config.resolve.alias.set('@shared', path.resolve(__dirname, './shared'))
 
@@ -20,6 +27,16 @@ module.exports = {
 
   },
   devServer: {
-    port: isMainApp ? 8080 : 7070
-  },
+    "port": 8080,
+    "https": {
+      "key": fs.readFileSync('./certs/ssl.key'),
+      "cert": fs.readFileSync('./certs/ssl.crt')
+    },
+    /*proxy: {
+      '^/customBooking': {
+        target: 'https://172.25.33.168',
+        changeOrigin: true
+      },
+    }*/
+  }
 }

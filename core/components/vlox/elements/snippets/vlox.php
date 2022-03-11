@@ -15,9 +15,10 @@ require_once($coreLocation . 'controllers/VloxController.php');
 
 VloxController::loadService($modx);
 
-$resIdStr = $modx->resource->get('id');
-$resId = $resIdStr + 0;
-
+if (!isset($resId) || empty($resId)) {
+  $resIdStr = $modx->resource->get('id');
+  $resId = $resIdStr + 0;
+}
 
 if (empty($resId) || is_null($resId) ) {
   throw new Exception("Missing params for: renderComponentsTag(resId: $resId)");

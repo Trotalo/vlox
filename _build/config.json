@@ -69,6 +69,10 @@
         {
           "name": "head",
           "file": "head.html"
+        },
+        {
+          "name": "defaultApp",
+          "file": "defaultApp.html"
         }
       ],
       "templates": [

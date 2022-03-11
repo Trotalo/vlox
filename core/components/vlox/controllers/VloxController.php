@@ -43,7 +43,9 @@ class VloxController {
     //$assetsLocation = $this->modx->getOption('vlox.assets_path');
     $assetsLocation = $this->modx->getOption('vlox.assets_path', null,
                                       $this->modx->getOption('assets_path') . 'components/vlox/');
-    $this->COMPONENTS_ROUTE = $assetsLocation . 'renderedBlocks/';
+    $coreLocation = $this->modx->getOption('vlox.core_path', null,
+                $this->modx->getOption('core_path') . 'components/vlox/');
+    $this->COMPONENTS_ROUTE = $coreLocation . 'vue-res/';
   }
 
   /** @param modX $modx */
@@ -112,52 +114,34 @@ class VloxController {
   public function generateVueComponentsFiles($resId) {
     $query = $this->loadResourceBlocks($resId);
 
+    if (!file_exists($this->COMPONENTS_ROUTE . $resId)) {
+      $this->recurseCopy($this->COMPONENTS_ROUTE . 'sample',
+        $this->COMPONENTS_ROUTE . $resId);
+    }
+    $hasComponents = false;
+    $parser = $this->modx->getParser();
+    $maxIterations= (integer) $this->modx->getOption('parser_max_iterations', null, 10);
+
     while ($row = $query->fetch()) {
+      $hasComponents = true;
       //$this->modx->log(xPDO::LOG_LEVEL_ERROR, json_encode($row));
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
-      //$compName = str_replace('.vue', $row['id'], $chunkName);
-      $compName = strtolower($chunkName . '-' . $resBlockId);
+      $compName = strtolower($chunkName . '_' . $resBlockId);
       $blockContent = $this->buildJsonContent($chunkName, $row['properties'], $compName);
       if (empty($blockContent)) {
         throw new Exception($chunkName . ' snippet not found, check your manager configuration!');
       }
-      //Build the final final usign DOM parser lib
-      /*$document = new \Gt\Dom\HTMLDocument($blockContent);
-      $styleSection = $document->querySelector("style")->textContent;*/
-      $styleStart = strpos($blockContent, '<style');
-      $styleEnd = strpos($blockContent, '</style>');
-      $styleSection = substr($blockContent, $styleStart + 13, ($styleEnd - $styleStart) - 13) ;
-      try {
-        $compiledStyle = $this->scss->compile($styleSection);
-      } catch (\Exception $e) {
-        throw new Exception("There are issues with $chunkName, error is $e->getMessage()" );
-      }
-      $blockContent = substr($blockContent, 0, strpos($blockContent, '<style'));
-      $blockContent .= "<style scope>";
-      $blockContent .= $compiledStyle;
-      $blockContent .= "</style>";
-
-
-      //--------------TEST CODE
-      // Get the modParser instance
-      $parser = $this->modx->getParser();
-
-      // Define how deep we can go
-      $maxIterations= (integer) $this->modx->getOption('parser_max_iterations', null, 10);
-
       // Parse cached tags, while leaving unprocessed tags in place
       $parser->processElementTags('', $blockContent, false, false, '[[', ']]', [], $maxIterations);
       // Parse uncached tags and remove anything that could not be processed
       $parser->processElementTags('', $blockContent, true, true, '[[', ']]', [], $maxIterations);
-
-      //echo $blockContent;
-
       //$document->querySelector("style")->textContent = $compiledStyle;
       $finalBlock = $blockContent;
       //And finally we save the partial vue component
-      //$vueFileName = MODX_BASE_PATH . 'modxMonster/renderedBlocks/' . $compName . '.vue';
-      $vueFileName = $this->COMPONENTS_ROUTE . $compName . '.vue';
+      //first check if the project dir exists
+
+      $vueFileName = $this->COMPONENTS_ROUTE . $resId . '/src/components/' . $compName . '.vue';
       $vueFile = fopen($vueFileName, "w");
       if (!$vueFile) {
         $lastError = error_get_last();
@@ -167,13 +151,30 @@ class VloxController {
       fclose($vueFile);
 
     }
+    if ($hasComponents) {
+      //here we should recreate the App.vue file
+      $output = $this->modx->getChunk('defaultApp', array('resId'=> $resId));
+      $parser->processElementTags('', $output, false, false, '[[', ']]', [], $maxIterations);
+      // Parse uncached tags and remove anything that could not be processed
+      $parser->processElementTags('', $output, true, true, '[[', ']]', [], $maxIterations);
+      //echo $output;
+      $vueFileName = $this->COMPONENTS_ROUTE . $resId . '/src/App.vue';
+      $vueFile = fopen($vueFileName, "w");
+      if (!$vueFile) {
+        $lastError = error_get_last();
+        throw new Exception("Problems creating $vueFileName error was: $lastError");
+      }
+      fwrite($vueFile, $output);
+      fclose($vueFile);
+
+    }
     /*if (empty($returnValue)) {
       $returnValue = "<h1>There aren't any blocks assigned to this resource</h1>";
     }*/
     //return '';
   }
 
-  public function renderComponentImports($resId) {
+  public function renderComponentDef($resId) {
     $returnValue = "components: { ";
     $query = $this->loadResourceBlocks($resId);
 
@@ -182,15 +183,31 @@ class VloxController {
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
       //$compName = strtolower(str_replace('.vue', '-' . $resBlockId, $chunkName));\
-      $compName = strtolower($chunkName . '-' . $resBlockId);
+      $compName = strtolower($chunkName . '_' . $resBlockId);
       //$fileName = str_replace('.vue', $resBlockId . '.vue', $chunkName);
-      $fileName = $compName . '.vue';
-      $returnValue .= "'$compName': httpVueLoader('". $this->modx->getOption('site_url') .
-        str_replace(MODX_BASE_PATH, '', $this->COMPONENTS_ROUTE) . "$fileName'), ";
+      //$fileName = $compName . '.vue';
+      $returnValue .= "$compName,\n";
     }
     $returnValue .= "}";
     if (empty($returnValue)) {
       $returnValue = "<h1>There aren't any blocks assigned to this resource</h1>";
+    }
+    return $returnValue;
+  }
+
+  public function renderComponentImports($resId) {
+    $returnValue = "";
+    $query = $this->loadResourceBlocks($resId);
+
+    while ($row = $query->fetch()) {
+      //$this->modx->log(xPDO::LOG_LEVEL_ERROR, json_encode($row));
+      $chunkName = $row['chunkName'];
+      $resBlockId = $row['id'];
+      //$compName = strtolower(str_replace('.vue', '-' . $resBlockId, $chunkName));\
+      $compName = strtolower($chunkName . '_' . $resBlockId);
+      //$fileName = str_replace('.vue', $resBlockId . '.vue', $chunkName);
+      $fileName = $compName;
+      $returnValue .= "import $compName from './components/$compName';\n";
     }
     return $returnValue;
   }
@@ -203,8 +220,8 @@ class VloxController {
       //$this->modx->log(xPDO::LOG_LEVEL_ERROR, json_encode($row));
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
-      $compName = strtolower($chunkName . '-' . $resBlockId);
-      $scrollDiv = '<div id="' . $row['id'] . '-' . $row['title'] . '">';
+      $compName = strtolower($chunkName . '_' . $resBlockId);
+      $scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '">';
       $returnValue .= $scrollDiv;
       $returnValue .= "<$compName v-on:toggle-loading=\"toggleLoading\" v-on:show-error=\"toggleError\" ></$compName>";
       $returnValue .= "</div>";
@@ -233,5 +250,53 @@ class VloxController {
                         getResourcesContent(resourceId: $resId)");
     }
     return $query;
+  }
+
+  /**
+   * Taken from https://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php
+   * @param string $sourceDirectory
+   * @param string $destinationDirectory
+   * @param string $childFolder
+   */
+  private function recurseCopy(
+    string $sourceDirectory,
+    string $destinationDirectory,
+    string $childFolder = ''
+  ): void {
+    $directory = opendir($sourceDirectory);
+
+    if (is_dir($destinationDirectory) === false) {
+      mkdir($destinationDirectory);
+    }
+
+    if ($childFolder !== '') {
+      if (is_dir("$destinationDirectory/$childFolder") === false) {
+        mkdir("$destinationDirectory/$childFolder");
+      }
+      while (($file = readdir($directory)) !== false) {
+        if ($file === '.' || $file === '..') {
+          continue;
+        }
+        if (is_dir("$sourceDirectory/$file") === true) {
+          $this->recurseCopy("$sourceDirectory/$file", "$destinationDirectory/$childFolder/$file");
+        } else {
+          copy("$sourceDirectory/$file", "$destinationDirectory/$childFolder/$file");
+        }
+      }
+      closedir($directory);
+      return;
+    }
+    while (($file = readdir($directory)) !== false) {
+      if ($file === '.' || $file === '..') {
+        continue;
+      }
+      if (is_dir("$sourceDirectory/$file") === true) {
+        $this->recurseCopy("$sourceDirectory/$file", "$destinationDirectory/$file");
+      }
+      else {
+        copy("$sourceDirectory/$file", "$destinationDirectory/$file");
+      }
+    }
+    closedir($directory);
   }
 }
