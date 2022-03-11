@@ -63,6 +63,10 @@
         {
           "name": "generateSchema",
           "file": "generateSchema.php"
+        },
+        {
+          "name": "updateAndRun",
+          "file": "updateAndRun.php"
         }
       ],
       "chunks": [

@@ -232,6 +232,67 @@ class VloxController {
     return $returnValue;
   }
 
+  public function updatePackageAndRun($resId) {
+    $packageFileLocation = $this->COMPONENTS_ROUTE . 'package.json';
+    $jsonString = file_get_contents($packageFileLocation);
+    $data = json_decode($jsonString, true);
+    $data["scripts"] = array();
+    $data["scripts"]["serve:$resId"] = "env APP_TYPE=$resId vue-cli-service serve $resId/src/main.js";
+    $data["scripts"]["build:$resId"] = "env APP_TYPE=$resId vue-cli-service build $resId/src/main.js";
+    /*array_push($data["scripts"], ("serve:$resId" => "env APP_TYPE=$resId vue-cli-service serve $resId/src/main.js"));
+    array_push($data["scripts"], array( "build:$resId" => "env APP_TYPE=$resId vue-cli-service build $resId/src/main.js"));*/
+    $newJsonString = json_encode($data);
+    file_put_contents($packageFileLocation, $newJsonString);
+
+    $this->launchNodeServer($resId);
+  }
+
+  private function launchNodeServer($resId) {
+    $cmd = "npm --prefix $this->COMPONENTS_ROUTE run serve:$resId";
+    $outputfile = $this->COMPONENTS_ROUTE . 'npmOutPut';
+    $pidfile = $this->COMPONENTS_ROUTE . 'pidFile';
+    $resIdFile = $this->COMPONENTS_ROUTE . 'resId';
+    //file_put_contents($outputfile, "");
+    //file_put_contents($pidfile, "");
+    $isRunning = false;
+    if (file_exists($pidfile)) {
+      //first check if the id still the same
+      $pid = file_get_contents($pidfile);
+      $tmpResId = intval(file_get_contents($resIdFile));
+      if (intval($resId) !== $tmpResId) {
+        $result = shell_exec(sprintf("kill %d", $pid));
+        $result = shell_exec("pkill node");
+        file_put_contents($resIdFile, '');
+        file_put_contents($pidfile, '');
+        file_put_contents($resIdFile, $resId);
+        exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
+      } elseif (!$this->isRunning($pid)) {
+        file_put_contents($resIdFile, '');
+        file_put_contents($pidfile, '');
+        file_put_contents($resIdFile, $resId);
+        exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
+      }
+
+    } else {
+      file_put_contents($resIdFile, '');
+      file_put_contents($pidfile, '');
+      file_put_contents($resIdFile, $resId);
+      exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
+    }
+
+  }
+
+  private function isRunning($pid){
+    try{
+      $result = shell_exec(sprintf("ps %d", $pid));
+      if( count(preg_split("/\n/", $result)) > 2){
+        return true;
+      }
+    }catch(Exception $e){}
+
+    return false;
+  }
+
 
   /**
    *  Function that loadas the blocks for a given resource from the database
