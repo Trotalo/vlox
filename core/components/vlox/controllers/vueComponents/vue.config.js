@@ -25,7 +25,7 @@ module.exports = {
 
   },
   devServer: {
-    "port": 8081,
+    "port": 9090,
     "https": {
       "key": fs.readFileSync('../../vue-res/certs/ssl.key'),
       "cert": fs.readFileSync('../../vue-res/certs/ssl.crt')
