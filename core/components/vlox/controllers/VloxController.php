@@ -260,26 +260,25 @@ class VloxController {
       $pid = file_get_contents($pidfile);
       $tmpResId = intval(file_get_contents($resIdFile));
       if (intval($resId) !== $tmpResId) {
-        $result = shell_exec(sprintf("kill %d", $pid));
-        $result = shell_exec("pkill node");
-        file_put_contents($resIdFile, '');
-        file_put_contents($pidfile, '');
-        file_put_contents($resIdFile, $resId);
-        exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
+        shell_exec(sprintf("kill %d", $pid));
+        shell_exec("pkill node");
+        $this->cleanAndStartDevServer($cmd, $resIdFile, $pidfile, $resId, $outputfile);
       } elseif (!$this->isRunning($pid)) {
-        file_put_contents($resIdFile, '');
-        file_put_contents($pidfile, '');
-        file_put_contents($resIdFile, $resId);
-        exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
+        $this->cleanAndStartDevServer($cmd, $resIdFile, $pidfile, $resId, $outputfile);
       }
 
     } else {
-      file_put_contents($resIdFile, '');
-      file_put_contents($pidfile, '');
-      file_put_contents($resIdFile, $resId);
-      exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
+      $this->cleanAndStartDevServer($cmd, $resIdFile, $pidfile, $resId, $outputfile);
     }
 
+  }
+
+  private function cleanAndStartDevServer($cmd, $resIdFile, $pidfile, $resId, $outputfile) {
+    file_put_contents($resIdFile, '');
+    file_put_contents($pidfile, '');
+    file_put_contents($outputfile, '');
+    file_put_contents($resIdFile, $resId);
+    exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
   }
 
   private function isRunning($pid){
