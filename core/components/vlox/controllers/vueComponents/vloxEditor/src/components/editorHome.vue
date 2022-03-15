@@ -148,110 +148,15 @@
 <script>
 import viewBlocksList from './viewBlocksList'
 import newBlockComponent from './newBlockComponent';
-
-const VueAceEditor = {
-  //  simplified model handling using `value` prop and `input` event for $emit
-  props:['value','id','options'],
-  model: {
-    prop: 'value',
-    event: 'listchange'
-  },
-  computed: {
-    valueLocal: {
-      get: function() {
-        return this.value
-      },
-      set: function(value) {
-        this.$emit('listchange', value)
-      }
-    }
-  },
-
-  //  add dynmic class and id (if not set) based on component tag
-  template:`
-    <div :id="id ? id: $options._componentTag +'-'+ _uid"
-         :class="$options._componentTag">
-    <slot></slot>
-    </div>
-  `,
-
-  watch:{
-    value() {
-      //  two way binding – emit changes to parent
-      this.$emit('input', this.value);
-
-      //  update value on external model changes
-      if(this.oldValue !== this.value){
-        this.editor.setValue(this.value, 1);
-      }
-    }
-  },
-
-  mounted(){
-    //  editor
-    this.editor = window.ace.edit(this.$el.id);
-
-    //  deprecation fix
-    this.editor.$blockScrolling = Infinity;
-
-    //  ignore doctype warnings
-    const session = this.editor.getSession();
-    session.on("changeAnnotation", () => {
-      const a = session.getAnnotations();
-      const b = a.slice(0).filter( (item) => item.text.indexOf('DOC') == -1 );
-      if(a.length > b.length) session.setAnnotations(b);
-    });
-
-    //  editor options
-    //  https://github.com/ajaxorg/ace/wiki/Configuring-Ace
-    this.options = this.options || {};
-
-    //  opinionated option defaults
-    this.options.maxLines = this.options.maxLines || Infinity;
-    this.options.printMargin = this.options.printMargin || false;
-    this.options.highlightActiveLine = this.options.highlightActiveLine || false;
-
-    //  hide cursor
-    if(this.options.cursor === 'none' || this.options.cursor === false){
-      this.editor.renderer.$cursorLayer.element.style.display = 'none';
-      delete this.options.cursor;
-    }
-
-    //  add missing mode and theme paths
-    if(this.options.mode && this.options.mode.indexOf('ace/mode/')===-1) {
-      this.options.mode = `ace/mode/${this.options.mode}`;
-    }
-    if(this.options.theme && this.options.theme.indexOf('ace/theme/')===-1) {
-      this.options.theme = `ace/theme/${this.options.theme}`;
-    }
-    this.editor.setOptions(this.options);
-
-
-    //  set model value
-    //  if no model value found – use slot content
-    if(!this.value || this.value === ''){
-      this.$emit('input', this.editor.getValue());
-    } else {
-      this.editor.setValue(this.value, -1);
-    }
-
-    //  editor value changes
-    this.editor.on('change', () => {
-      //  oldValue set to prevent internal updates
-      this.valueLocal = this.editor.getValue();
-      //this.set(this.editor.getValue()),
-      this.oldValue = this.editor.getValue();
-    });
-  },
-  methods:{ editor(){ return this.editor } }
-};
+import vueAceEditor from "./vueAceEditor";
+import axios from 'axios';
 
 export default {
   name: "editor-home",
   components: {
     'view-block-list': viewBlocksList,
     'new-block-component': newBlockComponent,
-    'vue-ace-editor': VueAceEditor
+    'vue-ace-editor': vueAceEditor
   },
   data() {
     return {
@@ -368,7 +273,7 @@ export default {
       const modalRef = this.$bvModal;
       // TODO reenable to use rigth api endpoint instead of this
       //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
-      this.$axios.put(window.location.protocol + "//" + window.location.host +
+      axios.put(window.location.protocol + "//" + window.location.host +
                   this.$restRoute + '/rest/index.php?_rest=Blocks/'
           + this.blockData.id,
           this.blockData,
@@ -402,7 +307,7 @@ export default {
         'Access-Control-Allow-Origin': "*",
       }
     };
-    this.$axios.put(window.location.protocol + "//" + window.location.host +
+    axios.put(window.location.protocol + "//" + window.location.host +
         this.$restRoute + '/rest/index.php?_rest=Ide/'
         + 5,
         {'oper': 'RUN'},

@@ -2,8 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
 import VuejsDialog from 'vuejs-dialog';
-import axios from 'axios';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import ace from 'ace-builds'
+
+import '../../css/style.css'
 
 // include the default style
 import 'bootstrap/dist/css/bootstrap.css'
@@ -18,9 +20,11 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
 Vue.use(VuejsDialog);
+Vue.use(ace);
+
 Vue.prototype.$restRoute = '/vlox/assets/components/vlox';
-//set axios globla access
-Vue.prototype.$axios = axios
+
+
 
 new Vue({
   store,

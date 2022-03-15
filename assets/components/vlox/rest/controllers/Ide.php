@@ -13,7 +13,8 @@ class KrakenIde extends  modRestController {
 
   public function put() {
     $resContent = $this->getProperties();
-    return $resContent;
+    echo $resContent;
+    return $this->success('todo vientos!');
   }
 
 }

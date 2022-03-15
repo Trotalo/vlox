@@ -39,28 +39,29 @@
   </b-modal>
 </template>
 <script>
+import axios from 'axios';
 
-const axiosConfig = {
-  headers: {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': "*",
-  }
-};
 export default {
   name: "view-block-list",
   data() {
     return {
       showBlocksList: false,
-      blockList : [],
+      blockList: [],
       resourceId: 1,
-      blockObject: []
+      blockObject: [],
+      axiosConfig: {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': "*",
+        }
+      }
     }
   },
   methods: {
     selectBlock(blockData) {
       const modalRef = this.$bvModal;
-      this.$axios.get(window.location.protocol + "//" + window.location.host + this.$restRoute +
-          '/rest/index.php?_rest=blocks/' + blockData.id, axiosConfig)
+      axios.get(window.location.protocol + "//" + window.location.host + this.$restRoute +
+          '/rest/index.php?_rest=blocks/' + blockData.id, this.axiosConfig)
           .then(response => {
             this.blockObject = response.data.object;
             this.$emit('block-selected', this.blockObject);
@@ -72,8 +73,8 @@ export default {
           });
     },
     loadBLockList() {
-      this.$axios.get(window.location.protocol + "//" + window.location.host +
-          this.$restRoute + '/rest/blocks?limit=100')
+      axios.get(window.location.protocol + "//" + window.location.host +
+          this.$restRoute + '/rest/index.php?_rest=blocks&limit=100', this.axiosConfig)
           .then(response => {
             this.blockList = response.data;
           })
@@ -87,7 +88,7 @@ export default {
           .confirm('Are your sure you want to delete ' + block.chunkName)
           .then(dialog => {
             console.log(dialog);
-            this.$axios.delete(window.location.protocol + "//" + window.location.host +
+            axios.delete(window.location.protocol + "//" + window.location.host +
                           this.$restRoute + '/rest/blocks/' + block.id)
                 .then(response => {
                   if (response.data.success) {

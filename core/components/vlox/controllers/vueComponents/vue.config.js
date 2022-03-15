@@ -10,8 +10,6 @@ var fs = require('fs');
 
 const path = require('path')
 
-/*const isMainApp = process.env.APP_TYPE === 'app1'
-console.log('asdf' + process.env.APP_TYPE);*/
 const appDir = process.env.APP_TYPE;
 
 module.exports = {
@@ -27,14 +25,14 @@ module.exports = {
 
   },
   devServer: {
-    "port": 8080,
+    "port": 8081,
     "https": {
       "key": fs.readFileSync('../../vue-res/certs/ssl.key'),
       "cert": fs.readFileSync('../../vue-res/certs/ssl.crt')
     },
     proxy: {
       '^/vlox': {
-        target: 'https://172.25.37.79',
+        target: 'https://172.25.42.93',
         changeOrigin: true
       },
     }
