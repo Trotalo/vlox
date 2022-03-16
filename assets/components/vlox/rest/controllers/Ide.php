@@ -27,10 +27,21 @@ class KrakenIde extends  modRestController {
           $this->modx->VloxController->launchNodeServer($resId);
         } elseif ($resContent['oper'] === 'UPDATE') {
           $this->modx->VloxController->generateVueComponentsFiles($resId);
+        } elseif ($resContent['oper'] === 'STOP') {
+          $this->modx->VloxController->stopServer();
         }
       }
     }
     return $this->success('todo vientos!');
+  }
+
+  public function read($id) {
+    if (!is_numeric($id)) {
+      if ($id === 'RENDERER') {
+        $renderer = $this->modx->getObject('modResource', array('pagetitle' => 'vloxrenderer'));
+        return $this->success('Ok', $renderer->get('id'));
+      }
+    }
   }
 
 }

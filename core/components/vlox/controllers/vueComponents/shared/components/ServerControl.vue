@@ -8,9 +8,9 @@
   -->
 
 <template>
-  <div class="previewButtons">
+  <div class="previewButtons mt-4">
     <b-button variant="success" @click="runServer()" class="updatePrev">RUN</b-button>
-    <b-button variant="outline-primary" @click="saveChanges()" class="updatePrev ml-4 mr-4">PREVIEW asdf</b-button>
+    <b-button variant="outline-primary" @click="saveChanges()" class="updatePrev ml-4 mr-4">PREVIEW</b-button>
     <b-button variant="danger" @click="stopServer()" class="updatePrev">STOP</b-button>
   </div>
 </template>
@@ -30,13 +30,16 @@ export default {
   props: ['resourceId', 'saveMethod', 'saveObject'],
   methods: {
     runServer() {
-      debugger;
       axios.put(window.location.protocol + "//" + window.location.host +
           this.$restRoute + '/rest/index.php?_rest=Ide/'
           + this.resourceId,
           {'oper': 'RUN'},
           axiosConfig)
           .then(response => {
+            setTimeout(()=> {
+              document.getElementById('componentPreview').src =
+                  document.getElementById('componentPreview').src;
+            }, 3000)
             console.log(response);
           })
           .catch(error => {
@@ -44,10 +47,21 @@ export default {
           });
     },
     stopServer() {
-
+      axios.put(window.location.protocol + "//" + window.location.host +
+          this.$restRoute + '/rest/index.php?_rest=Ide/'
+          + this.resourceId,
+          {'oper': 'STOP'},
+          axiosConfig)
+          .then(response => {
+            console.log(response);
+            document.getElementById('componentPreview').src =
+                document.getElementById('componentPreview').src;
+          })
+          .catch(error => {
+            console.log(error);
+          });
     },
     saveChanges() {//
-      debugger;
       if (this.saveMethod && this.saveMethod instanceof Function) {
         this.saveMethod(this.resourceId)
       } else {

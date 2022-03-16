@@ -14,11 +14,11 @@
         <button v-bind:class="[!renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(false)"><i class="fas fa-mobile-alt"></i> <span>576px</span></button>
         <button v-bind:class="[renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(true)"><i class="fas fa-desktop"></i> <span>1200px</span></button>
       </div>
-      <div class="previewButtons">
+<!--      <div class="previewButtons">
         <b-button @click="runServer()">RUN</b-button>
         <b-button @click="saveChanges()">PREVIEW</b-button>
         <b-button @click="stopServer()">STOP</b-button>
-      </div>
+      </div>-->
       <div class="vloxPreview" :class="[renderDesktop ? 'previewDesktop' : 'previewMobile']">
         <iframe id="demoIframe"
                 src="https://172.25.42.93:8080/"

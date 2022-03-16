@@ -278,6 +278,13 @@ class VloxController {
     } else {
       $this->cleanAndStartDevServer($cmd, $resIdFile, $pidfile, $resId, $outputfile);
     }
+  }
+
+  public function stopServer() {
+    $pidfile = $this->COMPONENTS_ROUTE . 'pidFile';
+    if (file_exists($pidfile)) {
+      shell_exec("pkill node");
+    }
 
   }
 

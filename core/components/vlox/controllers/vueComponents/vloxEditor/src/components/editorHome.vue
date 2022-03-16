@@ -78,63 +78,9 @@
 
     <b-container v-if="showControls">
       <server-control :save-method="save"
-                      :resource-id="31"></server-control>
+                      :resource-id="rendererId"></server-control>
       <b-row class="mt-4">
         <b-tabs content-class="mt-2 position-relative" class="col-12">
-          <!--b-tab title="Input Fields">
-            <b-row>
-              <b-col cols="12" class="text-right">
-                <b-button
-                    variant="outline-primary"
-                    v-b-modal.new-input
-                    class="addvloxBlock"
-                    type="button">Add Input Field
-                </b-button>
-                <new-input-component v-bind:blockDataInput="blockData"></new-input-component>
-              </b-col>
-              <b-col>
-                <b-table :items="items"
-                         :fields="fields"
-                         select-mode="single"
-                         selectable
-                         @row-selected="onRowSelected">
-                  <template #cell(name)="row">
-                    <b-form-input v-if="showInput && row.item.name === inputFieldData.name" v-model="row.value"  placeholder="Enter your name"></b-form-input>
-                    <p v-else>{{row.value}}</p>
-                  </template>
-                  <template #cell(content)="row">
-                    <b-form-input v-if="showInput && row.item.name === inputFieldData.name" v-model="row.value"  placeholder="Enter your name"></b-form-input>
-                    <p v-else>{{row.value}}</p>
-                  </template>
-                  <template #cell(type)="row">
-                    <b-dropdown v-if="showInput && row.item.name === inputFieldData.name" text="Input type" variant="light">
-                      <b-dropdown-item>Checkbox</b-dropdown-item>
-                      <b-dropdown-item>Date</b-dropdown-item>
-                      <b-dropdown-item>Email</b-dropdown-item>
-                      <b-dropdown-item>File</b-dropdown-item>
-                      <b-dropdown-item>Hidden</b-dropdown-item>
-                      <b-dropdown-item>Image</b-dropdown-item>
-                      <b-dropdown-item>Dropdown</b-dropdown-item>
-                      <b-dropdown-item>Number</b-dropdown-item>
-                      <b-dropdown-item>Radio</b-dropdown-item>
-                      <b-dropdown-item>Richtext</b-dropdown-item>
-                      <b-dropdown-item>Text</b-dropdown-item>
-                      <b-dropdown-item>Textarea</b-dropdown-item>
-                      <b-dropdown-item>URL</b-dropdown-item>
-                    </b-dropdown>
-                    <p v-else>{{row.value}}</p>
-                  </template>
-                  <template #cell(controls)="row">
-                    <b-button-group v-if="showInput === true && row.item.name === inputFieldData.name">
-                      <b-button variant="outline-danger" v-on:click="cancelEdit()"><i class="fas fa-times"></i></b-button>
-                      <b-button variant="outline-success" v-on:click="saveInput()"><i class="fas fa-check"></i></b-button>
-                    </b-button-group>
-                    <b-button v-else variant="outline-danger"><i class="fas fa-trash-alt"></i></b-button>
-                  </template>
-                </b-table>
-              </b-col>
-            </b-row>
-          </b-tab-->
           <b-tab title="Code Editor" active>
             <b-row class="codeEditorBlocks mb-3">
               <b-col id="htmlEditor" cols="12" md="12">
@@ -155,6 +101,8 @@ import viewBlocksList from './viewBlocksList'
 import newBlockComponent from './newBlockComponent';
 import vueAceEditor from "./vueAceEditor";
 import ServerControl from '../../../shared/components/ServerControl';
+import Services from '../../../shared/services';
+
 import axios from 'axios';
 
 const axiosConfig = {
@@ -163,6 +111,8 @@ const axiosConfig = {
     'Access-Control-Allow-Origin': "*",
   }
 }
+
+const services = new Services();
 
 export default {
   name: "editor-home",
@@ -183,9 +133,8 @@ export default {
       inputFieldData: {},
       localAddress: window.location.protocol + "//" + window.location.hostname + ':8080',
       renderDesktop: true,
+      rendererId: 0,
       //Ace editor section
-      editorcontent: '',
-
       //  options object
       //  https://github.com/ajaxorg/ace/wiki/Configuring-Ace
       htmlEdtOptions: {
@@ -202,45 +151,6 @@ export default {
         useSoftTabs: true,
         tabSize: 2
       },
-      styleEdtOptions: {
-        mode:'scss',
-        theme: 'monokai',
-        fontSize: 11,
-        fontFamily: 'monospace',
-        highlightActiveLine: false,
-        highlightGutterLine: false,
-        maxLines: 20,
-        minLines: 20,
-      },
-      codeEdtOptions: {
-        mode:'javascript',
-        theme: 'monokai',
-        fontSize: 11,
-        fontFamily: 'monospace',
-        highlightActiveLine: false,
-        highlightGutterLine: false,
-        maxLines: 20,
-        minLines: 20,
-      },
-      beautifyConfig: {
-        "indent_size": "2",
-        "indent_char": " ",
-        "max_preserve_newlines": "-1",
-        "preserve_newlines": false,
-        "keep_array_indentation": false,
-        "break_chained_methods": false,
-        "indent_scripts": "normal",
-        "brace_style": "none",
-        "space_before_conditional": false,
-        "unescape_strings": false,
-        "jslint_happy": false,
-        "end_with_newline": false,
-        "wrap_line_length": "0",
-        "indent_inner_html": false,
-        "comma_first": false,
-        "e4x": false,
-        "indent_empty_lines": false
-      }
     }
   },
   methods: {
@@ -307,6 +217,14 @@ export default {
       this.loaded = true;
     }
   },
+  async beforeMount() {
+    //read the id parameter
+    debugger;
+    const response = await services.getRendererId();
+    this.rendererId = response.object;
+    console.log(this.rendererId);
+
+  }
 
 };
 </script>
