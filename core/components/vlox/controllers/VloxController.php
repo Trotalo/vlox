@@ -223,7 +223,8 @@ class VloxController {
       $compName = strtolower($chunkName . '_' . $resBlockId);
       $scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '">';
       $returnValue .= $scrollDiv;
-      $returnValue .= "<$compName v-on:toggle-loading=\"toggleLoading\" v-on:show-error=\"toggleError\" ></$compName>";
+      //$returnValue .= "<$compName v-on:toggle-loading=\"toggleLoading\" v-on:show-error=\"toggleError\" ></$compName>";
+      $returnValue .= "<$compName></$compName>";
       $returnValue .= "</div>";
     }
     if (empty($returnValue)) {

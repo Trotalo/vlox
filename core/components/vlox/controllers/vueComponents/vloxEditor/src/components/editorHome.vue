@@ -45,10 +45,15 @@
         <button v-bind:class="[!renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(false)"><i class="fas fa-mobile-alt"></i> <span>576px</span></button>
         <button v-bind:class="[renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(true)"><i class="fas fa-desktop"></i> <span>1200px</span></button>
       </div>
+      <div class="previewButtons" v-if="showControls">
+        <b-button @click="runServer()">RUN</b-button>
+        <b-button @click="saveChanges()">PREVIEW</b-button>
+        <b-button @click="stopServer()">STOP</b-button>
+      </div>
       <b-row class="previewAreaWidth" :class="[renderDesktop ? 'previewDesktop' : 'previewMobile']">
         <b-col v-bind:class="{ previewExtraHeight: !showControls }" cols="12" class="previewArea">
           <iframe v-if="showControls" id="componentPreview"
-                  :src="localAddress"
+                  src="https://172.25.42.93:8080/"
                   style="
             width: 100%;
             height: 100%;
@@ -150,6 +155,13 @@ import viewBlocksList from './viewBlocksList'
 import newBlockComponent from './newBlockComponent';
 import vueAceEditor from "./vueAceEditor";
 import axios from 'axios';
+
+const axiosConfig = {
+  headers: {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': "*",
+  }
+}
 
 export default {
   name: "editor-home",
@@ -264,12 +276,6 @@ export default {
       this.showInput = false;
     },
     save() {
-      let axiosConfig = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': "*",
-        }
-      };
       const modalRef = this.$bvModal;
       // TODO reenable to use rigth api endpoint instead of this
       //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
@@ -292,34 +298,43 @@ export default {
       console.log(code);
       // js highlight example
       //return Prism.highlight(code, Prism.languages.js, "js");
-    }
+    },
+    runServer() {
+      axios.put(window.location.protocol + "//" + window.location.host +
+          this.$restRoute + '/rest/index.php?_rest=Ide/'
+          + this.blockData.id,
+          {'oper': 'RUN'},
+          axiosConfig)
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    },
+    stopServer() {
+
+    },
+    saveChanges() {//
+      axios.put(window.location.protocol + "//" + window.location.host +
+          this.$restRoute + '/rest/index.php?_rest=Ide/'
+          + this.resourceId,
+          {'oper': 'UPDATE'},
+          axiosConfig)
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    },
   },
   updated() {
     if (document.getElementById("editor1") && !this.loaded) {
       this.loaded = true;
     }
   },
-  beforeMount() {
-    //we start the dev server on the backend
-    let axiosConfig = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': "*",
-      }
-    };
-    axios.put(window.location.protocol + "//" + window.location.host +
-        this.$restRoute + '/rest/index.php?_rest=Ide/'
-        + 5,
-        {'oper': 'RUN'},
-        axiosConfig)
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error);
 
-        });
-  }
 };
 </script>
 <style scope>

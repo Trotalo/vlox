@@ -9,22 +9,22 @@
 
 <template>
   <div class="vloxBlock">
-    <h5>{{vloxcontent.title}}</h5>
-    <p class="m-0">{{vloxcontent.description}}</p>
+    <h5>{{vloxContent.title}}</h5>
+    <p class="m-0">{{vloxContent.description}}</p>
     <button class="selectScrollArea" v-on:click="scrollToElement()"></button>
     <div class="iconsLeft">
       <button class="btn editIcon" type="button" v-on:click="showEdit()">
         <i class="fas fa-edit"></i>
       </button>
       <b-modal
-          v-bind:id="'edit-content' + vloxcontent.id"
-          v-bind:key="vloxcontent.id"
-          v-bind:ref="'edit-content' + vloxcontent.id"
+          v-bind:id="'edit-content' + vloxContent.id"
+          v-bind:key="vloxContent.id"
+          v-bind:ref="'edit-content' + vloxContent.id"
           @ok="save"
           title="Edit block" size="xl" scrollable>
         <content-editor
-            :blockContent = "vloxcontent"
-            :id = "vloxcontent.id">
+            :blockContent = "vloxContent"
+            :id = "vloxContent.id">
         </content-editor>
       </b-modal>
       <button class="btn showHideIcon" type="button">
@@ -49,18 +49,13 @@ export default {
   components: {
     'content-editor': contentEditor,
   },
-  props: {'vloxcontent': {
-            default () {
-                return {};
-              },
-            type: Object
-          }},
+  props: ['vloxContent'],
   methods: {
     showEdit() {
-      if (this.$refs['edit-content' + this.vloxcontent.id]) {
-        this.$refs['edit-content' + this.vloxcontent.id].show();
+      if (this.$refs['edit-content' + this.vloxContent.id]) {
+        this.$refs['edit-content' + this.vloxContent.id].show();
       } else {
-        alert('Error opening: ' + 'edit-content' + this.vloxcontent.id);
+        alert('Error opening: ' + 'edit-content' + this.vloxContent.id);
       }
 
     },
@@ -69,8 +64,8 @@ export default {
       //TODO this neds to be changed to use VueBoostrap's components
       const answer = confirm("You sure you want to proceed?");
       if (answer == true) {
-        let finalObject = JSON.parse(JSON.stringify(this.vloxcontent));
-        finalObject['items'] = this.vloxcontent['properties']['items'];
+        let finalObject = JSON.parse(JSON.stringify(this.vloxContent));
+        finalObject['items'] = this.vloxContent['properties']['items'];
         delete finalObject['properties'];
         let axiosConfig = {
           headers: {
@@ -83,7 +78,7 @@ export default {
         //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
         axios.delete(window.location.protocol + "//" + window.location.host + this.$restRoute +
             '/rest/index.php?_rest=Resources/'
-            + this.vloxcontent.id,
+            + this.vloxContent.id,
             finalObject,
             axiosConfig)
             .then(response => {
@@ -98,8 +93,8 @@ export default {
       }
     },
     save() {
-      let finalObject = JSON.parse(JSON.stringify(this.vloxcontent));
-      finalObject['items'] = this.vloxcontent['properties']['items'];
+      let finalObject = JSON.parse(JSON.stringify(this.vloxContent));
+      finalObject['items'] = this.vloxContent['properties']['items'];
       delete finalObject['properties'];
       let axiosConfig = {
         headers: {
@@ -113,7 +108,7 @@ export default {
       //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
       axios.post(window.location.protocol + "//" + window.location.host + this.$restRoute +
           '/rest/index.php?_rest=Resources/'
-          + this.vloxcontent.id,
+          + this.vloxContent.id,
           finalObject,
           axiosConfig)
           .then(response => {
@@ -134,10 +129,10 @@ export default {
       while (selectedBlocks.length)
         selectedBlocks[0].className = selectedBlocks[0].className.replace(/\bblockSelected\b/g, "");
 
-      const scrollToElement = childDocument.getElementById(this.vloxcontent.id + '-' +
-          this.vloxcontent.title);
+      const scrollToElement = childDocument.getElementById(this.vloxContent.id + '-' +
+          this.vloxContent.title);
       if (!scrollToElement) {
-        alert(this.vloxcontent.id + '-' + this.vloxcontent.title + " not present on DOM, please check your blocks!");
+        alert(this.vloxContent.id + '-' + this.vloxContent.title + " not present on DOM, please check your blocks!");
       } else {
         scrollToElement.className = "blockSelected";
         var rect = scrollToElement.getBoundingClientRect();

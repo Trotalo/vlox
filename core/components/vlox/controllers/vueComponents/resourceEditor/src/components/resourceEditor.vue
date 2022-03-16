@@ -14,9 +14,14 @@
         <button v-bind:class="[!renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(false)"><i class="fas fa-mobile-alt"></i> <span>576px</span></button>
         <button v-bind:class="[renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(true)"><i class="fas fa-desktop"></i> <span>1200px</span></button>
       </div>
+      <div class="previewButtons">
+        <b-button @click="runServer()">RUN</b-button>
+        <b-button @click="saveChanges()">PREVIEW</b-button>
+        <b-button @click="stopServer()">STOP</b-button>
+      </div>
       <div class="vloxPreview" :class="[renderDesktop ? 'previewDesktop' : 'previewMobile']">
         <iframe id="demoIframe"
-                :src="frontPreview"
+                src="https://172.25.42.93:8080/"
                 sandbox="allow-same-origin allow-forms allow-scripts"
                 style="width: 100%;height: 100%">
         </iframe>
@@ -26,7 +31,7 @@
     <div class="col-4 col-xl-3">
       <div class="mb-4 saveAddButtonsWrap">
         <div class="col-12">
-          <button class="btn btn-outline-primary vloxSaveDraft">Save Draft</button>
+          <button class="btn btn-outline-primary vloxSaveDraft" @click="saveChanges()">Save Draft</button>
           <b-button
               v-b-modal.add-content
               class="btn btn-success addvloxBlock"
@@ -43,18 +48,19 @@
         </div>
       </div>
       <div class="vloxContainer">
-        <div v-if="resultsList"
-             class="col-12 vloxWrap">
+        <div class="col-12 vloxWrap">
           <draggable
               ghost-class="vloxGhost"
               v-model="resultsList"
               :component-data="getComponentData()">
-            <resource-content
+            <template v-if="resultsList">
+              <resource-content
                 v-for="blockSection in resultsList"
                 :key="blockSection.id"
-                :vloxContent = "blockSection"
+                :vloxContent="blockSection"
                 @updated="updated()">
-            </resource-content>
+              </resource-content>
+            </template>
           </draggable>
         </div>
       </div>
@@ -67,6 +73,13 @@ import axios from "axios";
 import resourceContent from "./resourceContent";
 import addContentModal from "./addContentModal";
 import draggable from 'vuedraggable'
+
+const axiosConfig = {
+  headers: {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': "*",
+  }
+}
 
 export default {
   name: "resource-editor",
@@ -112,12 +125,6 @@ export default {
       } else {
         this.$dialog.alert('Problems reaching the webservice!');
       }
-
-          /*})
-          .catch(error => {
-            console.log(error);
-            this.showErrorAjax();
-          });*/
     },
     updated() {
       this.loadData();
@@ -127,12 +134,6 @@ export default {
         element['position'] = index + 1;
       });
       //Now we send the data to the server!!!
-      let axiosConfig = {
-        headers: {
-          'Content-Type': 'application/json',
-          "Access-Control-Allow-Origin": "*",
-        }
-      };
       //TODO revisar este put aca esta mandando todo lo que cargo
       axios.put(window.location.protocol + "//" + window.location.host + this.$restRoute +
           '/rest/index.php?_rest=Resources',
@@ -163,10 +164,38 @@ export default {
           value: this.resultsList
         }
       };
-    }
+    },
+    runServer() {
+      axios.put(window.location.protocol + "//" + window.location.host +
+          this.$restRoute + '/rest/index.php?_rest=Ide/'
+          + this.resourceId,
+          {'oper': 'RUN'},
+          axiosConfig)
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    },
+    stopServer() {
+
+    },
+    saveChanges() {//
+      axios.put(window.location.protocol + "//" + window.location.host +
+          this.$restRoute + '/rest/index.php?_rest=Ide/'
+          + this.resourceId,
+          {'oper': 'UPDATE'},
+          axiosConfig)
+          .then(response => {
+            console.log(response);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    },
   },
   async beforeMount() {
-    debugger;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const resId = urlParams.get("resId");
