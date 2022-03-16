@@ -79,15 +79,24 @@ class KrakenResources extends modRestController {
    */
   public function put() {
     $resContent = $this->getProperties();
+    $resId = 0;
     if (isset($resContent)) {
       foreach ($resContent as $blockContent) {
         //** @var vloxResourceContent  $resBlockContent*/
         $resBlockContent = $this->modx->getObject('vloxResourceContent', $blockContent['id']);
         $resBlockContent->set('position', $blockContent['position']);
+        $resId = $blockContent['resourceId'];
         $resBlockContent->save();
         $this->modx->log(ModX::LOG_LEVEL_DEBUG, json_encode($resBlockContent));
       }
       $this->modx->cacheManager->refresh();
+
+      $coreLocation = $this->modx->getOption('vlox.core_path', null,
+        $this->modx->getOption('core_path') . 'components/vlox/');
+      require_once($coreLocation . 'controllers/VloxController.php');
+
+      VloxController::loadService($this->modx);
+      $this->modx->VloxController->generateVueComponentsFiles($resId);
     }
   }
 

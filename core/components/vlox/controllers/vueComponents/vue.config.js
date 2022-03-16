@@ -14,15 +14,14 @@ const appDir = process.env.APP_TYPE;
 
 module.exports = {
   outputDir: path.resolve(__dirname, `${appDir}/dist`),
+  publicPath: `./${appDir}-assets`,
   chainWebpack: config => {
     config.resolve.alias.set('@I', path.resolve(__dirname, '../interfaces'))
     config.resolve.alias.set('@shared', path.resolve(__dirname, './shared'))
-
     config.plugin("html").tap(args => {
       args[0].template = path.resolve(__dirname, `${appDir}/index.html`)
       return args
     })
-
   },
   devServer: {
     "port": 9090,

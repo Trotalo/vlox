@@ -1,6 +1,7 @@
 assets/components/vlox/renderedBlocks/*.vue
 /_packages/vlox-0.0.1-pl
 vendor
+dist
 node_modules
 [0-9]*
 /core/components/vlox/vue-res/node_modules/

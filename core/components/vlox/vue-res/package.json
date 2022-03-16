@@ -1,1 +1,1 @@
-{"scripts":{"serve:31":"env APP_TYPE=31 vue-cli-service serve 31\/src\/main.js","build:31":"env APP_TYPE=31 vue-cli-service build 31\/src\/main.js"}}
+{"scripts":{"serve:28":"env APP_TYPE=28 vue-cli-service serve 28\/src\/main.js","build:28":"env APP_TYPE=28 vue-cli-service build 28\/src\/main.js"}}

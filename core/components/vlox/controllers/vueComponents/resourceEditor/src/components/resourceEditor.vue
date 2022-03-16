@@ -19,9 +19,10 @@
         <b-button @click="saveChanges()">PREVIEW</b-button>
         <b-button @click="stopServer()">STOP</b-button>
       </div>-->
+      <server-control :resource-id="resourceId"></server-control>
       <div class="vloxPreview" :class="[renderDesktop ? 'previewDesktop' : 'previewMobile']">
-        <iframe id="demoIframe"
-                src="https://172.25.42.93:8080/"
+        <iframe id="componentPreview"
+                :src="localAddress"
                 sandbox="allow-same-origin allow-forms allow-scripts"
                 style="width: 100%;height: 100%">
         </iframe>
@@ -87,7 +88,7 @@ export default {
   components: {
     'resource-content': resourceContent,
     'add-content-modal': addContentModal,
-
+    'server-control': ServerControl,
     draggable
   },
   data() {
@@ -96,7 +97,8 @@ export default {
       resourceId: '',
       frontPreview: '',
       resultsList: [],
-      renderDesktop: true
+      renderDesktop: true,
+      localAddress: window.location.protocol + "//" + window.location.hostname + ':8080',
     }
   },
   methods: {
@@ -142,7 +144,8 @@ export default {
           this.resultsList,
           axiosConfig)
           .then(response => {
-            document.getElementById('demoIframe').src = document.getElementById('demoIframe').src;
+            document.getElementById('componentPreview').src =
+                document.getElementById('componentPreview').src;
             console.log(response);
           })
           .catch(error => {
@@ -166,35 +169,6 @@ export default {
           value: this.resultsList
         }
       };
-    },
-    runServer() {
-      axios.put(window.location.protocol + "//" + window.location.host +
-          this.$restRoute + '/rest/index.php?_rest=Ide/'
-          + this.resourceId,
-          {'oper': 'RUN'},
-          axiosConfig)
-          .then(response => {
-            console.log(response);
-          })
-          .catch(error => {
-            console.log(error);
-          });
-    },
-    stopServer() {
-
-    },
-    saveChanges() {//
-      axios.put(window.location.protocol + "//" + window.location.host +
-          this.$restRoute + '/rest/index.php?_rest=Ide/'
-          + this.resourceId,
-          {'oper': 'UPDATE'},
-          axiosConfig)
-          .then(response => {
-            console.log(response);
-          })
-          .catch(error => {
-            console.log(error);
-          });
     },
   },
   async beforeMount() {

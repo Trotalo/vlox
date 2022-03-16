@@ -152,7 +152,8 @@ class KrakenBlocks extends  modRestController {
     require_once($coreLocation . 'controllers/VloxController.php');
 
     VloxController::loadService($this->modx);
-    $this->modx->VloxController->generateVueComponentsFiles(31);
+    $renderer = $this->modx->getObject('modResource', array('pagetitle' => 'vloxrenderer'));
+    $this->modx->VloxController->generateVueComponentsFiles($renderer->get('id'));
 
     return $this->success('updated', $resContent);
   }
