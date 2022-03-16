@@ -72,6 +72,7 @@
 import axios from "axios";
 import resourceContent from "./resourceContent";
 import addContentModal from "./addContentModal";
+import ServerControl from '../../../shared/components/ServerControl';
 import draggable from 'vuedraggable'
 
 const axiosConfig = {
@@ -86,6 +87,7 @@ export default {
   components: {
     'resource-content': resourceContent,
     'add-content-modal': addContentModal,
+
     draggable
   },
   data() {

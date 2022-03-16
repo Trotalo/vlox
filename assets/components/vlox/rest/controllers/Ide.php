@@ -23,7 +23,8 @@ class KrakenIde extends  modRestController {
       if (isset($resId) && isset($resContent['oper'])) {
         VloxController::loadService($this->modx);
         if ($resContent['oper'] === 'RUN') {
-          $this->modx->VloxController->updatePackageAndRun($resId);
+          $this->modx->VloxController->updatePackage($resId);
+          $this->modx->VloxController->launchNodeServer($resId);
         } elseif ($resContent['oper'] === 'UPDATE') {
           $this->modx->VloxController->generateVueComponentsFiles($resId);
         }

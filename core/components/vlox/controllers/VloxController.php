@@ -123,6 +123,15 @@ class VloxController {
     $maxIterations= (integer) $this->modx->getOption('parser_max_iterations', null, 10);
 
     while ($row = $query->fetch()) {
+      //remove folder contents the first time we fetch files
+      if (!$hasComponents) {
+        $files = glob($this->COMPONENTS_ROUTE . $resId . '/src/components/*'); // get all file names
+        foreach($files as $file){ // iterate files
+          if(is_file($file)) {
+            unlink($file); // delete file
+          }
+        }
+      }
       $hasComponents = true;
       //$this->modx->log(xPDO::LOG_LEVEL_ERROR, json_encode($row));
       $chunkName = $row['chunkName'];
@@ -233,7 +242,7 @@ class VloxController {
     return $returnValue;
   }
 
-  public function updatePackageAndRun($resId) {
+  public function updatePackage($resId) {
     $packageFileLocation = $this->COMPONENTS_ROUTE . 'package.json';
     $jsonString = file_get_contents($packageFileLocation);
     $data = json_decode($jsonString, true);
@@ -244,11 +253,9 @@ class VloxController {
     array_push($data["scripts"], array( "build:$resId" => "env APP_TYPE=$resId vue-cli-service build $resId/src/main.js"));*/
     $newJsonString = json_encode($data);
     file_put_contents($packageFileLocation, $newJsonString);
-
-    $this->launchNodeServer($resId);
   }
 
-  private function launchNodeServer($resId) {
+  public function launchNodeServer($resId) {
     $cmd = "npm --prefix $this->COMPONENTS_ROUTE run serve:$resId";
     $outputfile = $this->COMPONENTS_ROUTE . 'npmOutPut';
     $pidfile = $this->COMPONENTS_ROUTE . 'pidFile';

@@ -32,7 +32,7 @@ module.exports = {
     },
     proxy: {
       '^/vlox': {
-        target: 'https://172.25.42.93',
+        target: 'https://172.25.37.144',
         changeOrigin: true
       },
     }

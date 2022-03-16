@@ -4,13 +4,15 @@ import store from './store'
 import VuejsDialog from 'vuejs-dialog';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import ace from 'ace-builds'
+import '../../shared/globalConstants';
 
-import '../../css/style.css'
+import '../../shared/css/style.css'
 
 // include the default style
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vuejs-dialog/dist/vuejs-dialog.min.css';
+
 
 Vue.config.productionTip = false
 
@@ -22,7 +24,7 @@ Vue.use(IconsPlugin)
 Vue.use(VuejsDialog);
 Vue.use(ace);
 
-Vue.prototype.$restRoute = '/vlox/assets/components/vlox';
+
 
 
 

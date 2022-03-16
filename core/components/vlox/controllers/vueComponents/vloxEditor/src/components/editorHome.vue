@@ -45,15 +45,13 @@
         <button v-bind:class="[!renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(false)"><i class="fas fa-mobile-alt"></i> <span>576px</span></button>
         <button v-bind:class="[renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(true)"><i class="fas fa-desktop"></i> <span>1200px</span></button>
       </div>
-      <div class="previewButtons" v-if="showControls">
-        <b-button @click="runServer()">RUN</b-button>
-        <b-button @click="saveChanges()">PREVIEW</b-button>
-        <b-button @click="stopServer()">STOP</b-button>
-      </div>
+<!--      <server-control v-if="showControls"
+                      :save-method="save"
+                      :resource-id="31"></server-control>-->
       <b-row class="previewAreaWidth" :class="[renderDesktop ? 'previewDesktop' : 'previewMobile']">
         <b-col v-bind:class="{ previewExtraHeight: !showControls }" cols="12" class="previewArea">
           <iframe v-if="showControls" id="componentPreview"
-                  src="https://172.25.42.93:8080/"
+                  :src="localAddress"
                   style="
             width: 100%;
             height: 100%;
@@ -79,6 +77,8 @@
     </b-container>
 
     <b-container v-if="showControls">
+      <server-control :save-method="save"
+                      :resource-id="31"></server-control>
       <b-row class="mt-4">
         <b-tabs content-class="mt-2 position-relative" class="col-12">
           <!--b-tab title="Input Fields">
@@ -139,7 +139,7 @@
             <b-row class="codeEditorBlocks mb-3">
               <b-col id="htmlEditor" cols="12" md="12">
                 <h3>HTML</h3>
-                <b-button variant="outline-primary" v-on:click="save()" class="updatePrev">Update Preview</b-button>
+<!--                <b-button variant="outline-primary" v-on:click="save()" class="updatePrev">Update Preview</b-button>-->
                 <vue-ace-editor v-model="blockData.htmlSection" v-bind:options="htmlEdtOptions" id="editor1"/>
               </b-col>
             </b-row>
@@ -154,6 +154,7 @@
 import viewBlocksList from './viewBlocksList'
 import newBlockComponent from './newBlockComponent';
 import vueAceEditor from "./vueAceEditor";
+import ServerControl from '../../../shared/components/ServerControl';
 import axios from 'axios';
 
 const axiosConfig = {
@@ -168,7 +169,8 @@ export default {
   components: {
     'view-block-list': viewBlocksList,
     'new-block-component': newBlockComponent,
-    'vue-ace-editor': vueAceEditor
+    'vue-ace-editor': vueAceEditor,
+    'server-control': ServerControl
   },
   data() {
     return {
@@ -179,7 +181,7 @@ export default {
       showInput: false,
       showControls: false,
       inputFieldData: {},
-      localAddress: window.location.protocol + "//" + window.location.host + '/vloxrenderer.html',
+      localAddress: window.location.protocol + "//" + window.location.hostname + ':8080',
       renderDesktop: true,
       //Ace editor section
       editorcontent: '',
@@ -299,35 +301,6 @@ export default {
       // js highlight example
       //return Prism.highlight(code, Prism.languages.js, "js");
     },
-    runServer() {
-      axios.put(window.location.protocol + "//" + window.location.host +
-          this.$restRoute + '/rest/index.php?_rest=Ide/'
-          + this.blockData.id,
-          {'oper': 'RUN'},
-          axiosConfig)
-          .then(response => {
-            console.log(response);
-          })
-          .catch(error => {
-            console.log(error);
-          });
-    },
-    stopServer() {
-
-    },
-    saveChanges() {//
-      axios.put(window.location.protocol + "//" + window.location.host +
-          this.$restRoute + '/rest/index.php?_rest=Ide/'
-          + this.resourceId,
-          {'oper': 'UPDATE'},
-          axiosConfig)
-          .then(response => {
-            console.log(response);
-          })
-          .catch(error => {
-            console.log(error);
-          });
-    },
   },
   updated() {
     if (document.getElementById("editor1") && !this.loaded) {
@@ -337,7 +310,7 @@ export default {
 
 };
 </script>
-<style scope>
+<style scoped lang="scss">
 h3 {
   font-size: 1.4rem;
   font-weight: 600;

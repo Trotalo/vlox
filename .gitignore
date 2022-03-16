@@ -3,6 +3,7 @@ assets/components/vlox/renderedBlocks/*.vue
 vendor
 node_modules
 /core/components/vlox/vue-res/31/
+/core/components/vlox/vue-res/1/
 /core/components/vlox/vue-res/28/
 /core/components/vlox/vue-res/node_modules/
 /core/components/vlox/vue-res/npmOutPut
