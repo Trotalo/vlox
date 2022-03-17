@@ -13,9 +13,10 @@
     <p class="m-0">{{vloxContent.description}}</p>
     <button class="selectScrollArea" v-on:click="scrollToElement()"></button>
     <div class="iconsLeft">
-      <button class="btn editIcon" type="button" v-on:click="showEdit()">
+      <b-icon-pencil-square class="btn editIcon" v-on:click="showEdit()"></b-icon-pencil-square>
+<!--      <button class="btn editIcon" type="button" v-on:click="showEdit()">
         <i class="fas fa-edit"></i>
-      </button>
+      </button>-->
       <b-modal
           v-bind:id="'edit-content' + vloxContent.id"
           v-bind:key="vloxContent.id"
@@ -27,16 +28,20 @@
             :id = "vloxContent.id">
         </content-editor>
       </b-modal>
-      <button class="btn showHideIcon" type="button">
+      <b-icon-eye class="btn showHideIcon" v-on:click="showEdit()"></b-icon-eye>
+<!--      <button class="btn showHideIcon" type="button">
         <i class="far fa-eye"></i>
-      </button>
+      </button>-->
     </div>
-    <button class="btn removeIcon" type="button" v-on:click="deleteElement()">
+    <b-icon-trash class="btn removeIcon" v-on:click="deleteElement()"></b-icon-trash>
+<!--    <button class="btn removeIcon" type="button" v-on:click="deleteElement()">
       <i class="fas fa-times"></i>
-    </button>
-    <button class="btn moveIcon" type="button">
+    </button>-->
+
+    <b-icon-hand-index class="btn moveIcon"></b-icon-hand-index>
+<!--    <button class="btn moveIcon" type="button">
       <i class="fas fa-bars"></i>
-    </button>
+    </button>-->
   </div>
 </template>
 
