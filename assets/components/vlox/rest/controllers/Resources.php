@@ -8,6 +8,10 @@
  * files found in the top-level directory of this distribution.
  */
 
+$coreLocation = $this->modx->getOption('vlox.core_path', null,
+  $this->modx->getOption('core_path') . 'components/vlox/');
+require_once($coreLocation . 'controllers/VloxController.php');
+
 class KrakenResources extends modRestController {
   /** @var string $classKey The xPDO class to use */
   public $classKey = 'vloxResourceContent';
@@ -90,11 +94,6 @@ class KrakenResources extends modRestController {
         $this->modx->log(ModX::LOG_LEVEL_DEBUG, json_encode($resBlockContent));
       }
       $this->modx->cacheManager->refresh();
-
-      $coreLocation = $this->modx->getOption('vlox.core_path', null,
-        $this->modx->getOption('core_path') . 'components/vlox/');
-      require_once($coreLocation . 'controllers/VloxController.php');
-
       VloxController::loadService($this->modx);
       $this->modx->VloxController->generateVueComponentsFiles($resId);
     }
@@ -130,6 +129,8 @@ class KrakenResources extends modRestController {
    * @param array $objectArray
    */
   public function afterDelete(array &$objectArray) {
+    VloxController::loadService($this->modx);
+    $this->modx->VloxController->generateVueComponentsFiles($objectArray['resourceId']);
     $this->modx->cacheManager->refresh();
   }
 

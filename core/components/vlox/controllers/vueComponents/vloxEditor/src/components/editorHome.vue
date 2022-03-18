@@ -101,7 +101,7 @@ import viewBlocksList from './viewBlocksList'
 import newBlockComponent from './newBlockComponent';
 import vueAceEditor from "./vueAceEditor";
 import ServerControl from '../../../shared/components/ServerControl';
-import Services from '../../../shared/services';
+import Services from '@shared/services';
 
 import axios from 'axios';
 
@@ -219,7 +219,6 @@ export default {
   },
   async beforeMount() {
     //read the id parameter
-    debugger;
     const response = await services.getRendererId();
     this.rendererId = response.object;
     console.log(this.rendererId);

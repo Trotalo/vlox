@@ -68,7 +68,8 @@ export default {
           .then(response => {
             this.$emit('updated');
             modalRef.hide('add-content');
-            document.getElementById('demoIframe').src = document.getElementById('demoIframe').src;
+            document.getElementById('componentPreview').src =
+                document.getElementById('componentPreview').src;
             console.log(response);
           })
           .catch(error => {

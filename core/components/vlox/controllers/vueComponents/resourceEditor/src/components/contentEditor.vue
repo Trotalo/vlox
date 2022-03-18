@@ -18,7 +18,7 @@
       <div class="col-12">
         <div class="row p-2 mb-2">
           <div class="col-12">
-            <div class="py-1">
+            <div class="py-1" v-if="blockcontent && blockcontent.properties">
               <div class="form-group" v-for="(item, index) in blockcontent.properties.items" :key="index">
                 <div v-if="item.type === 'text'">
                   <label>{{item.name}}</label>
@@ -106,7 +106,8 @@ export default {
           axiosConfig)
           .then(response => {
             modalRef.hide('add-content');
-            document.getElementById('demoIframe').src = document.getElementById('demoIframe').src;
+            document.getElementById('componentPreview').src =
+                document.getElementById('componentPreview').src;
             console.log(response);
           })
           .catch(error => {

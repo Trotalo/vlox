@@ -54,25 +54,17 @@
 </template>
 
 <script>
+import { ValidationProvider } from 'vee-validate';
+import { extend } from 'vee-validate';
+import { min, alpha_dash, alpha_num } from 'vee-validate/dist/rules';
+import Services from "@shared/services";
 
-/*
-axios.get(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/blocks')
-    .then(response => {
-      blockList = response.data;
-    })
-    .catch(error => {
-      alert('The ajax petition has problem doing a GET request, please verify the blocks Controller.');
-    });
-*/
+extend('min', min);
+extend('alpha_dash', alpha_dash);
+extend('alpha_num', alpha_num);
 
-/*
-Example of custom validation
-VeeValidate.extend('description', {
-  validate: (value) => (value && value.length > 9),
-  message: 'Please add a description of at least 10 characters'
-});*/
-// Register the component globally.
-//Vue.component('validation-provider', VeeValidate.ValidationProvider);
+
+const services = new Services();
 
 export default {
   name: "new-block-component",
@@ -86,55 +78,28 @@ export default {
       blockList: [],
     }
   },
+  components: {
+    'validation-provider': ValidationProvider
+  },
   methods: {
     onSelectBlock (blockData) {
       this.blockData = blockData;
-      document.getElementById('componentPreview').src = document.getElementById('componentPreview').src;
+      //document.getElementById('componentPreview').src = document.getElementById('componentPreview').src;
     },
-    save(data) {
-      let axiosConfig = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        }
-      };
+    async save(data) {
+
       const modalRef = this.$bvModal;
-      //first validate that the block does not exists
-      /*axios.get(window.location.protocol + "//" + window.location.host + Vue.prototype.$restRoute + '/rest/index.php?_rest=Blocks/',
-          data,
-          axiosConfig)
-          .then(response => {
-            this.$emit('block-selected', response.data.object);
-            //this.$root.$emit('reload-bocks-list', data);
-            this.$store.commit('change', true);
-            this.blockData.chunkName = '';
-            this.blockData.description = '';
-            modalRef.hide('new-block');
-
-            //document.getElementById('demoIframe').src = document.getElementById('demoIframe').src;
-          })
-          .catch(error => {
-            console.log(error);
-            this.showErrorAjax();
-          });*/
-      // TODO reenable to use rigth api endpoint instead of this
-      this.$axios.put(window.location.protocol + "//" + window.location.host + this.$restRoute + '/rest/index.php?_rest=Blocks/',
-          data,
-          axiosConfig)
-          .then(response => {
-            this.$emit('block-selected', response.data.object);
-            //this.$root.$emit('reload-bocks-list', data);
-            this.$store.commit('change', true);
-            this.blockData.chunkName = '';
-            this.blockData.description = '';
-            modalRef.hide('new-block');
-
-            //document.getElementById('demoIframe').src = document.getElementById('demoIframe').src;
-          })
-          .catch(error => {
-            console.log(error);
-            this.showErrorAjax();
-          });
+      try {
+        const response = await services.newBlock(data);
+        this.$emit('block-selected', response.data.object);
+        this.$store.commit('change', true);
+        this.blockData.chunkName = '';
+        this.blockData.description = '';
+        modalRef.hide('new-block');
+      } catch (e) {
+        console.log(e);
+        this.showErrorAjax();
+      }
       console.log(data);
     },
   }

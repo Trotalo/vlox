@@ -14,9 +14,6 @@
     <button class="selectScrollArea" v-on:click="scrollToElement()"></button>
     <div class="iconsLeft">
       <b-icon-pencil-square class="btn editIcon" v-on:click="showEdit()"></b-icon-pencil-square>
-<!--      <button class="btn editIcon" type="button" v-on:click="showEdit()">
-        <i class="fas fa-edit"></i>
-      </button>-->
       <b-modal
           v-bind:id="'edit-content' + vloxContent.id"
           v-bind:key="vloxContent.id"
@@ -28,20 +25,10 @@
             :id = "vloxContent.id">
         </content-editor>
       </b-modal>
-      <b-icon-eye class="btn showHideIcon" v-on:click="showEdit()"></b-icon-eye>
-<!--      <button class="btn showHideIcon" type="button">
-        <i class="far fa-eye"></i>
-      </button>-->
+<!--      <b-icon-eye class="btn showHideIcon mb-3"></b-icon-eye>-->
     </div>
-    <b-icon-trash class="btn removeIcon" v-on:click="deleteElement()"></b-icon-trash>
-<!--    <button class="btn removeIcon" type="button" v-on:click="deleteElement()">
-      <i class="fas fa-times"></i>
-    </button>-->
-
+    <b-icon-trash class="btn removeIcon mr-2" v-on:click="deleteElement()"></b-icon-trash>
     <b-icon-hand-index class="btn moveIcon"></b-icon-hand-index>
-<!--    <button class="btn moveIcon" type="button">
-      <i class="fas fa-bars"></i>
-    </button>-->
   </div>
 </template>
 
@@ -87,7 +74,6 @@ export default {
             finalObject,
             axiosConfig)
             .then(response => {
-              document.getElementById('demoIframe').src = document.getElementById('demoIframe').src;
               this.$emit('updated');
               console.log(response);
             })
@@ -118,7 +104,8 @@ export default {
           axiosConfig)
           .then(response => {
             modalRef.hide('add-content');
-            document.getElementById('demoIframe').src = document.getElementById('demoIframe').src;
+            /*document.getElementById('componentPreview').src =
+                document.getElementById('componentPreview').src;*/
             console.log(response);
           })
           .catch(error => {
@@ -127,7 +114,7 @@ export default {
           });
     },
     scrollToElement() {
-      const iframe = document.getElementById('demoIframe');
+      /*const iframe = document.getElementById('componentPreview');
       var childDocument = iframe.contentDocument ? iframe.contentDocument : iframe.contentWindow.document;
 
       var selectedBlocks = childDocument.getElementsByClassName("blockSelected");
@@ -142,7 +129,7 @@ export default {
         scrollToElement.className = "blockSelected";
         var rect = scrollToElement.getBoundingClientRect();
         childDocument.documentElement.scrollTop = rect.top;
-      }
+      }*/
     }
   }
 }
@@ -215,7 +202,7 @@ export default {
   right: 0;
   background: #e8e8e8;
   height: 100%;
-  width: 40px;
+  width: 30px;
   padding: 0;
   color: #6b6b6b;
 }
@@ -230,6 +217,7 @@ export default {
   width: 33px;
   height: calc(100% - 10px);
   border-right: 1px solid lightgrey;
+  text-align: start;
 }
 .vloxGhost {
   opacity: 0.5;

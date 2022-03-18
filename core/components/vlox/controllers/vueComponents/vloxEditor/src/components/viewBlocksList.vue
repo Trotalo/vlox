@@ -20,7 +20,9 @@
               <h5>{{ block.title }}</h5>
               <p>{{ block.description }}</p>
             </button>
-            <button v-on:click="deleteBlock(block)" class="vloxBlockDelete btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button>
+<!--            <button v-on:click="deleteBlock(block)" class="vloxBlockDelete btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button>-->
+            <b-icon-trash
+                class="btn btn-outline-danger removeIcon mr-2" v-on:click="deleteBlock(block)"></b-icon-trash>
           </div>
         </b-col>
       </b-row>
