@@ -252,7 +252,12 @@ class VloxController {
     /*array_push($data["scripts"], ("serve:$resId" => "env APP_TYPE=$resId vue-cli-service serve $resId/src/main.js"));
     array_push($data["scripts"], array( "build:$resId" => "env APP_TYPE=$resId vue-cli-service build $resId/src/main.js"));*/
     $newJsonString = json_encode($data);
-    file_put_contents($packageFileLocation, $newJsonString);
+    //check if the file can be writen is_writable
+    if (is_writable($packageFileLocation)) {
+      file_put_contents($packageFileLocation, $newJsonString);
+    } else {
+      throw new Exception('Wrong permissions for: ' + $packageFileLocation);
+    }
   }
 
   public function launchNodeServer($resId) {

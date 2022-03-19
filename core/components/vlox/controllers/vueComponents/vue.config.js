@@ -7,13 +7,19 @@
  * files found in the top-level directory of this distribution.
  */
 var fs = require('fs');
-
+const webpack = require('webpack')
 const path = require('path')
-
 const appDir = process.env.APP_TYPE;
 
 module.exports = {
   outputDir: path.resolve(__dirname, `${appDir}/dist`),
+  configureWebpack: {
+    plugins: [
+      new webpack.NormalModuleReplacementPlugin(/^file-loader\?esModule=false!(.*)/, (res) => {
+        res.request = res.request.replace(/^file-loader\?esModule=false!/, 'file-loader?esModule=false&outputPath=assets/js/ace-editor-modes!')
+      }),
+    ],
+  },
   chainWebpack: config => {
     config.resolve.alias.set('@I', path.resolve(__dirname, '../interfaces'))
     config.resolve.alias.set('@shared', path.resolve(__dirname, './shared'))
@@ -30,7 +36,7 @@ module.exports = {
     },
     proxy: {
       '^/vlox': {
-        target: 'https://172.25.42.54',
+        target: 'https://172.25.42.163',
         changeOrigin: true
       },
     }

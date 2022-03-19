@@ -5,8 +5,8 @@ import VuejsDialog from 'vuejs-dialog';
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import ace from 'ace-builds'
 import '../../shared/globalConstants';
-import { ValidationProvider, extend } from 'vee-validate';
-import { required } from 'vee-validate/dist/rules';
+import { ValidationProvider } from 'vee-validate';
+//import { required } from 'vee-validate/dist/rules';
 
 import '../../shared/css/style.css'
 import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css';
@@ -16,10 +16,10 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vuejs-dialog/dist/vuejs-dialog.min.css';
 
-extend('required', {
+/*extend('required', {
   ...required,
   message: 'This field is required'
-});
+});*/
 
 
 Vue.config.productionTip = false
