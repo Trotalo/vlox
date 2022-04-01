@@ -20,12 +20,19 @@ const axiosConfig = {
 /* eslint-disable no-unused-vars */
 export default class Services {
 
-  constructor() {
-  }
+  /*constructor() {
+  }*/
 
   async getRendererId() {
     const response = await axios.get(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/RENDERER',
+      axiosConfig)
+    return response.data;
+  }
+
+  async getNpmModules() {
+    const response = await axios.get(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/NPM',
       axiosConfig)
     return response.data;
   }
@@ -36,20 +43,7 @@ export default class Services {
       data,
       axiosConfig);
     return response;
-      /*.then(response => {
-        this.$emit('block-selected', response.data.object);
-        //this.$root.$emit('reload-bocks-list', data);
-        this.$store.commit('change', true);
-        this.blockData.chunkName = '';
-        this.blockData.description = '';
-        modalRef.hide('new-block');
-
-        //document.getElementById('demoIframe').src = document.getElementById('demoIframe').src;
-      })
-      .catch(error => {
-        console.log(error);
-        this.showErrorAjax();
-      });*/
   }
 }
 
+//export default new Services();

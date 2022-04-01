@@ -63,7 +63,6 @@ export default {
   mounted(){
     //  editor
     //this.editor = window.ace.edit(this.$el.id);
-    debugger;
     this.editor = ace.edit(this.$refs.ace); /*, {
       maxLines: 20,//The maximum number of lines, scroll bars will appear automatically if exceeded
       minLines: 10,//The minimum number of lines, when the maximum number of lines is not reached, the editor will automatically expand and contract

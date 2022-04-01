@@ -260,6 +260,13 @@ class VloxController {
     }
   }
 
+  public function getNpmModules() {
+    $packageFileLocation = $this->COMPONENTS_ROUTE . 'package.json';
+    $jsonString = file_get_contents($packageFileLocation);
+    $data = json_decode($jsonString, true);
+    return $data['dependencies'];
+  }
+
   public function launchNodeServer($resId) {
     $cmd = "npm --prefix $this->COMPONENTS_ROUTE run serve:$resId";
     $outputfile = $this->COMPONENTS_ROUTE . 'npmOutPut';
