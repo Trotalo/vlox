@@ -9,14 +9,23 @@
 
 <template>
   <div class="previewButtons mt-4">
-    <b-button variant="success" @click="runServer()" class="updatePrev">RUN</b-button>
-    <b-button variant="outline-primary" @click="saveChanges()" class="updatePrev ml-4 mr-4">PREVIEW</b-button>
-    <b-button variant="danger" @click="stopServer()" class="updatePrev">STOP</b-button>
+    <b-button :disabled="isRunning" variant="success" @click="runServer()" class="updatePrev">RUN</b-button>
+    <b-button :disabled="!isRunning" @click="saveChanges()" class="updatePrev ml-4 mr-4">PREVIEW</b-button>
+    <b-button :disabled="!isRunning" variant="danger" @click="stopServer()" class="updatePrev">STOP</b-button>
+    <br>
+    <p>is running: {{isRunning}}</p>
+    <b-button @click="getNpmStatus()" class="updatePrev">NPM Status</b-button>
+    <b-modal id="npm-status-modal" size="xl" title="NPM Status" ok-only>
+      <p class="log-view">{{npmStatus}}</p>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import Services from '@shared/services';
+//import vueAceEditor from "./vueAceEditor";
+
 
 const axiosConfig = {
   headers: {
@@ -27,8 +36,21 @@ const axiosConfig = {
 
 export default {
   name: "ServerControl",
+  //components: {'vue-ace-editor': vueAceEditor},
   props: ['resourceId', 'saveMethod', 'saveObject'],
+  data() {
+    return {
+      npmStatus: '',
+      isRunning: false,
+      intervalId: 0,
+    }
+  },
   methods: {
+    async getNpmStatus(){
+      let response = await Services.getNpmLog();
+      this.npmStatus = response.object;
+      this.$bvModal.show('npm-status-modal');
+    },
     runServer() {
       axios.put(window.location.protocol + "//" + window.location.host +
           this.$restRoute + '/rest/index.php?_rest=Ide/'
@@ -79,10 +101,31 @@ export default {
       }
 
     },
-  }
+    async loadRunningStatus() {
+      const response = await Services.getNpmStatus(this.resourceId);
+      this.isRunning = response.object;
+    }
+  },
+  mounted() {
+    this.intervalId = setInterval(async() => {
+      await this.loadRunningStatus()
+    }, 2000);
+
+  },
+  beforeDestroy() {
+    clearInterval(this.isRunning);
+  }/*,
+  async beforeUpdate() {
+    await this.loadRunningStatus();
+  }*/
 }
 </script>
 
 <style>
-
+ .log-view{
+   overflow-x: scroll;
+   overflow-y: scroll;
+   max-height: 75vh;
+   white-space: pre;
+ }
 </style>

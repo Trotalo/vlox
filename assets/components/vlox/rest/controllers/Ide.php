@@ -24,12 +24,12 @@ class KrakenIde extends  modRestController {
 
   public function put() {
     $resContent = $this->getProperties();
-    echo $resContent;
     if (!empty($resContent)) {
       $resId = $resContent['id'];
       if (isset($resId) && isset($resContent['oper'])) {
         if ($resContent['oper'] === 'RUN') {
           $this->modx->VloxController->updatePackage($resId);
+          $this->modx->VloxController->generateVueComponentsFiles($resId);
           $this->modx->VloxController->launchNodeServer($resId);
         } elseif ($resContent['oper'] === 'UPDATE') {
           $this->modx->VloxController->generateVueComponentsFiles($resId);
@@ -49,6 +49,13 @@ class KrakenIde extends  modRestController {
       } elseif ($id === 'NPM') {
         $npmModules =  $this->modx->VloxController->getNpmModules();
         return $this->success('Ok', $npmModules);
+      } elseif ($id === 'NPM_LOG') {
+        $npmModules =  $this->modx->VloxController->getNpmLog();
+        return $this->success('Ok', $npmModules);
+      } elseif (strpos($id, 'NPM_STATUS') === 0) {
+        $resId = substr($id, strpos($id, '=') + 1);
+        $serverStatus =  $this->modx->VloxController->getNpmStatus($resId);
+        return $this->success('Ok', $serverStatus);
       }
     }
   }

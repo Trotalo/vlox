@@ -77,7 +77,7 @@
       </b-row>
       <div v-if="!showControls" class="modXMonsterLogo">
         <a href="https://trotalo.com" target="_blank">
-          <img class="img-fluid" src="./images/logoMenu.svg" />
+          <img class="img-fluid" src="images/logoMenu.svg" />
         </a>
         <p>All Rights Reserved © 2020</p>
       </div>
@@ -106,7 +106,7 @@
 <script>
 import viewBlocksList from './viewBlocksList'
 import newBlockComponent from './newBlockComponent';
-import vueAceEditor from "./vueAceEditor";
+import vueAceEditor from "@shared/components/vueAceEditor";
 import ServerControl from '../../../shared/components/ServerControl';
 import Services from '@shared/services';
 import BaseConfiguration from '@shared/components/baseConfiguration';
@@ -119,8 +119,6 @@ const axiosConfig = {
     'Access-Control-Allow-Origin': "*",
   }
 }
-
-const services = new Services();
 
 export default {
   name: "editor-home",
@@ -228,7 +226,8 @@ export default {
   },
   async beforeMount() {
     //read the id parameter
-    const response = await services.getRendererId();
+    //const response = await services.getRendererId();
+    const response = await Services.getRendererId();
     this.rendererId = response.object;
     console.log(this.rendererId);
 

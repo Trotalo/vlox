@@ -23,7 +23,7 @@ export default class Services {
   /*constructor() {
   }*/
 
-  async getRendererId() {
+  static async getRendererId() {
     const response = await axios.get(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/RENDERER',
       axiosConfig)
@@ -33,6 +33,20 @@ export default class Services {
   async getNpmModules() {
     const response = await axios.get(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/NPM',
+      axiosConfig)
+    return response.data;
+  }
+
+  static async getNpmLog() {
+    const response = await axios.get(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/NPM_LOG',
+      axiosConfig)
+    return response.data;
+  }
+
+  static async getNpmStatus(resId) {
+    const response = await axios.get(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/NPM_STATUS?resId=' + resId,
       axiosConfig)
     return response.data;
   }

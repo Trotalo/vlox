@@ -61,6 +61,8 @@ export default {
   },
   methods: {
     selectBlock(blockData) {
+      //first we stop the server
+
       const modalRef = this.$bvModal;
       axios.get(window.location.protocol + "//" + window.location.host + this.$restRoute +
           '/rest/index.php?_rest=blocks/' + blockData.id, this.axiosConfig)

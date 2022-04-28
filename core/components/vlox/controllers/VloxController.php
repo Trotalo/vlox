@@ -267,6 +267,28 @@ class VloxController {
     return $data['dependencies'];
   }
 
+  public function getNpmLog() {
+    $outputFile = $this->COMPONENTS_ROUTE . 'npmOutPut';
+    $npmStatus = file_get_contents($outputFile);
+    return $npmStatus;
+  }
+
+  public function getNpmStatus($resId){
+    $pidfile = $this->COMPONENTS_ROUTE . 'pidFile';
+    if (file_exists($pidfile)) {
+      $resIdFile = $this->COMPONENTS_ROUTE . 'resId';
+      $pid = file_get_contents($pidfile);
+      $tmpResId = intval(file_get_contents($resIdFile));
+      if (intval($resId) !== $tmpResId) {
+        return true;
+      } else {
+        return $this->isRunning($pid);
+      }
+    } else {
+      return false;
+    }
+  }
+
   public function launchNodeServer($resId) {
     $cmd = "npm --prefix $this->COMPONENTS_ROUTE run serve:$resId";
     $outputfile = $this->COMPONENTS_ROUTE . 'npmOutPut';
