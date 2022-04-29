@@ -20,6 +20,9 @@ class KrakenIde extends  modRestController {
       $this->modx->getOption('core_path') . 'components/vlox/');
     require_once($coreLocation . 'controllers/VloxController.php');
     VloxController::loadService($this->modx);
+
+    require_once($coreLocation . 'controllers/VloxVueConfigurationController.php');
+    VloxVueConfigurationController::loadService($this->modx, 'VloxVueConfigurationController');
   }
 
   public function put() {
@@ -36,9 +39,16 @@ class KrakenIde extends  modRestController {
         } elseif ($resContent['oper'] === 'STOP') {
           $this->modx->VloxController->stopServer();
         }
+      } elseif (isset($resContent['oper'])) {
+        if($resContent['oper'] === 'SAVE_MAIN_JS') {
+          $this->modx->VloxVueConfigurationController->storeMainJs($resContent['contents']);
+          /*$chunk = $this->modx->getObject('modChunk', array('name'=>'mainJs'));
+          $chunk->set('snippet', $fileContents);
+          $chunk->save();*/
+        }
       }
     }
-    return $this->success('todo vientos!');
+    return $this->success('success');
   }
 
   public function read($id) {
@@ -56,6 +66,10 @@ class KrakenIde extends  modRestController {
         $resId = substr($id, strpos($id, '=') + 1);
         $serverStatus =  $this->modx->VloxController->getNpmStatus($resId);
         return $this->success('Ok', $serverStatus);
+      } elseif ($id === 'MAIN_JS') {
+        $chunk = $this->modx->getObject('modChunk', array('name'=>'mainJs'));
+        $blockContent = $chunk->get('snippet');
+        return $this->success('Ok', $blockContent);
       }
     }
   }

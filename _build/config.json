@@ -77,6 +77,10 @@
         {
           "name": "defaultApp",
           "file": "defaultApp.html"
+        },
+        {
+          "name": "mainJs",
+          "file": "main.js"
         }
       ],
       "templates": [

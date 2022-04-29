@@ -79,6 +79,7 @@ class KrakenBlocks extends  modRestController {
         $renderer->save();
         //Finally, we set the friendly url on, so we can load the right elements
         $setting = $this->modx->getObject('modSystemSetting', 'friendly_urls');
+        //check the locked status
         $setting->set('value', 1);
         $setting->save();
         $cacheRefreshOptions =  array( 'system_settings' => array() );

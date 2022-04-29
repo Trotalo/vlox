@@ -28,13 +28,6 @@
               class="addvloxBlock"
               type="button">Select A Block
           </b-button>
-          <b-button
-              variant="outline-primary"
-              v-b-modal.project_config
-              class="addvloxBlock"
-              type="button">Configuration
-          </b-button>
-          <base-configuration></base-configuration>
         </b-col>
         <b-col v-if="showControls" cols="12" md="6" lg="4" class="text-right">
           <b-button variant="success" v-on:click="save()">Save & Publish</b-button>
@@ -109,7 +102,6 @@ import newBlockComponent from './newBlockComponent';
 import vueAceEditor from "@shared/components/vueAceEditor";
 import ServerControl from '../../../shared/components/ServerControl';
 import Services from '@shared/services';
-import BaseConfiguration from '@shared/components/baseConfiguration';
 
 import axios from 'axios';
 
@@ -126,8 +118,7 @@ export default {
     'view-block-list': viewBlocksList,
     'new-block-component': newBlockComponent,
     'vue-ace-editor': vueAceEditor,
-    'server-control': ServerControl,
-    'base-configuration': BaseConfiguration
+    'server-control': ServerControl
   },
   data() {
     return {

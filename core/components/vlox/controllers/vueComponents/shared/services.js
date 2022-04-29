@@ -30,11 +30,28 @@ export default class Services {
     return response.data;
   }
 
-  async getNpmModules() {
+  static async getNpmModules() {
     const response = await axios.get(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/NPM',
       axiosConfig)
     return response.data;
+  }
+
+  static async getMainJs() {
+    const response = await axios.get(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/MAIN_JS',
+      axiosConfig)
+    return response.data;
+  }
+
+  static async saveMainJs(mainJs) {
+    const response = await axios.put(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide',
+      {'oper': 'SAVE_MAIN_JS',
+              'contents': mainJs},
+      axiosConfig)
+    return response;
+    //
   }
 
   static async getNpmLog() {

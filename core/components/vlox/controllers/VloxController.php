@@ -13,9 +13,6 @@ require_once dirname(__FILE__) . "/vendor/autoload.php";
 require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
 
 
-use ScssPhp\ScssPhp\Compiler;
-
-
 
 /**
  * Loads the json from vlox_resource_content table
@@ -24,14 +21,11 @@ class VloxController {
 
   /** @var modX $modx */
   private $modx;
-  /** @var ScssPhp\ScssPhp\Compiler $scss*/
-  private $scss;
 
   private $COMPONENTS_ROUTE; //'vlox/assets/components/vlox/renderedBlocks/'
 
   function __construct() {
     $this->modx = new modX;
-    $this->scss = new Compiler();
     $this->modx->initialize('web');
     //$packagePath = $this->modx->getOption('vlox.core_path') . 'model/';
     $packagePath = $this->modx->getOption('vlox.core_path', null,
@@ -280,7 +274,10 @@ class VloxController {
       $pid = file_get_contents($pidfile);
       $tmpResId = intval(file_get_contents($resIdFile));
       if (intval($resId) !== $tmpResId) {
-        return true;
+        if ($this->isRunning($pid)) {
+          return true;//$this->stopServer();
+        }
+        return false;
       } else {
         return $this->isRunning($pid);
       }

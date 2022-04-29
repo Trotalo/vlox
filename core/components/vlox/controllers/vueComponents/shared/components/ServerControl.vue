@@ -14,7 +14,9 @@
     <b-button :disabled="!isRunning" variant="danger" @click="stopServer()" class="updatePrev">STOP</b-button>
     <br>
     <p>is running: {{isRunning}}</p>
-    <b-button @click="getNpmStatus()" class="updatePrev">NPM Status</b-button>
+    <b-button @click="getNpmStatus()" class="updatePrev mr-2">NPM Status</b-button>
+    <b-button variant="outline-primary" v-b-modal.project_config type="button" class="updatePrev ml-2">Configuration</b-button>
+    <base-configuration></base-configuration>
     <b-modal id="npm-status-modal" size="xl" title="NPM Status" ok-only>
       <p class="log-view">{{npmStatus}}</p>
     </b-modal>
@@ -24,6 +26,7 @@
 <script>
 import axios from "axios";
 import Services from '@shared/services';
+import baseConfiguration from './baseConfiguration'
 //import vueAceEditor from "./vueAceEditor";
 
 
@@ -36,7 +39,7 @@ const axiosConfig = {
 
 export default {
   name: "ServerControl",
-  //components: {'vue-ace-editor': vueAceEditor},
+  components: {'base-configuration': baseConfiguration},
   props: ['resourceId', 'saveMethod', 'saveObject'],
   data() {
     return {
@@ -108,12 +111,15 @@ export default {
   },
   mounted() {
     this.intervalId = setInterval(async() => {
-      await this.loadRunningStatus()
+      await this.loadRunningStatus();
+      if (!this.isRunning) {
+        clearInterval(this.intervalId);
+      }
     }, 2000);
 
   },
   beforeDestroy() {
-    clearInterval(this.isRunning);
+    clearInterval(this.intervalId);
   }/*,
   async beforeUpdate() {
     await this.loadRunningStatus();
