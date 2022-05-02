@@ -119,7 +119,6 @@ class KrakenBlocks extends  modRestController {
       //With te stored chunck now we
       $chunk->set('snippet', $resContent['htmlSection']);
       $chunk->save();
-
     } else {
       //First we get the cat id for vlox
       $category = $this->modx->getObject('modCategory', array('category'=> 'Vlox'));

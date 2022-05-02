@@ -29,9 +29,9 @@
               type="button">Select A Block
           </b-button>
         </b-col>
-        <b-col v-if="showControls" cols="12" md="6" lg="4" class="text-right">
+<!--        <b-col v-if="showControls" cols="12" md="6" lg="4" class="text-right">
           <b-button variant="success" v-on:click="save()">Save & Publish</b-button>
-        </b-col>
+        </b-col>-->
         <view-block-list v-on:block-selected="onSelectBlock"></view-block-list>
         <!--      <b-col class="mt-4 mt-lg-0">-->
         <!--        <h5 v-if="showControls" class="lightGrey">Preview Area for {{blockData.chunkName}}</h5>-->

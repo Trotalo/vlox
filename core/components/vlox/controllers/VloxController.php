@@ -109,11 +109,9 @@ class VloxController extends  VloxBaseController{
       $parser->processElementTags('', $blockContent, false, false, '[[', ']]', [], $maxIterations);
       // Parse uncached tags and remove anything that could not be processed
       $parser->processElementTags('', $blockContent, true, true, '[[', ']]', [], $maxIterations);
-      //$document->querySelector("style")->textContent = $compiledStyle;
       $finalBlock = $blockContent;
       //And finally we save the partial vue component
       //first check if the project dir exists
-
       $vueFileName = $this->COMPONENTS_ROUTE . $resId . '/src/components/' . $compName . '.vue';
       $vueFile = fopen($vueFileName, "w");
       if (!$vueFile) {
@@ -132,19 +130,35 @@ class VloxController extends  VloxBaseController{
       $parser->processElementTags('', $output, true, true, '[[', ']]', [], $maxIterations);
       //echo $output;
       $vueFileName = $this->COMPONENTS_ROUTE . $resId . '/src/App.vue';
-      $vueFile = fopen($vueFileName, "w");
+      $vueFile = fopen($vueFileName, "w+");
       if (!$vueFile) {
         $lastError = error_get_last();
         throw new Exception("Problems creating $vueFileName error was: $lastError");
       }
       fwrite($vueFile, $output);
       fclose($vueFile);
+      //Finally we check if the mainJs has been changed, and i it has,
+      //we need to regenerate the file and restart the server
+      //TODO test this section!!!
+      $mainJs = $this->modx->getObject('modChunk', array('name'=>'mainJs'));
+      $mainJsContent = $mainJs->get('snippet');
+      $mainJsFileName = $this->COMPONENTS_ROUTE . $resId . '/src/main.js';
+      $mainJsFile = fopen($mainJsFileName, "r+");
+      if (!$mainJsFile) {
+        $lastError = error_get_last();
+        throw new Exception("Problems creating $mainJsFileName error was: $lastError");
+      }
+      $contents = fread($mainJsFile, filesize($mainJsFileName));
+      if (strcmp($contents, $mainJsContent) !== 0 ) {
+        $this->stopServer();
+        fwrite($mainJsFile, $mainJsContent);
+        $this->launchNodeServer($resId);
+      }
+      fclose($mainJsFile);
+      //finally rewrite the mainJs flag to avoid reloading
+
 
     }
-    /*if (empty($returnValue)) {
-      $returnValue = "<h1>There aren't any blocks assigned to this resource</h1>";
-    }*/
-    //return '';
   }
 
   public function renderComponentDef($resId) {
@@ -206,6 +220,11 @@ class VloxController extends  VloxBaseController{
     return $returnValue;
   }
 
+  /**
+   * Method in charge of updating the package.json file to run a given component
+   * @param $resId
+   * @throws Exception
+   */
   public function updatePackage($resId) {
     $packageFileLocation = $this->COMPONENTS_ROUTE . 'package.json';
     $jsonString = file_get_contents($packageFileLocation);

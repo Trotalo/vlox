@@ -14,6 +14,8 @@
     <b-button :disabled="!isRunning" variant="danger" @click="stopServer()" class="updatePrev">STOP</b-button>
     <br>
     <p>is running: {{isRunning}}</p>
+    <b-button @click="refreshView()" class="updatePrev mr-2">Refresh</b-button>
+    <br>
     <b-button @click="getNpmStatus()" class="updatePrev mr-2">NPM Status</b-button>
     <b-button variant="outline-primary" v-b-modal.project_config type="button" class="updatePrev ml-2">Configuration</b-button>
     <base-configuration></base-configuration>

@@ -34,6 +34,10 @@ class VloxBaseController {
     $coreLocation = $this->modx->getOption('vlox.core_path', null,
       $this->modx->getOption('core_path') . 'components/vlox/');
     $this->COMPONENTS_ROUTE = $coreLocation . 'vue-res/';
+    //TODO delete this section after development
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
   }
 
   /** @param modX $modx */
