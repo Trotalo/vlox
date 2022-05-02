@@ -94,7 +94,7 @@ class KrakenResources extends modRestController {
         $this->modx->log(ModX::LOG_LEVEL_DEBUG, json_encode($resBlockContent));
       }
       $this->modx->cacheManager->refresh();
-      VloxController::loadService($this->modx);
+      VloxController::loadService($this->modx, 'VloxController');
       $this->modx->VloxController->generateVueComponentsFiles($resId);
     }
   }
@@ -129,7 +129,7 @@ class KrakenResources extends modRestController {
    * @param array $objectArray
    */
   public function afterDelete(array &$objectArray) {
-    VloxController::loadService($this->modx);
+    VloxController::loadService($this->modx, 'VloxController');
     $this->modx->VloxController->generateVueComponentsFiles($objectArray['resourceId']);
     $this->modx->cacheManager->refresh();
   }

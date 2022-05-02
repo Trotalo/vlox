@@ -61,6 +61,7 @@ export default {
           {'oper': 'RUN'},
           axiosConfig)
           .then(response => {
+            this.loadRunningStatus();
             setTimeout(()=> {
               document.getElementById('componentPreview').src =
                   document.getElementById('componentPreview').src;
@@ -105,18 +106,18 @@ export default {
 
     },
     async loadRunningStatus() {
-      const response = await Services.getNpmStatus(this.resourceId);
-      this.isRunning = response.object;
+      this.intervalId = setInterval(async() => {
+        const response = await Services.getNpmStatus(this.resourceId);
+        this.isRunning = response.object;
+        if (!this.isRunning) {
+          clearInterval(this.intervalId);
+        }
+      }, 2000);
+
     }
   },
   mounted() {
-    this.intervalId = setInterval(async() => {
-      await this.loadRunningStatus();
-      if (!this.isRunning) {
-        clearInterval(this.intervalId);
-      }
-    }, 2000);
-
+    this.loadRunningStatus();
   },
   beforeDestroy() {
     clearInterval(this.intervalId);

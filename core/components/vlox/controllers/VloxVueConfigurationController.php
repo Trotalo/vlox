@@ -20,6 +20,16 @@ class VloxVueConfigurationController extends  VloxBaseController {
   public function storeMainJs($fileContents) {
     $chunk = $this->modx->getObject('modChunk', array('name'=>'mainJs'));
     $chunk->set('snippet', $fileContents);
+    $chunk->set('description', 1);
     $chunk->save();
+  }
+
+  public function getMainJs(){
+    $chunk = $this->modx->getObject('modChunk', array('name'=>'mainJs'));
+    return $chunk->get('snippet');
+  }
+
+  public function addNpmModule($npmModule) {
+    //shell_exec
   }
 }

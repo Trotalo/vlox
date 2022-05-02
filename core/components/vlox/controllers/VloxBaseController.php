@@ -16,7 +16,7 @@ class VloxBaseController {
   /** @var string $assetsLocation */
   protected $assetsLocation;
 
-  protected $COMPONENTS_ROUTE; //'vlox/assets/components/vlox/renderedBlocks/'
+  protected $COMPONENTS_ROUTE;
 
   function __construct() {
     $this->modx = new modX;

@@ -11,46 +11,16 @@
 require_once MODX_BASE_PATH . 'config.core.php';
 require_once dirname(__FILE__) . "/vendor/autoload.php";
 require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
+require_once 'VloxBaseController.php';
 
 
 
 /**
  * Loads the json from vlox_resource_content table
  */
-class VloxController {
+class VloxController extends  VloxBaseController{
 
-  /** @var modX $modx */
-  private $modx;
 
-  private $COMPONENTS_ROUTE; //'vlox/assets/components/vlox/renderedBlocks/'
-
-  function __construct() {
-    $this->modx = new modX;
-    $this->modx->initialize('web');
-    //$packagePath = $this->modx->getOption('vlox.core_path') . 'model/';
-    $packagePath = $this->modx->getOption('vlox.core_path', null,
-        $this->modx->getOption('core_path') . 'components/vlox/'). 'model/';
-    if (!$this->modx->addPackage('vlox', $packagePath)) {
-      $this->modx->log(xPDO::LOG_LEVEL_ERROR, "vlox package not found");
-      throw new Exception("vlox package not found");
-    }
-    //$assetsLocation = $this->modx->getOption('vlox.assets_path');
-    $assetsLocation = $this->modx->getOption('vlox.assets_path', null,
-                                      $this->modx->getOption('assets_path') . 'components/vlox/');
-    $coreLocation = $this->modx->getOption('vlox.core_path', null,
-                $this->modx->getOption('core_path') . 'components/vlox/');
-    $this->COMPONENTS_ROUTE = $coreLocation . 'vue-res/';
-  }
-
-  /** @param modX $modx */
-  public static function loadService($modx): void {
-    $admUserMgr = $modx->getService('VloxController',
-      'VloxController',
-      MODX_CORE_PATH . 'components/vlox/controllers');
-    if (!($admUserMgr instanceof VloxController)) {
-      $modx->log(modX::LOG_LEVEL_ERROR, 'Could not load VloxResourceContentTable class');
-    }
-  }
 
   /**
    * @param $chunkName string

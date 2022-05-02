@@ -70,7 +70,7 @@
       </b-row>
       <div v-if="!showControls" class="modXMonsterLogo">
         <a href="https://trotalo.com" target="_blank">
-          <img class="img-fluid" src="images/logoMenu.svg" />
+          <img class="img-fluid" src="./images/logoMenu.svg" />
         </a>
         <p>All Rights Reserved © 2020</p>
       </div>

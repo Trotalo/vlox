@@ -12,7 +12,7 @@ $coreLocation = $modx->getOption('vlox.core_path', null,
   $modx->getOption('core_path') . 'components/vlox/');
 require_once($coreLocation . 'controllers/VloxController.php');
 
-VloxController::loadService($modx);
+VloxController::loadService($modx, "VloxController");
 
 if (!isset($resId) || empty($resId)) {
   $resIdStr = $modx->resource->get('id');
