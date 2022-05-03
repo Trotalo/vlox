@@ -35,8 +35,8 @@ class VloxVueConfigurationController extends  VloxBaseController {
     return $chunk->get('snippet');
   }
 
-  public function addNpmModule($npmModule, $resId) {
-    $baseCommand = "npm install %s";
+  public function modifyNpmModule($npmModule, $resId, $operation) {
+    $baseCommand = $operation === 0 ? "npm install %s" : "npm uninstall %s";
     $currentWorkingDir = getcwd();
     chdir($this->COMPONENTS_ROUTE);
     $this->modx->VloxController->stopServer();
@@ -46,7 +46,4 @@ class VloxVueConfigurationController extends  VloxBaseController {
     return $npmRespose;
   }
 
-  public function removeNpmModule($npmModule) {
-    //shell_exec
-  }
 }

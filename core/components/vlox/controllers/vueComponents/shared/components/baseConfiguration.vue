@@ -13,13 +13,13 @@
       <b-tab title="npm Modules" active>
         <div>
           <b-form-input v-model="newModuleName" placeholder="Enter the module name"></b-form-input>
-          <b-button @click="addNpmModule()" size="sm" variant="success" class="mr-2">
+          <b-button @click="alterNpmModule(newModuleName, 0)" size="sm" variant="success" class="mr-2">
             Add module
           </b-button>
         </div>
         <b-table striped hover :items="npmPackages" :fields="fields">
           <template #cell(actions)="data">
-            <b-button size="sm" variant="danger" class="mr-2" @click="deleteModule(data)">
+            <b-button size="sm" variant="danger" class="mr-2" @click="alterNpmModule(data.item.name, 1)">
               Delete module
             </b-button>
           </template>
@@ -110,15 +110,17 @@ export default {
           console.error(error);
         });
     },
-    addNpmModule() {
+    alterNpmModule(module, action) {
+      const actionText = (action === 0 ? 'Sure you want to add ' + module + ' module?'
+                                        : 'Sure you want to remove ' + module + ' module?')
       this.$dialog
-          .confirm('Sure you want to add ' + this.newModuleName + ' npm module?')
+          .confirm(actionText)
           .then(async () => {
-            const response = await Services.addNpmModule(this.newModuleName, this.resourceId);
+            const response = await Services.modifyNpmModule(module, this.resourceId, action);
             debugger;
             if (!response.data.object) {
               this.$dialog.alert('Errors installing '
-                  + this.newModuleName
+                  + module
                   + ' please check the name and try again')
             }
           })

@@ -39,7 +39,8 @@ class KrakenIde extends  modRestController {
         } elseif ($resContent['oper'] === 'STOP') {
           $this->modx->VloxController->stopServer();
         }elseif ($resContent['oper'] === 'NPM_MODULE') {
-          $npmResponse = $this->modx->VloxVueConfigurationController->addNpmModule($resContent['module'], $resId);
+          $npmResponse = $this->modx->
+                VloxVueConfigurationController->modifyNpmModule($resContent['module'], $resId, $resContent['action']);
           return $this->success('success', $npmResponse);
       }
       } elseif (isset($resContent['oper'])) {
@@ -72,5 +73,4 @@ class KrakenIde extends  modRestController {
       }
     }
   }
-
 }

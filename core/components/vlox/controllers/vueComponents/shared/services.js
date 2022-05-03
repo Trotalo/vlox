@@ -75,15 +75,18 @@ export default class Services {
     return response;
   }
 
-  static async addNpmModule(npmModule, resId){
-    const response = await axios.put(window.location.protocol + "//" + window.location.host +
+  static async modifyNpmModule(npmModule, resId, action){
+    return await axios.put(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/'
       + resId,
-      {'oper': 'NPM_MODULE',
-        'module': npmModule},
-      axiosConfig)
-    return response;
+      {
+        'oper': 'NPM_MODULE',
+        'module': npmModule,
+        'action': action
+      },
+      axiosConfig);
   }
+
 }
 
 //export default new Services();
