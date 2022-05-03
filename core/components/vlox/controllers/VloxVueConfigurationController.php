@@ -13,8 +13,14 @@ require_once dirname(__FILE__) . "/vendor/autoload.php";
 require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
 
 require_once 'VloxBaseController.php';
+require_once 'VloxController.php';
 
 class VloxVueConfigurationController extends  VloxBaseController {
+
+  function __construct() {
+    parent::__construct();
+    VloxController::loadService($this->modx, 'VloxController');
+  }
 
 
   public function storeMainJs($fileContents) {
@@ -29,7 +35,18 @@ class VloxVueConfigurationController extends  VloxBaseController {
     return $chunk->get('snippet');
   }
 
-  public function addNpmModule($npmModule) {
+  public function addNpmModule($npmModule, $resId) {
+    $baseCommand = "npm install %s";
+    $currentWorkingDir = getcwd();
+    chdir($this->COMPONENTS_ROUTE);
+    $this->modx->VloxController->stopServer();
+    $npmRespose = shell_exec(sprintf($baseCommand, $npmModule));
+    chdir($currentWorkingDir);
+    $this->modx->VloxController->launchNodeServer($resId);
+    return $npmRespose;
+  }
+
+  public function removeNpmModule($npmModule) {
     //shell_exec
   }
 }

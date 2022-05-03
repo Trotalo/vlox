@@ -13,7 +13,7 @@
       <b-tab title="npm Modules" active>
         <div>
           <b-form-input v-model="newModuleName" placeholder="Enter the module name"></b-form-input>
-          <b-button size="sm" variant="success" class="mr-2">
+          <b-button @click="addNpmModule()" size="sm" variant="success" class="mr-2">
             Add module
           </b-button>
         </div>
@@ -42,6 +42,7 @@ import vueAceEditor from "@shared/components/vueAceEditor";
 
 export default {
   name: "baseConfiguration",
+  props: ['resourceId'],
   components: {
     'vue-ace-editor': vueAceEditor,
   },
@@ -101,13 +102,28 @@ export default {
     },
     saveMainJs() {
       this.$dialog
-          .confirm('Sure about the changes on main.js?')
+        .confirm('Sure about the changes on main.js?')
+        .then(async () => {
+          await Services.saveMainJs(this.mainJs);
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
+    },
+    addNpmModule() {
+      this.$dialog
+          .confirm('Sure you want to add ' + this.newModuleName + ' npm module?')
           .then(async () => {
-            await Services.saveMainJs(this.mainJs);
-            console.log('Save main: ' + this.mainJs);
+            const response = await Services.addNpmModule(this.newModuleName, this.resourceId);
+            debugger;
+            if (!response.data.object) {
+              this.$dialog.alert('Errors installing '
+                  + this.newModuleName
+                  + ' please check the name and try again')
+            }
           })
-          .catch(function() {
-            console.log('Clicked on cancel');
+          .catch(function(error) {
+            console.error(error);
           });
     }
   }

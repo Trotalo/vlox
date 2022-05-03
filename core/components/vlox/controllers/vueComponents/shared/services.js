@@ -51,7 +51,6 @@ export default class Services {
               'contents': mainJs},
       axiosConfig)
     return response;
-    //
   }
 
   static async getNpmLog() {
@@ -73,6 +72,16 @@ export default class Services {
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Blocks/',
       data,
       axiosConfig);
+    return response;
+  }
+
+  static async addNpmModule(npmModule, resId){
+    const response = await axios.put(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/'
+      + resId,
+      {'oper': 'NPM_MODULE',
+        'module': npmModule},
+      axiosConfig)
     return response;
   }
 }
