@@ -28,7 +28,7 @@
       </b-form-group>
 
       <b-form-group id="input-group-2" label="Blocks description:" label-for="input-2">
-        <validation-provider name="Description" rules="min:10|alpha_spaces" v-slot="{ errors }">
+        <validation-provider name="Description" v-slot="{ errors }">
           <b-form-textarea
               id="textarea"
               v-model="blockData.description"
@@ -58,13 +58,12 @@ import { ValidationProvider } from 'vee-validate';
 import { extend } from 'vee-validate';
 import { min, alpha_dash, alpha_num } from 'vee-validate/dist/rules';
 import Services from "@shared/services";
+import { mapActions } from 'vuex';
 
 extend('min', min);
 extend('alpha_dash', alpha_dash);
 extend('alpha_num', alpha_num);
 
-
-const services = new Services();
 
 export default {
   name: "new-block-component",
@@ -82,23 +81,27 @@ export default {
     'validation-provider': ValidationProvider
   },
   methods: {
+    ...mapActions([
+      'showLoading', 'hideLoading']),
     onSelectBlock (blockData) {
       this.blockData = blockData;
       //document.getElementById('componentPreview').src = document.getElementById('componentPreview').src;
     },
     async save(data) {
-
       const modalRef = this.$bvModal;
       try {
-        const response = await services.newBlock(data);
-        this.$emit('block-selected', response.data.object);
+        this.showLoading();
+        const response = await Services.saveBlockData(data);
+        const storedBlock = await Services.getBlockData(response.data.object.id);
+        this.$emit('block-selected', storedBlock.data.object);
         this.$store.commit('change', true);
         this.blockData.chunkName = '';
         this.blockData.description = '';
         modalRef.hide('new-block');
+        this.hideLoading();
       } catch (e) {
-        console.log(e);
-        this.showErrorAjax();
+        await this.$dialog.alert('Error saving block!');
+        console.error(e);
       }
       console.log(data);
     },

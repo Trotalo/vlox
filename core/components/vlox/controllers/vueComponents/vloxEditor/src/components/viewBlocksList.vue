@@ -93,7 +93,7 @@ export default {
           .then(dialog => {
             console.log(dialog);
             axios.delete(window.location.protocol + "//" + window.location.host +
-                          this.$restRoute + '/rest/blocks/' + block.id)
+                          this.$restRoute + '/rest/index.php?_rest=Blocks/' + block.id)
                 .then(response => {
                   if (response.data.success) {
                     this.$dialog.alert('Block deleted successfully');

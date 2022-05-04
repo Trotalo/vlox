@@ -29,7 +29,7 @@
 import axios from "axios";
 import Services from '@shared/services';
 import baseConfiguration from './baseConfiguration'
-//import vueAceEditor from "./vueAceEditor";
+import { mapActions } from 'vuex';
 
 
 const axiosConfig = {
@@ -51,12 +51,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'showLoading', 'hideLoading']),
     async getNpmStatus(){
       let response = await Services.getNpmLog();
       this.npmStatus = response.object;
       this.$bvModal.show('npm-status-modal');
     },
     runServer() {
+      this.showLoading();
       axios.put(window.location.protocol + "//" + window.location.host +
           this.$restRoute + '/rest/index.php?_rest=Ide/'
           + this.resourceId,
@@ -64,7 +67,14 @@ export default {
           axiosConfig)
           .then(response => {
             setTimeout(()=> {
+              this.hideLoading();
               this.refreshView();
+              this.$dialog.alert("allow a couple seconds for node server to start, " +
+                  "if it's taking too long, or the state doesn't change to running, check the NPM STATUS")
+              .then(()=>{
+                console.log('closed');
+              })
+
             }, 3000)
             console.log(response);
           })
@@ -73,6 +83,7 @@ export default {
           });
     },
     stopServer() {
+      this.showLoading();
       axios.put(window.location.protocol + "//" + window.location.host +
           this.$restRoute + '/rest/index.php?_rest=Ide/'
           + this.resourceId,
@@ -81,6 +92,7 @@ export default {
           .then(response => {
             console.log(response);
             this.refreshView();
+            this.hideLoading();
           })
           .catch(error => {
             console.log(error);

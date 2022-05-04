@@ -110,6 +110,7 @@ class KrakenBlocks extends  modRestController {
    * @return array|void
    */
   public function put() {
+    $vloxBlocks = null;
     $resContent = $this->getProperties();
     $chunkName = $resContent['chunkName'];
     $description = $resContent['description'];
@@ -154,8 +155,8 @@ class KrakenBlocks extends  modRestController {
     VloxController::loadService($this->modx, 'VloxController');
     $renderer = $this->modx->getObject('modResource', array('pagetitle' => 'vloxrenderer'));
     $this->modx->VloxController->generateVueComponentsFiles($renderer->get('id'));
-
-    return $this->success('updated', $resContent);
+    $vloxBlocks = is_null($vloxBlocks) ? $chunk : $vloxBlocks;
+    return $this->success('updated', $vloxBlocks);
   }
 
   public function delete() {

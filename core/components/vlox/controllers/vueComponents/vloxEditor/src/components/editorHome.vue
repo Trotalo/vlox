@@ -86,7 +86,6 @@
             <b-row class="codeEditorBlocks mb-3">
               <b-col id="htmlEditor" cols="12" md="12">
                 <h3>HTML</h3>
-<!--                <b-button variant="outline-primary" v-on:click="save()" class="updatePrev">Update Preview</b-button>-->
                 <vue-ace-editor v-model="blockData.htmlSection" v-bind:options="htmlEdtOptions" id="editor1"/>
               </b-col>
             </b-row>
@@ -160,10 +159,10 @@ export default {
       this.blockData = blockData;
       this.showControls = true;
       //we initializae the data table
-      const blockContents =  blockData.properties.items instanceof Array ?
+      /*const blockContents =  blockData.properties.items instanceof Array ?
           blockData.properties.items:
           JSON.parse(blockData.properties).items;
-      this.items = blockContents;//[];
+      this.items = blockContents;//[];*/
       /*blockContents.forEach(element => {
         this.items.push({ variable_name: element.name, default_value: element.content, variable_type: element.type});
       });*/

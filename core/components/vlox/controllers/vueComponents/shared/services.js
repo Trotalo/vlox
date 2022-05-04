@@ -67,13 +67,13 @@ export default class Services {
     return response.data;
   }
 
-  async newBlock(data) {
+  /*async newBlock(data) {
     const response = await axios.put(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Blocks/',
       data,
       axiosConfig);
     return response;
-  }
+  }*/
 
   static async modifyNpmModule(npmModule, resId, action){
     return await axios.put(window.location.protocol + "//" + window.location.host +
@@ -93,6 +93,21 @@ export default class Services {
       + blockData.id,
       blockData,
       axiosConfig);
+  }
+
+  static async getBlockData(blockId){
+    return await axios.get(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute +
+      '/rest/index.php?_rest=blocks/' + blockId, axiosConfig)
+      /*.then(response => {
+        this.blockObject = response.data.object;
+        this.$emit('block-selected', this.blockObject);
+        modalRef.hide('select-block');
+      })
+      .catch(error => {
+        alert('The ajax petition has problem doing a GET request, please verify the blocks Controller.' +
+          JSON.stringify(error) );
+      });*/
   }
 
   static async updateIde(resourceId){
