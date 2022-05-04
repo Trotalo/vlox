@@ -87,6 +87,23 @@ export default class Services {
       axiosConfig);
   }
 
+  static async saveBlockData(blockData){
+    return await axios.put(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Blocks/'
+      + blockData.id,
+      blockData,
+      axiosConfig);
+  }
+
+  static async updateIde(resourceId){
+    return await axios.put(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/'
+      + resourceId,
+      {'oper': 'UPDATE'},
+      axiosConfig);
+
+  }
+
 }
 
 //export default new Services();

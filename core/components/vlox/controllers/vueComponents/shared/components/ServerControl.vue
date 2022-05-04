@@ -10,7 +10,7 @@
 <template>
   <div class="previewButtons mt-4">
     <b-button :disabled="isRunning" variant="success" @click="runServer()" class="updatePrev">RUN</b-button>
-    <b-button :disabled="!isRunning" @click="saveChanges()" class="updatePrev ml-4 mr-4">PREVIEW</b-button>
+    <b-button :disabled="!isRunning" @click="saveChanges()" class="updatePrev ml-4 mr-4">SAVE</b-button>
     <b-button :disabled="!isRunning" variant="danger" @click="stopServer()" class="updatePrev">STOP</b-button>
     <br>
     <p>is running: {{isRunning}}</p>
@@ -42,7 +42,7 @@ const axiosConfig = {
 export default {
   name: "ServerControl",
   components: {'base-configuration': baseConfiguration},
-  props: ['resourceId'],
+  props: ['resourceId', 'blockData'],
   data() {
     return {
       npmStatus: '',
@@ -63,10 +63,8 @@ export default {
           {'oper': 'RUN'},
           axiosConfig)
           .then(response => {
-            this.loadRunningStatus();
             setTimeout(()=> {
-              document.getElementById('componentPreview').src =
-                  document.getElementById('componentPreview').src;
+              this.refreshView();
             }, 3000)
             console.log(response);
           })
@@ -82,43 +80,35 @@ export default {
           axiosConfig)
           .then(response => {
             console.log(response);
-            document.getElementById('componentPreview').src =
-                document.getElementById('componentPreview').src;
+            this.refreshView();
           })
           .catch(error => {
             console.log(error);
           });
     },
-    saveChanges() {//
-      if (this.saveMethod && this.saveMethod instanceof Function) {
-        this.saveMethod(this.resourceId)
-      } else {
-        axios.put(window.location.protocol + "//" + window.location.host +
-            this.$restRoute + '/rest/index.php?_rest=Ide/'
-            + this.resourceId,
-            {'oper': 'UPDATE'},
-            axiosConfig)
-            .then(response => {
-              console.log(response);
-            })
-            .catch(error => {
-              console.log(error);
-            });
-      }
-
+    async saveChanges() {//
+      let response = await Services.saveBlockData(this.blockData);
+      console.log(response);
+      response = await Services.updateIde(this.resourceId);
     },
     async loadRunningStatus() {
       this.intervalId = setInterval(async() => {
         const response = await Services.getNpmStatus(this.resourceId);
         this.isRunning = response.object;
-        if (!this.isRunning) {
+        /*if (!this.isRunning) {
           clearInterval(this.intervalId);
-        }
-      }, 2000);
+        }*/
+      }, 3000);
 
+    },
+    refreshView() {
+      document.getElementById('componentPreview').src
+          = document.getElementById('componentPreview').src;
     }
   },
-  mounted() {
+  async mounted() {
+    const response = await Services.getNpmStatus(this.resourceId);
+    this.isRunning = response.object;
     this.loadRunningStatus();
   },
   beforeDestroy() {

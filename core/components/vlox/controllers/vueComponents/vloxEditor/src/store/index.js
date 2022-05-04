@@ -7,13 +7,23 @@ export default new Vuex.Store({
   state: {
     refreshList: true,
     restRoute: '/vlox/assets/components/vlox',
+    showLoading: false
   },
   mutations: {
     change (state, refreshList) {
       state.refreshList = refreshList;
+    },
+    CHANGE_LOADING_STATUS(state, val){
+      state.showLoading = val;
     }
   },
   actions: {
+    showLoading({ commit }) {
+      commit("CHANGE_LOADING_STATUS", true);
+    },
+    hideLoading({ commit }) {
+      commit("CHANGE_LOADING_STATUS", false);
+    },
   },
   getters: {
     refreshList (state) {
@@ -21,6 +31,9 @@ export default new Vuex.Store({
     },
     restRoute(state) {
       return state.restRoute;
+    },
+    showLoading(state) {
+      return state.showLoading;
     }
   },
   modules: {

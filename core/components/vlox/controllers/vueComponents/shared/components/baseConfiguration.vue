@@ -24,13 +24,15 @@
             </b-button>
           </template>
         </b-table>
+        <b-modal id="npm-response-modal" size="xl" title="NPM Response" ok-only>
+          <p class="log-view">{{npmResponse}}</p>
+        </b-modal>
       </b-tab>
       <b-tab title="Main.js">
         <b-button size="sm" variant="success" class="mr-2" @click="saveMainJs()">
           Save
         </b-button>
         <vue-ace-editor v-model="mainJs" v-bind:options="htmlEdtOptions" id="editor1"/>
-
       </b-tab>
     </b-tabs>
   </b-modal>
@@ -39,6 +41,7 @@
 <script>
 import Services from '@shared/services';
 import vueAceEditor from "@shared/components/vueAceEditor";
+import { mapActions } from 'vuex';
 
 export default {
   name: "baseConfiguration",
@@ -52,6 +55,7 @@ export default {
       mainJs: '',
       fields: ['name', 'version', 'actions'],
       newModuleName: '',
+      npmResponse: '',
       htmlEdtOptions: {
         mode:'javascript',
         theme: 'monokai',
@@ -90,21 +94,15 @@ export default {
     console.log(this.currentModules);
   },
   methods: {
-    deleteModule(modName) {
-      this.$dialog
-          .confirm('You really want to delete the package: ' + modName.item.name + '?')
-          .then(function() {
-            console.log('Clicked on proceed');
-          })
-          .catch(function() {
-            console.log('Clicked on cancel');
-          });
-    },
+    ...mapActions([
+      'showLoading', 'hideLoading']),
     saveMainJs() {
       this.$dialog
         .confirm('Sure about the changes on main.js?')
         .then(async () => {
+          this.showLoading();
           await Services.saveMainJs(this.mainJs);
+          this.hideLoading();
         })
         .catch(function(error) {
           console.error(error);
@@ -116,12 +114,17 @@ export default {
       this.$dialog
           .confirm(actionText)
           .then(async () => {
+            this.showLoading();
             const response = await Services.modifyNpmModule(module, this.resourceId, action);
-            debugger;
+            this.currentModules = await Services.getNpmModules();
+            this.hideLoading();
             if (!response.data.object) {
               this.$dialog.alert('Errors installing '
                   + module
                   + ' please check the name and try again')
+            } else {
+              this.npmResponse = response.data.object;
+              this.$bvModal.show("npm-response-modal");
             }
           })
           .catch(function(error) {
@@ -133,5 +136,10 @@ export default {
 </script>
 
 <style scoped>
-
+.log-view{
+  overflow-x: scroll;
+  overflow-y: scroll;
+  max-height: 75vh;
+  white-space: pre;
+}
 </style>

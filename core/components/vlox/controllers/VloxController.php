@@ -139,7 +139,6 @@ class VloxController extends  VloxBaseController{
       fclose($vueFile);
       //Finally we check if the mainJs has been changed, and i it has,
       //we need to regenerate the file and restart the server
-      //TODO test this section!!!
       $mainJs = $this->modx->getObject('modChunk', array('name'=>'mainJs'));
       $mainJsContent = $mainJs->get('snippet');
       $mainJsFileName = $this->COMPONENTS_ROUTE . $resId . '/src/main.js';
@@ -150,6 +149,9 @@ class VloxController extends  VloxBaseController{
       }
       $contents = fread($mainJsFile, filesize($mainJsFileName));
       if (strcmp($contents, $mainJsContent) !== 0 ) {
+        ftruncate($mainJsFile, 0);
+        //rewind($mainJsFile);
+        fseek($mainJsFile, 0);
         $this->stopServer();
         fwrite($mainJsFile, $mainJsContent);
         $this->launchNodeServer($resId);

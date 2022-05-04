@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <loading></loading>
     <editor-home></editor-home>
   </div>
 </template>
@@ -7,11 +8,13 @@
 <script>
 
 import editorHome from './components/editorHome';
+import loading from '@shared/components/loading'
 
 export default {
   name: 'App',
   components: {
     editorHome,
+    loading
   }
 }
 </script>
