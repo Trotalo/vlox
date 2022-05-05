@@ -91,14 +91,21 @@ export default {
       const modalRef = this.$bvModal;
       try {
         this.showLoading();
-        const response = await Services.saveBlockData(data);
-        const storedBlock = await Services.getBlockData(response.data.object.id);
-        this.$emit('block-selected', storedBlock.data.object);
-        this.$store.commit('change', true);
-        this.blockData.chunkName = '';
-        this.blockData.description = '';
-        modalRef.hide('new-block');
-        this.hideLoading();
+        const existingChunk = await Services.getBlockData(this.blockData.chunkName);
+        if (existingChunk.data.object) {
+          this.hideLoading();
+          await this.$dialog.alert('The block with name ' + this.blockData.chunkName +
+              ' exists! please chose another name!');
+        } else {
+          const response = await Services.saveBlockData(data);
+          const storedBlock = await Services.getBlockData(response.data.object.id);
+          this.$emit('block-selected', storedBlock.data.object);
+          this.$store.commit('change', true);
+          this.blockData.chunkName = '';
+          this.blockData.description = '';
+          modalRef.hide('new-block');
+          this.hideLoading();
+        }
       } catch (e) {
         await this.$dialog.alert('Error saving block!');
         console.error(e);

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import store from './store'
+import store from '@shared/store'
 import VuejsDialog from 'vuejs-dialog';
 import { BootstrapVue,  BootstrapVueIcons } from 'bootstrap-vue';
 import '../../shared/globalConstants';

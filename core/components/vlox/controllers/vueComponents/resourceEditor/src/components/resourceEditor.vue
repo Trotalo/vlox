@@ -32,7 +32,7 @@
     <div class="col-4 col-xl-3">
       <div class="mb-4 saveAddButtonsWrap">
         <div class="col-12">
-          <button class="btn btn-outline-primary vloxSaveDraft" @click="saveChanges()">Save Draft</button>
+          <button class="btn btn-outline-primary vloxSaveDraft" @click="exportChanges()">Save resource</button>
           <b-button
               v-b-modal.add-content
               class="btn btn-success addvloxBlock"
@@ -170,6 +170,9 @@ export default {
         }
       };
     },
+    exportChanges() {
+      console.log('export to final JAM');
+    }
   },
   async beforeMount() {
     const queryString = window.location.search;

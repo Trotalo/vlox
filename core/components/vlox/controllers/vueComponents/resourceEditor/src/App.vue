@@ -1,16 +1,19 @@
 <template>
   <div id="app">
+    <loading></loading>
     <resource-editor></resource-editor>
   </div>
 </template>
 
 <script>
 import resourceEditor from './components/resourceEditor';
+import loading from '@shared/components/loading'
 
 export default {
   name: 'App',
   components: {
-    'resource-editor': resourceEditor
+    resourceEditor,
+    loading
   }
 }
 </script>
