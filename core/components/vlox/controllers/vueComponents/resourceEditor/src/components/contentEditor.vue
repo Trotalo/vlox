@@ -120,9 +120,6 @@ export default {
       for (var member in cloneObj) cloneObj[member] = '';
       item.content.push(cloneObj);
     }
-  },
-  mounted() {
-    console.log('zzzzzzzzzzzzzzzzz');
   }
 }
 </script>

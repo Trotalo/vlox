@@ -32,7 +32,7 @@
     <div class="col-4 col-xl-3">
       <div class="mb-4 saveAddButtonsWrap">
         <div class="col-12">
-          <button class="btn btn-outline-primary vloxSaveDraft" @click="exportChanges()">Save resource</button>
+          <button class="btn btn-outline-primary vloxSaveDraft" @click="buildResource()">Build resource</button>
           <b-button
               v-b-modal.add-content
               class="btn btn-success addvloxBlock"
@@ -74,7 +74,9 @@ import axios from "axios";
 import resourceContent from "./resourceContent";
 import addContentModal from "./addContentModal";
 import ServerControl from '../../../shared/components/ServerControl';
-import draggable from 'vuedraggable'
+import draggable from 'vuedraggable';
+import Services from '@shared/services';
+import { mapActions } from 'vuex';
 
 const axiosConfig = {
   headers: {
@@ -102,6 +104,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'showLoading', 'hideLoading']),
     setUpSizePreview(render) {
       this.renderDesktop = render;
     },
@@ -170,8 +174,18 @@ export default {
         }
       };
     },
-    exportChanges() {
-      console.log('export to final JAM');
+    buildResource() {
+      this.$dialog.confirm('You want to build this resources? Be patient, this action can take some time')
+        .then(async ()=> {
+          this.showLoading();
+          const response = await Services.buildResource(this.resourceId);
+          this.hideLoading();
+          debugger;
+          console.log(response);
+        })
+      .catch((error)=> {
+        console.error(error);
+      })
     }
   },
   async beforeMount() {

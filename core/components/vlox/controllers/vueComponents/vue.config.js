@@ -36,7 +36,7 @@ module.exports = {
     },
     proxy: {
       '^/vlox': {
-        target: 'https://192.168.156.109',
+        target: 'https://172.17.82.27',
         changeOrigin: true
       },
     }

@@ -38,11 +38,17 @@ class KrakenIde extends  modRestController {
           $this->modx->VloxController->generateVueComponentsFiles($resId);
         } elseif ($resContent['oper'] === 'STOP') {
           $this->modx->VloxController->stopServer();
-        }elseif ($resContent['oper'] === 'NPM_MODULE') {
+        } elseif ($resContent['oper'] === 'NPM_MODULE') {
           $npmResponse = $this->modx->
                 VloxVueConfigurationController->modifyNpmModule($resContent['module'], $resId, $resContent['action']);
           return $this->success('success', $npmResponse);
-      }
+        } elseif ($resContent['oper'] === 'BUILD') {
+          $this->modx->VloxController->updatePackage($resId);
+          $this->modx->VloxController->generateVueComponentsFiles($resId);
+          $npmResponse = $this->modx->
+          VloxVueConfigurationController->buildResource($resId);
+          return $this->success('success', $npmResponse);
+        }
       } elseif (isset($resContent['oper'])) {
         if($resContent['oper'] === 'SAVE_MAIN_JS') {
           $this->modx->VloxVueConfigurationController->storeMainJs($resContent['contents']);
