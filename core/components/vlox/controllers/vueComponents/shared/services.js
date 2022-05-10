@@ -68,7 +68,7 @@ export default class Services {
   }
 
   static async modifyNpmModule(npmModule, resId, action){
-    return await axios.put(window.location.protocol + "//" + window.location.host +
+    const response =  await axios.put(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/'
       + resId,
       {
@@ -77,14 +77,16 @@ export default class Services {
         'action': action
       },
       axiosConfig);
+    return response;
   }
 
   static async saveBlockData(blockData){
-    return await axios.put(window.location.protocol + "//" + window.location.host +
+    const response =  await axios.put(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Blocks/'
       + blockData.id,
       blockData,
       axiosConfig);
+    return response;
   }
 
   static async getBlockData(blockId){
@@ -94,21 +96,47 @@ export default class Services {
   }
 
   static async updateIde(resourceId){
-    return await axios.put(window.location.protocol + "//" + window.location.host +
+    const response = await axios.put(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/'
       + resourceId,
       {'oper': 'UPDATE'},
       axiosConfig);
+    return response;
   }
 
   static async buildResource(resId){
-    return await axios.put(window.location.protocol + "//" + window.location.host +
+    const response = await axios.put(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/'
       + resId,
       {
         'oper': 'BUILD'
       },
       axiosConfig);
+    return response;
+  }
+
+  static async startServer(resourceId) {
+    const response = await axios.put(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/'
+      + resourceId,
+      {'oper': 'RUN'},
+      axiosConfig);
+    return response;
+  }
+
+  static async isNpmInstalled() {
+    const response = await axios.get(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/NPM_INSTALLED',
+      axiosConfig)
+    return response.data;
+  }
+
+  static async installNpm() {
+    const response = await axios.put(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide',
+      {'oper': 'NPM_INSTALLED'},
+      axiosConfig)
+    return response.data;
   }
 
 }

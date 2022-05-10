@@ -58,29 +58,39 @@ export default {
       this.npmStatus = response.object;
       this.$bvModal.show('npm-status-modal');
     },
-    runServer() {
-      this.showLoading();
-      axios.put(window.location.protocol + "//" + window.location.host +
-          this.$restRoute + '/rest/index.php?_rest=Ide/'
-          + this.resourceId,
-          {'oper': 'RUN'},
-          axiosConfig)
-          .then(response => {
-            setTimeout(()=> {
-              this.hideLoading();
-              this.refreshView();
-              this.$dialog.alert("allow a couple seconds for node server to start, " +
-                  "if it's taking too long, or the state doesn't change to running, check the NPM STATUS")
-              .then(()=>{
-                console.log('closed');
-              })
+    async startServer(resourceId){
+      const startResponse = await Services.startServer(resourceId);
+      console.log(startResponse);
+      setTimeout(()=> {
+        this.hideLoading();
+        this.refreshView();
+        this.$dialog.alert("allow a couple seconds for node server to start, " +
+            "if it's taking too long, or the state doesn't change to running, check the NPM STATUS")
+            .then(()=>{
+              console.log('closed');
+            })
 
-            }, 3000)
-            console.log(response);
+      }, 3000);
+      return;
+    },
+    async runServer() {
+      const isNpmInstalled = await Services.isNpmInstalled();
+      if (!isNpmInstalled.object) {
+        //if npm isn't installed, show confirm and proceed with installation
+        this.$dialog.confirm("NPM isn't installed on the server, " +
+            "this installation can take some time, want to continue?")
+          .then(async () => {
+            this.showLoading();
+            const installationResponse = await Services.installNpm();
+            await this.startServer(this.resourceId);
+            console.log(installationResponse);
           })
-          .catch(error => {
-            console.log(error);
-          });
+          .catch((error) => {
+            console.error(error);
+          })
+      } else {
+        await this.startServer(this.resourceId);
+      }
     },
     stopServer() {
       this.showLoading();
@@ -107,9 +117,6 @@ export default {
       this.intervalId = setInterval(async() => {
         const response = await Services.getNpmStatus(this.resourceId);
         this.isRunning = response.object;
-        /*if (!this.isRunning) {
-          clearInterval(this.intervalId);
-        }*/
       }, 3000);
 
     },

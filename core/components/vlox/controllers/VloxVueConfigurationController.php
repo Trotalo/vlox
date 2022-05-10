@@ -81,6 +81,20 @@ class VloxVueConfigurationController extends  VloxBaseController {
     return $npmRespose;
   }
 
+  public function isNpmInstalled() {
+    $response = is_dir($this->COMPONENTS_ROUTE . 'node_modules');
+    return $response;
+  }
+
+  public function installNpm() {
+    $cmd = "npm --prefix $this->COMPONENTS_ROUTE install";
+    $npmRespose = shell_exec($cmd);
+    if( is_null($npmRespose)) {
+      throw new Exception("The command $cmd failed! check your server logs");
+    }
+    return $npmRespose;
+  }
+
   /**
    * Taken from https://www.php.net/manual/en/function.rmdir.php
    * @param $dir

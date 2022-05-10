@@ -52,6 +52,9 @@ class KrakenIde extends  modRestController {
       } elseif (isset($resContent['oper'])) {
         if($resContent['oper'] === 'SAVE_MAIN_JS') {
           $this->modx->VloxVueConfigurationController->storeMainJs($resContent['contents']);
+        } elseif($resContent['oper'] === 'NPM_INSTALLED') {
+          $npmResponse = $this->modx->VloxVueConfigurationController->installNpm($resContent['contents']);
+          return $this->success('success', $npmResponse);
         }
       }
     }
@@ -76,6 +79,9 @@ class KrakenIde extends  modRestController {
       } elseif ($id === 'MAIN_JS') {
         $mainJs =  $this->modx->VloxVueConfigurationController->getMainJs();
         return $this->success('Ok', $mainJs);
+      } elseif ($id === 'NPM_INSTALLED') {
+        $respones =  $this->modx->VloxVueConfigurationController->isNpmInstalled();
+        return $this->success('Ok', $respones);
       }
     }
   }

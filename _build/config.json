@@ -3,8 +3,20 @@
   "lowCaseName": "vlox",
   "description": "Simple integration to easily use VueJs inside modx",
   "author": "@camicase82",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "package": {
+    "resources": [{
+      "pagetitle": "resEditor",
+      "alias": "resEditor",
+      "template": 0,
+      "content": "<!DOCTYPE html><html lang=\"\"><head><meta charset=\"utf-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><link rel=\"icon\" href=\"/favicon.ico\"><title>multi-code-project</title><link href=\"/assets/components/vlox/resourceEditor/css/app.08574e7a.css\" rel=\"preload\" as=\"style\"><link href=\"/assets/components/vlox/resourceEditor/css/chunk-vendors.b3e5da29.css\" rel=\"preload\" as=\"style\"><link href=\"/assets/components/vlox/resourceEditor/js/app.3640bf91.js\" rel=\"preload\" as=\"script\"><link href=\"/assets/components/vlox/resourceEditor/js/chunk-vendors.94140160.js\" rel=\"preload\" as=\"script\"><link href=\"/assets/components/vlox/resourceEditor/css/chunk-vendors.b3e5da29.css\" rel=\"stylesheet\"><link href=\"/assets/components/vlox/resourceEditor/css/app.08574e7a.css\" rel=\"stylesheet\"></head><body><noscript><strong>We're sorry but multi-code-project doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=\"app\"></div><script src=\"/assets/components/vlox/resourceEditor/js/chunk-vendors.94140160.js\"></script><script src=\"/assets/components/vlox/resourceEditor/js/app.3640bf91.js\"></script></body></html>"
+    },
+    {
+      "pagetitle": "vloxEditor",
+      "alias": "vloxEditor",
+      "template": 0,
+      "content": "<!DOCTYPE html><html lang=\"\"><head><meta charset=\"utf-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><link rel=\"icon\" href=\"/favicon.ico\"><title>multi-code-project</title><link href=\"/assets/components/vlox/vloxEditor/css/app.afb866d4.css\" rel=\"preload\" as=\"style\"><link href=\"/assets/components/vlox/vloxEditor/css/chunk-vendors.be14c58f.css\" rel=\"preload\" as=\"style\"><link href=\"/assets/components/vlox/vloxEditor/js/app.f74367fc.js\" rel=\"preload\" as=\"script\"><link href=\"/assets/components/vlox/vloxEditor/js/chunk-vendors.e54dc58a.js\" rel=\"preload\" as=\"script\"><link href=\"/assets/components/vlox/vloxEditor/css/chunk-vendors.be14c58f.css\" rel=\"stylesheet\"><link href=\"/assets/components/vlox/vloxEditor/css/app.afb866d4.css\" rel=\"stylesheet\"></head><body><noscript><strong>We're sorry but multi-code-project doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=\"app\"></div><script src=\"/assets/components/vlox/vloxEditor/js/chunk-vendors.e54dc58a.js\"></script><script src=\"/assets/components/vlox/vloxEditor/js/app.f74367fc.js\"></script></body></html>"
+    }],
     "actions": [{
       "id": 1,
       "controller": "init",
