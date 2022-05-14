@@ -236,7 +236,7 @@ class VloxController extends  VloxBaseController{
     $data["scripts"]["build:$resId"] = "env APP_TYPE=$resId vue-cli-service build $resId/src/main.js";
     /*array_push($data["scripts"], ("serve:$resId" => "env APP_TYPE=$resId vue-cli-service serve $resId/src/main.js"));
     array_push($data["scripts"], array( "build:$resId" => "env APP_TYPE=$resId vue-cli-service build $resId/src/main.js"));*/
-    $newJsonString = json_encode($data);
+    $newJsonString = json_encode($data, JSON_UNESCAPED_SLASHES);
     //check if the file can be writen is_writable
     if (is_writable($packageFileLocation)) {
       file_put_contents($packageFileLocation, $newJsonString);
