@@ -59,6 +59,7 @@ export default {
       this.$bvModal.show('npm-status-modal');
     },
     async startServer(resourceId){
+      this.showLoading();
       const startResponse = await Services.startServer(resourceId);
       console.log(startResponse);
       setTimeout(()=> {

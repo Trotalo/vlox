@@ -108,6 +108,7 @@ export default {
         }
       } catch (e) {
         await this.$dialog.alert('Error saving block!');
+        this.hideLoading();
         console.error(e);
       }
       console.log(data);

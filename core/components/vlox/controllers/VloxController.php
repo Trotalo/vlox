@@ -9,7 +9,6 @@
  */
 
 require_once MODX_BASE_PATH . 'config.core.php';
-require_once dirname(__FILE__) . "/vendor/autoload.php";
 require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
 require_once 'VloxBaseController.php';
 

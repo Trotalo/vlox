@@ -9,7 +9,6 @@
  */
 
 require_once MODX_BASE_PATH . 'config.core.php';
-require_once dirname(__FILE__) . "/vendor/autoload.php";
 require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
 
 require_once 'VloxBaseController.php';
@@ -87,10 +86,15 @@ class VloxVueConfigurationController extends  VloxBaseController {
   }
 
   public function installNpm() {
-    $cmd = "npm --prefix $this->COMPONENTS_ROUTE install";
+    $currentWorkingDir = getcwd();
+    chdir($this->COMPONENTS_ROUTE);
+    $cmd = "npm install";
     $npmRespose = shell_exec($cmd);
+    chdir($currentWorkingDir);
     if( is_null($npmRespose)) {
-      throw new Exception("The command $cmd failed! check your server logs");
+      var_dump(shell_exec("$cmd 2>&1"));
+      $debug = var_export(shell_exec("$cmd 2>&1"), true);
+      throw new Exception("The command $cmd failed, error: $debug");
     }
     return $npmRespose;
   }

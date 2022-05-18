@@ -13,11 +13,11 @@ const appDir = process.env.APP_TYPE;
 
 module.exports = {
   outputDir: path.resolve(__dirname, `${appDir}/dist`),
-  assetsDir: `assets/components/vlox/${appDir}`,
+  assetsDir: `vlox/assets/components/vlox/${appDir}`,
   configureWebpack: {
     plugins: [
       new webpack.NormalModuleReplacementPlugin(/^file-loader\?esModule=false!(.*)/, (res) => {
-        res.request = res.request.replace(/^file-loader\?esModule=false!/, `file-loader?esModule=false&outputPath=assets/components/vlox/${appDir}/ace-editor-modes!`)
+        res.request = res.request.replace(/^file-loader\?esModule=false!/, `file-loader?esModule=false&outputPath=vlox/assets/components/vlox/ace-editor-modes!`)
       }),
     ],
   },
@@ -37,7 +37,7 @@ module.exports = {
     },
     proxy: {
       '^/vlox': {
-        target: 'https://172.17.92.247',
+        target: 'https://172.17.81.132',
         changeOrigin: true
       },
     }

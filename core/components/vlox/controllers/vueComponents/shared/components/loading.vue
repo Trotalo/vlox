@@ -31,7 +31,7 @@ export default {
 
 <style scoped>
 .custom-loader{
-  position: absolute;
+  position: relative;
   background-color: #00000070;
   height: 100%;
   width: 100%;

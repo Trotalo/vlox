@@ -23,6 +23,6 @@ class VloxInitManagerController  extends modExtraManagerController {
     //return '/var/www/html/vlox/assets/components/vlox/blocksEditor/blocksEditor.html';
     //$assetsLocation = $this->modx->getOption('vlox.assets_path');
     $assetsLocation = $this->modx->getOption('vlox.assets_path', null, $this->modx->getOption('assets_path') . 'components/vlox/');
-    return $assetsLocation . 'blocksEditor/vloxEditor.html';
+    return $assetsLocation . 'vloxContainer.html';
   }
 }
