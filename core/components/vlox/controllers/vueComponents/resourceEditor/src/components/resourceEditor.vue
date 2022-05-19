@@ -189,9 +189,14 @@ export default {
     }
   },
   async beforeMount() {
-    const queryString = window.location.search;
+    /*const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const resId = urlParams.get("resId");
+    const resId = urlParams.get("resId");*/
+    const resId = (new URL(document.referrer.toString())).searchParams.get("id");
+    if (!resId) {
+      throw new Exception("Can't load resources editor without an ID!");
+    }
+    console.log("ResId is: " + resId );
     //this.frontPreview = window.location.protocol + "//" + window.location.host + "/index.php?id=" + resId;
     this.frontPreview = "www.google.com";
     this.resourceId = resId;

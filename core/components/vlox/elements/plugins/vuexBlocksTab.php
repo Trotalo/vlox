@@ -19,6 +19,7 @@ switch ($modx->event->name) {
         $assetsLocation =  $modx->getOption('vlox.assets_url', null,
                         $modx->getOption('assets_url') . 'components/vlox/');
         $url = $assetsLocation. 'vloxTab.html' ;
+        //$url = "https://" .$_SERVER['SERVER_NAME'] . "/resEditor.html?resId=" . $resource->id;
         $modx->regClientStartupHTMLBlock(' 
           <script type="text/javascript">
               MODx.on("ready",function() {
