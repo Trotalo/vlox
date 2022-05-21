@@ -89,6 +89,15 @@ export default class Services {
     return response;
   }
 
+  static async saveResData(blockData){
+    const response =  await axios.put(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Resources/'
+      + this.blockData.id,
+      blockData,
+      axiosConfig);
+    return response;
+  }
+
   static async getBlockData(blockId){
     return await axios.get(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute +

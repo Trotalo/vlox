@@ -9,12 +9,12 @@
 
 <template>
   <div class="previewButtons mt-4">
-    <b-button :disabled="isRunning" variant="success" @click="runServer()" class="updatePrev">RUN</b-button>
-    <b-button :disabled="!isRunning" @click="saveChanges()" class="updatePrev ml-4 mr-4">SAVE</b-button>
-    <b-button :disabled="!isRunning" variant="danger" @click="stopServer()" class="updatePrev">STOP</b-button>
+    <b-button :disabled="isRunning" variant="success" @click="runServer()" class="updatePrev mr-3">RUN</b-button>
+    <b-button v-if="vloxType === 0" :disabled="!isRunning" @click="saveChanges()" class="updatePrev">SAVE</b-button>
+    <b-button :disabled="!isRunning" variant="danger" @click="stopServer()" class="updatePrev ml-3">STOP</b-button>
     <br>
     <p>is running: {{isRunning}}</p>
-    <b-button @click="refreshView()" class="updatePrev mr-2">Refresh</b-button>
+    <b-button @click="refreshView()" class="updatePrev mb-2">Refresh</b-button>
     <br>
     <b-button @click="getNpmStatus()" class="updatePrev mr-2">NPM Status</b-button>
     <b-button variant="outline-primary" v-b-modal.project_config type="button" class="updatePrev ml-2">Configuration</b-button>
@@ -42,7 +42,19 @@ const axiosConfig = {
 export default {
   name: "ServerControl",
   components: {'base-configuration': baseConfiguration},
-  props: ['resourceId', 'blockData'],
+  props: {
+      resourceId: {
+        type: String,
+        required: true
+      },
+      blockData : {
+        type: Object,
+      },
+      vloxType: {
+        type: Number,
+        required: true
+      }
+    },
   data() {
     return {
       npmStatus: '',
@@ -110,9 +122,19 @@ export default {
           });
     },
     async saveChanges() {//
-      let response = await Services.saveBlockData(this.blockData);
-      console.log(response);
-      response = await Services.updateIde(this.resourceId);
+      debugger;
+      if (this.vloxType === 0) {
+        await Services.saveBlockData(this.blockData);
+        //response = await Services.updateIde(this.resourceId);
+      } else {
+        let finalObject = JSON.parse(JSON.stringify(this.blockData));
+        finalObject['items'] = this.vloxContent['properties']['items'];
+        delete finalObject['properties'];
+        await Services.saveResData(finalObject);
+
+      }
+      const response = await Services.updateIde(this.resourceId);
+      return response;
     },
     async loadRunningStatus() {
       this.intervalId = setInterval(async() => {

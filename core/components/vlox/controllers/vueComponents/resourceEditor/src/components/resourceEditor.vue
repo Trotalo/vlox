@@ -14,12 +14,8 @@
         <button v-bind:class="[!renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(false)"><i class="fas fa-mobile-alt"></i> <span>576px</span></button>
         <button v-bind:class="[renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(true)"><i class="fas fa-desktop"></i> <span>1200px</span></button>
       </div>
-<!--      <div class="previewButtons">
-        <b-button @click="runServer()">RUN</b-button>
-        <b-button @click="saveChanges()">PREVIEW</b-button>
-        <b-button @click="stopServer()">STOP</b-button>
-      </div>-->
-      <server-control :resource-id="resourceId"></server-control>
+
+      <server-control :resource-id="resourceId" :vlox-type="1"></server-control>
       <div class="vloxPreview" :class="[renderDesktop ? 'previewDesktop' : 'previewMobile']">
         <iframe id="componentPreview"
                 :src="localAddress"
@@ -53,6 +49,7 @@
           <draggable
               ghost-class="vloxGhost"
               v-model="resultsList"
+              handle=".handle"
               :component-data="getComponentData()">
             <template v-if="resultsList">
               <resource-content
@@ -189,12 +186,13 @@ export default {
     }
   },
   async beforeMount() {
-    /*const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const resId = urlParams.get("resId");*/
-    const resId = (new URL(document.referrer.toString())).searchParams.get("id");
+    const resId = (new URL(document.location)).searchParams.get("resId");
     if (!resId) {
-      throw new Exception("Can't load resources editor without an ID!");
+      this.$dialog.alert("resId parameter missing, the module won't work!")
+        .then(() => {
+          this.showLoading();
+          throw new Error("Can't load resources editor without an ID!");
+        });
     }
     console.log("ResId is: " + resId );
     //this.frontPreview = window.location.protocol + "//" + window.location.host + "/index.php?id=" + resId;
@@ -311,4 +309,5 @@ button, button i:after, button span {
 .blockSelected {
   border: 2px solid red;
 }
+
 </style>

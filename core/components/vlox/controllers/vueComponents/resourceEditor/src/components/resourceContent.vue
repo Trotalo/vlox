@@ -9,38 +9,27 @@
 
 <template>
   <div class="vloxBlock">
-    <h5>{{vloxContent.title}}</h5>
-    <p class="m-0">{{vloxContent.description}}</p>
-    <button class="selectScrollArea" v-on:click="scrollToElement()"></button>
-    <div class="iconsLeft">
-      <b-icon-pencil-square class="btn editIcon" v-on:click="showEdit()"></b-icon-pencil-square>
-      <b-modal
-          v-bind:id="'edit-content' + vloxContent.id"
-          v-bind:key="vloxContent.id"
-          v-bind:ref="'edit-content' + vloxContent.id"
-          @ok="save"
-          title="Edit block" size="xl" scrollable>
-        <content-editor
-            :blockContent = "vloxContent"
-            :id = "vloxContent.id">
-        </content-editor>
-      </b-modal>
-<!--      <b-icon-eye class="btn showHideIcon mb-3"></b-icon-eye>-->
+    <div class="iconsLeft" @click="deleteElement(vloxContent.title)">
+      <b-icon-trash class="btn mr-2"></b-icon-trash>
     </div>
-    <b-icon-trash class="btn removeIcon mr-2" v-on:click="deleteElement()"></b-icon-trash>
+    <div class="handle">
+      <h5>{{vloxContent.title}}</h5>
+      <p class="m-0">{{vloxContent.description}}</p>
+<!--      <button class="selectScrollArea" v-on:click="scrollToElement()"></button>-->
+    </div>
     <b-icon-hand-index class="btn moveIcon"></b-icon-hand-index>
   </div>
 </template>
 
 <script>
-import contentEditor from './contentEditor';
+//import contentEditor from './contentEditor';
 import axios from "axios";
 
 export default {
   name: "resource-content",
-  components: {
+  /*components: {
     'content-editor': contentEditor,
-  },
+  },*/
   props: ['vloxContent'],
   methods: {
     showEdit() {
@@ -51,37 +40,38 @@ export default {
       }
 
     },
-    deleteElement() {
+    deleteElement(elementName) {
       //First we confir that we actually want to delete the block
       //TODO this neds to be changed to use VueBoostrap's components
-      const answer = confirm("You sure you want to proceed?");
-      if (answer == true) {
-        let finalObject = JSON.parse(JSON.stringify(this.vloxContent));
-        finalObject['items'] = this.vloxContent['properties']['items'];
-        delete finalObject['properties'];
-        let axiosConfig = {
-          headers: {
-            'Content-Type': 'application/json',
-            'User-Agent': 'Apache-HttpClient/4.1.1',
-            "Access-Control-Allow-Origin": "*",
-          }
-        };
-        // TODO reenable to use rigth api endpoint instead of this
-        //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
-        axios.delete(window.location.protocol + "//" + window.location.host + this.$restRoute +
-            '/rest/index.php?_rest=Resources/'
-            + this.vloxContent.id,
-            finalObject,
-            axiosConfig)
-            .then(response => {
-              this.$emit('updated');
-              console.log(response);
-            })
-            .catch(error => {
-              console.log(error);
-              this.showErrorAjax();
-            });
-      }
+      this.$dialog.confirm("You sure you want to delete " + elementName+ " ?")
+        .then(()=> {
+          let finalObject = JSON.parse(JSON.stringify(this.vloxContent));
+          finalObject['items'] = this.vloxContent['properties']['items'];
+          delete finalObject['properties'];
+          let axiosConfig = {
+            headers: {
+              'Content-Type': 'application/json',
+              'User-Agent': 'Apache-HttpClient/4.1.1',
+              "Access-Control-Allow-Origin": "*",
+            }
+          };
+          // TODO reenable to use rigth api endpoint instead of this
+          //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
+          axios.delete(window.location.protocol + "//" + window.location.host + this.$restRoute +
+              '/rest/index.php?_rest=Resources/'
+              + this.vloxContent.id,
+              finalObject,
+              axiosConfig)
+              .then(response => {
+                this.$emit('updated');
+                console.log(response);
+              })
+              .catch(error => {
+                console.log(error);
+                this.showErrorAjax();
+              });
+        })
+
     },
     save() {
       let finalObject = JSON.parse(JSON.stringify(this.vloxContent));
@@ -158,6 +148,7 @@ export default {
   background: #f3f3f3;
   min-height: 5.5rem;
   overflow: hidden;
+  cursor: pointer;
 }
 .vloxBlock h5 {
   position: absolute;
@@ -235,6 +226,10 @@ export default {
   border: navajowhite;
   background: transparent;
   padding: 0;
+}
+
+.handle {
+  cursor: -webkit-grabbing;
 }
 
 /*

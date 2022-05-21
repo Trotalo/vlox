@@ -79,7 +79,8 @@
     <b-container v-if="showControls">
       <server-control v-on:save-method="save"
                       :resource-id="rendererId"
-                      :block-data="blockData"></server-control>
+                      :block-data="blockData"
+                      :vlox-type="0"></server-control>
       <b-row class="mt-4">
         <b-tabs content-class="mt-2 position-relative" class="col-12">
           <b-tab title="Code Editor" active>

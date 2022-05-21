@@ -25,17 +25,8 @@
 </head>
 
 <body>
-<script>
-    let resIframe = document.getElementById("res-frame");
-    currentResId = new URLSearchParams(document.location.search).get('id');
-    if (!currentResId) {
-        alert('Missing parameter!');
-        throw new Error('Missing parameter!');
-    }
-    url = "https://172.17.83.195:9090?resId=" + currentResId;
-    resIframe.src = url;
-</script>
-<iframe style="height: 100vh; width: 100%;" id="res-frame" src=""></iframe>
+<iframe id="content-frame" src="../vloxEditor.html"></iframe>
+<!--<iframe id="content-frame" src="/vlox/assets/components/vlox/resourceEditor/vloxContainer.html"></iframe>-->
 </body>
 
 </html>

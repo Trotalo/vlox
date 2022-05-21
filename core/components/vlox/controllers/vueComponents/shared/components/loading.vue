@@ -31,12 +31,12 @@ export default {
 
 <style scoped>
 .custom-loader{
-  position: relative;
+  position: absolute;
   background-color: #00000070;
   height: 100%;
   width: 100%;
   z-index: 9999;
-  padding-top: 16%;
+  padding-top: 50%;
   margin-top: -60px;
 }
 </style>
