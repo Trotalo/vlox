@@ -50,6 +50,8 @@ class KrakenResources extends modRestController {
           'properties' => $properties["properties"]
         ));
         $resBlock->save();
+        VloxController::loadService($this->modx, 'VloxController');
+        $this->modx->VloxController->generateVueComponentsFiles($properties["resourceId"]);
       } elseif (!is_null($properties['items'])) {
         $resId = $properties['id'];
         $blockId = $properties['blockId'];
@@ -66,15 +68,17 @@ class KrakenResources extends modRestController {
         $saveResponse = $resource->save();
         if ($saveResponse) {
           $this->modx->cacheManager->refresh();
-          return $this->success('Succesful call!');
+          VloxController::loadService($this->modx, 'VloxController');
+          $this->modx->VloxController->generateVueComponentsFiles($resId);
+          $this->success('Succesful call!');
         } else {
-          return $this->success('Issues storing yur info!');
+          $this->success('Issues storing yur info!');
         }
       } else {
-        return $this->failure('Missing block items!');
+        $this->failure('Missing block items!');
       }
     } else {
-      return $this->failure('Missing message body!');
+      $this->failure('Missing message body!');
     }
   }
 
@@ -133,5 +137,4 @@ class KrakenResources extends modRestController {
     $this->modx->VloxController->generateVueComponentsFiles($objectArray['resourceId']);
     $this->modx->cacheManager->refresh();
   }
-
 }

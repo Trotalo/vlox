@@ -13,6 +13,7 @@
     <b-button v-if="vloxType === 0" :disabled="!isRunning" @click="saveChanges()" class="updatePrev">SAVE</b-button>
     <b-button :disabled="!isRunning" variant="danger" @click="stopServer()" class="updatePrev ml-3">STOP</b-button>
     <br>
+    <b-button @click="reloadServerFiles" class="updatePrev ml-3">RELOAD</b-button>
     <p>is running: {{isRunning}}</p>
     <b-button @click="refreshView()" class="updatePrev mb-2">Refresh</b-button>
     <br>
@@ -134,6 +135,10 @@ export default {
 
       }
       const response = await Services.updateIde(this.resourceId);
+      return response;
+    },
+    async reloadServerFiles() {
+      const response = await Services.buildResource(this.resourceId);
       return response;
     },
     async loadRunningStatus() {

@@ -88,18 +88,20 @@ class VloxController extends  VloxBaseController{
     while ($row = $query->fetch()) {
       //remove folder contents the first time we fetch files
       if (!$hasComponents) {
-        $files = glob($this->COMPONENTS_ROUTE . $resId . '/src/components/*'); // get all file names
+        $this->deleteFilesFromFolder($this->COMPONENTS_ROUTE . $resId . '/src/components/*');
+        /*$files = glob($this->COMPONENTS_ROUTE . $resId . '/src/components/*'); // get all file names
         foreach($files as $file){ // iterate files
           if(is_file($file)) {
             unlink($file); // delete file
           }
-        }
+        }*/
       }
       $hasComponents = true;
       //$this->modx->log(xPDO::LOG_LEVEL_ERROR, json_encode($row));
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
       $compName = strtolower($chunkName . '_' . $resBlockId);
+      //TODO we need to get rid of this, this was the original idea for data admin, but we are using TVs and MIGx
       $blockContent = $this->buildJsonContent($chunkName, $row['properties'], $compName);
       if (empty($blockContent)) {
         throw new Exception($chunkName . ' snippet not found, check your manager configuration!');
@@ -121,45 +123,47 @@ class VloxController extends  VloxBaseController{
       fclose($vueFile);
 
     }
-    if ($hasComponents) {
+    //if ($hasComponents) {
       //here we should recreate the App.vue file
-      $output = $this->modx->getChunk('defaultApp', array('resId'=> $resId));
-      $parser->processElementTags('', $output, false, false, '[[', ']]', [], $maxIterations);
-      // Parse uncached tags and remove anything that could not be processed
-      $parser->processElementTags('', $output, true, true, '[[', ']]', [], $maxIterations);
-      //echo $output;
-      $vueFileName = $this->COMPONENTS_ROUTE . $resId . '/src/App.vue';
-      $vueFile = fopen($vueFileName, "w+");
-      if (!$vueFile) {
-        $lastError = error_get_last();
-        throw new Exception("Problems creating $vueFileName error was: $lastError");
-      }
-      fwrite($vueFile, $output);
-      fclose($vueFile);
-      //Finally we check if the mainJs has been changed, and i it has,
-      //we need to regenerate the file and restart the server
-      $mainJs = $this->modx->getObject('modChunk', array('name'=>'mainJs'));
-      $mainJsContent = $mainJs->get('snippet');
-      $mainJsFileName = $this->COMPONENTS_ROUTE . $resId . '/src/main.js';
-      $mainJsFile = fopen($mainJsFileName, "r+");
-      if (!$mainJsFile) {
-        $lastError = error_get_last();
-        throw new Exception("Problems creating $mainJsFileName error was: $lastError");
-      }
-      $contents = fread($mainJsFile, filesize($mainJsFileName));
-      if (strcmp($contents, $mainJsContent) !== 0 ) {
-        ftruncate($mainJsFile, 0);
-        //rewind($mainJsFile);
-        fseek($mainJsFile, 0);
-        $this->stopServer();
-        fwrite($mainJsFile, $mainJsContent);
-        $this->launchNodeServer($resId);
-      }
-      fclose($mainJsFile);
-      //finally rewrite the mainJs flag to avoid reloading
-
-
+    if (!$hasComponents) {
+      $this->modx->log(xPDO::LOG_LEVEL_WARN, 'no components found, deleting files');
+      $this->deleteFilesFromFolder($this->COMPONENTS_ROUTE . $resId . '/src/components/*');
     }
+    $output = $this->modx->getChunk('defaultApp', array('resId'=> $resId));
+    $parser->processElementTags('', $output, false, false, '[[', ']]', [], $maxIterations);
+    // Parse uncached tags and remove anything that could not be processed
+    $parser->processElementTags('', $output, true, true, '[[', ']]', [], $maxIterations);
+    //echo $output;
+    $vueFileName = $this->COMPONENTS_ROUTE . $resId . '/src/App.vue';
+    $vueFile = fopen($vueFileName, "w+");
+    if (!$vueFile) {
+      $lastError = error_get_last();
+      throw new Exception("Problems creating $vueFileName error was: $lastError");
+    }
+    fwrite($vueFile, $output);
+    fclose($vueFile);
+    //Finally we check if the mainJs has been changed, and i it has,
+    //we need to regenerate the file and restart the server
+    $mainJs = $this->modx->getObject('modChunk', array('name'=>'mainJs'));
+    $mainJsContent = $mainJs->get('snippet');
+    $mainJsFileName = $this->COMPONENTS_ROUTE . $resId . '/src/main.js';
+    $mainJsFile = fopen($mainJsFileName, "r+");
+    if (!$mainJsFile) {
+      $lastError = error_get_last();
+      throw new Exception("Problems creating $mainJsFileName error was: $lastError");
+    }
+    $contents = fread($mainJsFile, filesize($mainJsFileName));
+    if (strcmp($contents, $mainJsContent) !== 0 ) {
+      ftruncate($mainJsFile, 0);
+      //rewind($mainJsFile);
+      fseek($mainJsFile, 0);
+      $this->stopServer();
+      fwrite($mainJsFile, $mainJsContent);
+      $this->launchNodeServer($resId);
+    }
+    fclose($mainJsFile);
+      //finally rewrite the mainJs flag to avoid reloading
+    //}
   }
 
   public function renderComponentDef($resId) {

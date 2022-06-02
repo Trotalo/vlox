@@ -64,19 +64,21 @@ class VloxVueConfigurationController extends  VloxBaseController {
     }
     //once the resource its updated copy the asset folders
     $localAssets = $this->modx->getOption('assets_path');
-    if(is_dir($localAssets . '/' + $resId)) {
-      if(!$this->delTree($localAssets . '/' + $resId)) {
-        throw new Exception('Failed to remove: ' . $localAssets . '/' + $resId);
+    $folderToDelete = $localAssets . $resId;
+    $this->modx->log(xPDO::LOG_LEVEL_WARN, "Deleting: $folderToDelete is dir: " . is_dir($folderToDelete));
+    if(is_dir($folderToDelete)) {
+      if(!$this->delTree($folderToDelete)) {
+        throw new Exception('Failed to remove: ' . $localAssets . '/' . $resId);
       }
     }
     //if we could delete the assets folder or it didnt exists, copy the generated resources
     $cmd = sprintf("cp -r %s %s",
       $this->COMPONENTS_ROUTE . $resId . '/dist/assets/' . $resId,
       $localAssets . $resId);
-    $copyResult = shell_exec($cmd);
-    if (is_null($copyResult) || empty($copyResult)) {
-      throw new Exception("Failed executing: $cmd");
-    }
+    $this->recurseCopy($this->COMPONENTS_ROUTE . $resId . '/dist/assets/' . $resId,
+      $localAssets . $resId, '');
+
+    $this->modx->log(xPDO::LOG_LEVEL_INFO, "Copied and finished: $npmRespose");
     return $npmRespose;
   }
 
@@ -114,6 +116,61 @@ class VloxVueConfigurationController extends  VloxBaseController {
       (is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
     }
     return rmdir($dir);
+  }
+
+  /**
+   * taken from
+   * @param string $sourceDirectory
+   * @param string $destinationDirectory
+   * @param string $childFolder
+   */
+  private function recurseCopy(
+    string $sourceDirectory,
+    string $destinationDirectory,
+    string $childFolder = ''
+  ): void {
+    $directory = opendir($sourceDirectory);
+
+    if (is_dir($destinationDirectory) === false) {
+      mkdir($destinationDirectory);
+    }
+
+    if ($childFolder !== '') {
+      if (is_dir("$destinationDirectory/$childFolder") === false) {
+        mkdir("$destinationDirectory/$childFolder");
+      }
+
+      while (($file = readdir($directory)) !== false) {
+        if ($file === '.' || $file === '..') {
+          continue;
+        }
+
+        if (is_dir("$sourceDirectory/$file") === true) {
+          $this->recurseCopy("$sourceDirectory/$file", "$destinationDirectory/$childFolder/$file");
+        } else {
+          copy("$sourceDirectory/$file", "$destinationDirectory/$childFolder/$file");
+        }
+      }
+
+      closedir($directory);
+
+      return;
+    }
+
+    while (($file = readdir($directory)) !== false) {
+      if ($file === '.' || $file === '..') {
+        continue;
+      }
+
+      if (is_dir("$sourceDirectory/$file") === true) {
+        $this->recurseCopy("$sourceDirectory/$file", "$destinationDirectory/$file");
+      }
+      else {
+        copy("$sourceDirectory/$file", "$destinationDirectory/$file");
+      }
+    }
+
+    closedir($directory);
   }
 
 }
