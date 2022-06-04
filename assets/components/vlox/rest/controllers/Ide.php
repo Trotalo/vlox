@@ -55,6 +55,8 @@ class KrakenIde extends  modRestController {
         } elseif($resContent['oper'] === 'NPM_INSTALLED') {
           $npmResponse = $this->modx->VloxVueConfigurationController->installNpm($resContent['contents']);
           return $this->success('success', $npmResponse);
+        } elseif ($resContent['oper'] === 'STOP') {
+          $this->modx->VloxController->stopServer();
         }
       }
     }

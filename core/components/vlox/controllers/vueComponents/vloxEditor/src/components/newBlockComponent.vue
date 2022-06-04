@@ -27,6 +27,11 @@
         </validation-provider>
       </b-form-group>
 
+      <b-form-group label="Select a Type" v-slot="{ ariaDescribedby }">
+        <b-form-radio v-model="blockData.vloxType" :aria-describedby="ariaDescribedby" name="some-radios" :value="0">Vlox (full width content vlox to build pages)</b-form-radio>
+        <b-form-radio v-model="blockData.vloxType" :aria-describedby="ariaDescribedby" name="some-radios" :value="1">Global Component (visual elements like buttons, cards and modals )</b-form-radio>
+      </b-form-group>
+
       <b-form-group id="input-group-2" label="Blocks description:" label-for="input-2">
         <validation-provider name="Description" v-slot="{ errors }">
           <b-form-textarea
@@ -71,10 +76,12 @@ export default {
     return {
       blockData: {
         chunkName: '',
-        description: ''
+        description: '',
+        vloxType: 0
       },
       validName: null,
       blockList: [],
+
     }
   },
   components: {

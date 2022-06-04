@@ -53,7 +53,9 @@ class VloxController extends  VloxBaseController{
 
 
   public function buildJsonContent($chunkName, $properties, $componentName) {
-    $jsonObject = array();
+    /*
+     * This is obsolete and neds to work with modx tvs
+     * $jsonObject = array();
 
     $jsonProps = !is_array($properties) ? json_decode($properties, true) : $properties;
     foreach ($jsonProps['items'] as $blockContents) {
@@ -62,14 +64,72 @@ class VloxController extends  VloxBaseController{
       }
     }
 
-    $dynamicPlaceholder = json_encode($jsonObject);
-
+    $dynamicPlaceholder = json_encode(array());
+    */
     return $this->modx->getChunk($chunkName, [
-      'blockContent' => $dynamicPlaceholder,
+      'blockContent' => json_encode(array()),
       'componentName' => $componentName
     ]);
   }
 
+  /**
+   * Regenerates everithing to make sure that modx rendered objects are udpated
+   */
+  public function generateGlobalComponents() {
+    $query = $this->modx->query(' 
+                              SELECT *
+                        FROM modx.modx_vlox_blocks
+                        WHERE JSON_EXTRACT(properties, "$.type") = 1');
+
+    if (is_null($query)) {
+      //throw new Exception("NO global componments");
+      //TODO this was changed du the fact that there cannot be global and no need of error
+      return;
+    }
+
+    if (!file_exists($this->COMPONENTS_ROUTE . 'shared')) {
+      mkdir($this->COMPONENTS_ROUTE . 'shared');
+      mkdir($this->COMPONENTS_ROUTE . 'shared/components');
+    }
+
+    $this->deleteFilesFromFolder($this->COMPONENTS_ROUTE . 'shared/components/*');
+
+    $parser = $this->modx->getParser();
+    $maxIterations= (integer) $this->modx->getOption('parser_max_iterations', null, 10);
+
+    while ($row = $query->fetch()) {
+      //remove folder contents the first time we fetch files
+      //$this->modx->log(xPDO::LOG_LEVEL_ERROR, json_encode($row));
+      $chunkName = $row['chunkName'];
+      $resBlockId = $row['id'];
+      $compName = $chunkName;
+      //TODO we need to get rid of this, this was the original idea for data admin, but we are using TVs and MIGx
+      $blockContent = $this->buildJsonContent($chunkName, $row['properties'], $compName);
+      if (empty($blockContent)) {
+        throw new Exception($chunkName . ' snippet not found, check your manager configuration!');
+      }
+      // Parse cached tags, while leaving unprocessed tags in place
+      $parser->processElementTags('', $blockContent, false, false, '[[', ']]', [], $maxIterations);
+      // Parse uncached tags and remove anything that could not be processed
+      $parser->processElementTags('', $blockContent, true, true, '[[', ']]', [], $maxIterations);
+      $finalBlock = $blockContent;
+      //And finally we save the partial vue component
+      //first check if the project dir exists
+      $vueFileName = $this->COMPONENTS_ROUTE . 'shared/components/' . $compName . '.vue';
+      $vueFile = fopen($vueFileName, "w");
+      if (!$vueFile) {
+        $lastError = error_get_last();
+        throw new Exception("Problems creating $vueFileName error was: $lastError");
+      }
+      fwrite($vueFile, $finalBlock);
+      fclose($vueFile);
+
+    }
+
+  }
+
+    //TODO TEngo que hcaer una "copia" de la funcion de abajo
+    // para generar los archivos shared, es decir componentes globales
   /**
    * @param $resId int
    * @return string
@@ -89,12 +149,6 @@ class VloxController extends  VloxBaseController{
       //remove folder contents the first time we fetch files
       if (!$hasComponents) {
         $this->deleteFilesFromFolder($this->COMPONENTS_ROUTE . $resId . '/src/components/*');
-        /*$files = glob($this->COMPONENTS_ROUTE . $resId . '/src/components/*'); // get all file names
-        foreach($files as $file){ // iterate files
-          if(is_file($file)) {
-            unlink($file); // delete file
-          }
-        }*/
       }
       $hasComponents = true;
       //$this->modx->log(xPDO::LOG_LEVEL_ERROR, json_encode($row));
@@ -213,7 +267,7 @@ class VloxController extends  VloxBaseController{
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
       $compName = strtolower($chunkName . '_' . $resBlockId);
-      $scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '">';
+      $scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '" style="max-width: fit-content;">';
       $returnValue .= $scrollDiv;
       //$returnValue .= "<$compName v-on:toggle-loading=\"toggleLoading\" v-on:show-error=\"toggleError\" ></$compName>";
       $returnValue .= "<$compName></$compName>";

@@ -103,5 +103,9 @@ export default {
   }
 }
 
+.dg-content-cont--floating{
+  top: 10vh !important;
+}
+
 
 </style>

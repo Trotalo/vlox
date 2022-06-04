@@ -12,20 +12,16 @@
       v-model="showBlocksList"
       id="select-block" title="VloX List" size="xl" scrollable>
     <b-container fluid>
-      <b-row v-if="blockList.results">
-        <b-col cols="12" lg="6" xl="4" v-for="block in blockList.results" :key="block.id">
-          <div class="vloxBlock my-2">
-            <button class="vloxBlockWSelect"
-                    v-on:click="selectBlock(block)">
-              <h5>{{ block.title }}</h5>
-              <p>{{ block.description }}</p>
-            </button>
-<!--            <button v-on:click="deleteBlock(block)" class="vloxBlockDelete btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button>-->
-            <b-icon-trash
-                class="btn btn-outline-danger removeIcon mr-2" v-on:click="deleteBlock(block)"></b-icon-trash>
-          </div>
-        </b-col>
-      </b-row>
+      <b-tabs content-class="mt-3">
+        <b-tab title="Vlox" active>
+          <p>Full width components to build pages</p>
+          <vlox-list-item :vlox-list="vloxList" @block-selected="selectBlock" button-text="Edit"></vlox-list-item>
+        </b-tab>
+        <b-tab title="Global Components">
+          <p>Reusable visual components to build vlox</p>
+          <vlox-list-item :vlox-list="componentsList" @block-selected="selectBlock" button-text="Edit"></vlox-list-item>
+        </b-tab>
+      </b-tabs>
     </b-container>
     <template #modal-footer>
       <div class="addButton w-100">
@@ -42,9 +38,12 @@
 </template>
 <script>
 import axios from 'axios';
+import VloxListItem from "../../../shared/components/VloxListItem";
+import Services from "../../../shared/services";
 
 export default {
   name: "view-block-list",
+  components: {VloxListItem},
   data() {
     return {
       showBlocksList: false,
@@ -59,10 +58,18 @@ export default {
       }
     }
   },
+  computed: {
+    vloxList(){
+      return this.blockList.results ? this.blockList.results.filter(val => val.properties.type !== 1) : [];
+    },
+    componentsList() {
+      return this.blockList.results ? this.blockList.results.filter(val => val.properties.type === 1) : [];
+    }
+  },
   methods: {
-    selectBlock(blockData) {
+    async selectBlock(blockData) {
       //first we stop the server
-
+      await Services.stopServer();
       const modalRef = this.$bvModal;
       axios.get(window.location.protocol + "//" + window.location.host + this.$restRoute +
           '/rest/index.php?_rest=blocks/' + blockData.id, this.axiosConfig)
@@ -110,6 +117,22 @@ export default {
             console.log('Clicked on cancel');
           });
 
+    },
+    componentImage(componentName) {
+      //debugger;
+      if (this.doesFileExist(window.location.protocol + "//" + window.location.host +
+          '/vlox/assets/components/vlox/compoSnapshots/' + componentName + '.png')) {
+        return 'vlox/assets/components/vlox/compoSnapshots/' + componentName + '.png';
+      } else {
+        return 'vlox/assets/components/vlox/images/circulo.png';
+      }
+    },
+    doesFileExist(urlToFile) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('HEAD', urlToFile, false);
+      xhr.send();
+
+      return xhr.status !== 404;
     }
   },
   mounted() {
@@ -124,30 +147,33 @@ export default {
 };
 </script>
 <style lang="scss">
+ul {
+  list-style-type: none;
+}
   #vloxAddBlockModal .modal-body button {
     background: #EEEEEE;
   }
   .vloxBlock {
     position: relative;
-    height: 160px;
+    //height: 160px;
   }
   .vloxBlock .vloxBlockWSelect {
     width: 100%;
     height: 100%;
     padding: 2rem 0;
-    background: no-repeat;
+    //background: no-repeat;
     border: 1px solid #b6b6b6;
     background-color: white;
   }
   .vloxBlock .vloxBlockWSelect:hover {
     background-color: #ebebeb;
   }
-  .vloxBlock .vloxBlockDelete {
+  /*.vloxBlock .vloxBlockDelete {
     position: absolute;
     right: 10px;
     top: 100%;
     transform: translateY(-121%);
-  }
+  }*/
   .modal-body {
     background: #f8f8f8;
   }

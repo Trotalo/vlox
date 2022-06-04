@@ -27,25 +27,16 @@
 </template>
 
 <script>
-import axios from "axios";
 import Services from '@shared/services';
 import baseConfiguration from './baseConfiguration'
 import { mapActions } from 'vuex';
-
-
-const axiosConfig = {
-  headers: {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': "*",
-  }
-}
 
 export default {
   name: "ServerControl",
   components: {'base-configuration': baseConfiguration},
   props: {
       resourceId: {
-        type: String,
+        type: Number,
         required: true
       },
       blockData : {
@@ -106,9 +97,12 @@ export default {
         await this.startServer(this.resourceId);
       }
     },
-    stopServer() {
+    async stopServer() {
       this.showLoading();
-      axios.put(window.location.protocol + "//" + window.location.host +
+      await Services.stopServer();
+      this.refreshView();
+      this.hideLoading();
+      /*axios.put(window.location.protocol + "//" + window.location.host +
           this.$restRoute + '/rest/index.php?_rest=Ide/'
           + this.resourceId,
           {'oper': 'STOP'},
@@ -120,19 +114,18 @@ export default {
           })
           .catch(error => {
             console.log(error);
-          });
+          });*/
     },
     async saveChanges() {//
-      debugger;
       if (this.vloxType === 0) {
         await Services.saveBlockData(this.blockData);
-        //response = await Services.updateIde(this.resourceId);
+        //after saved generate the image!
+        //debugger;
       } else {
         let finalObject = JSON.parse(JSON.stringify(this.blockData));
         finalObject['items'] = this.vloxContent['properties']['items'];
         delete finalObject['properties'];
         await Services.saveResData(finalObject);
-
       }
       const response = await Services.updateIde(this.resourceId);
       return response;
@@ -156,6 +149,9 @@ export default {
   async mounted() {
     const response = await Services.getNpmStatus(this.resourceId);
     this.isRunning = response.object;
+    if (this.isRunning) {
+      await Services.stopServer();
+    }
     this.loadRunningStatus();
   },
   beforeDestroy() {

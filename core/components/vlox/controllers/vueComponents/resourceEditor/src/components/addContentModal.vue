@@ -10,8 +10,12 @@
 <template>
   <b-modal id="add-content" title="Add Block" size="xl" scrollable :hide-footer="true">
     <div class="content">
-      <div class="row" v-if="blockList.results">
-        <div class="vloxBlockListContainer col-12 col-xl-6 p-1" v-for="block in blockList.results" :key="block.id">
+      <div class="row" v-if="vloxList">
+        <vlox-list-item
+            :vlox-list="vloxList"
+            @block-selected="addComponentToResource"
+            button-text="Add to page"></vlox-list-item>
+<!--        <div class="vloxBlockListContainer col-12 col-xl-6 p-1" v-for="block in vloxList" :key="block.id">
           <button class="vloxBlockList my-2" v-on:click="addComponentToResource(block)">
             <div class="row h-100 align-items-center">
               <div class="col-4">
@@ -23,7 +27,7 @@
               </div>
             </div>
           </button>
-        </div>
+        </div>-->
       </div>
     </div>
   </b-modal>
@@ -31,15 +35,22 @@
 
 <script>
 import axios from "axios";
+import VloxListItem from "../../../shared/components/VloxListItem";
 
 export default {
   name: "add-content-modal",
+  components: {VloxListItem},
   props: ['resinputid'],
   data() {
     return {
       blockList : [],
       resourceId: '',
     }
+  },
+  computed: {
+    vloxList(){
+      return this.blockList.results ? this.blockList.results.filter(val => val.properties.type !== 1) : [];
+    },
   },
   methods: {
     showAjaxError() {

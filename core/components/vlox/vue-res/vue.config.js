@@ -33,11 +33,15 @@ module.exports = {
       "key": fs.readFileSync('./certs/ssl.key'),
       "cert": fs.readFileSync('./certs/ssl.crt')
     },
-    /*proxy: {
-      '^/customBooking': {
-        target: 'https://172.25.33.168',
+    proxy: {
+      '^/vlox': {
+        target: 'https://172.25.114.131',
         changeOrigin: true
       },
-    }*/
+      '^/assets/images': {
+        target: 'https://172.25.114.131',
+        changeOrigin: true
+      },
+    }
   }
 }

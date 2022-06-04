@@ -20,7 +20,7 @@
         <iframe id="componentPreview"
                 :src="localAddress"
                 sandbox="allow-same-origin allow-forms allow-scripts"
-                style="width: 100%;height: 100%">
+                style="width: 100%;height: 400vh">
         </iframe>
       </div>
     </div>
@@ -37,11 +37,7 @@
           <add-content-modal v-bind:resinputid="resourceId"
                                     @updated="updated()">
           </add-content-modal>
-<!--          <b-modal id="add-content" title="Add Block" size="xl" scrollable :hide-footer="true">
-            <vlox-block-add-content v-bind:resInputId="resourceId"
-                                      @updated="updated()">
-            </vlox-block-add-content>
-          </b-modal>-->
+
         </div>
       </div>
       <div class="vloxContainer">
@@ -93,7 +89,7 @@ export default {
   data() {
     return {
       //TODO este id se debe cargar de forma dinamica
-      resourceId: '',
+      resourceId: 0,
       frontPreview: '',
       resultsList: [],
       renderDesktop: true,
@@ -177,7 +173,6 @@ export default {
           this.showLoading();
           const response = await Services.buildResource(this.resourceId);
           this.hideLoading();
-          debugger;
           console.log(response);
         })
       .catch((error)=> {
@@ -187,17 +182,17 @@ export default {
   },
   async beforeMount() {
     const resId = (new URL(document.location)).searchParams.get("resId");
-    if (!resId) {
+    if (!resId || isNaN(resId)) {
       this.$dialog.alert("resId parameter missing, the module won't work!")
         .then(() => {
           this.showLoading();
           throw new Error("Can't load resources editor without an ID!");
         });
     }
-    console.log("ResId is: " + resId );
+    console.log("ResId is: " + resId + " is number? " +  isNaN(resId) );
     //this.frontPreview = window.location.protocol + "//" + window.location.host + "/index.php?id=" + resId;
     this.frontPreview = "www.google.com";
-    this.resourceId = resId;
+    this.resourceId = parseInt(resId);
     await this.loadData();
   }
 }

@@ -133,6 +133,22 @@ export default class Services {
     return response;
   }
 
+  static async stopServer(){
+    const response = await axios.put(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/',
+      {'oper': 'STOP'},
+      axiosConfig);
+    return response;
+      /*.then(response => {
+        console.log(response);
+        this.refreshView();
+        this.hideLoading();
+      })
+      .catch(error => {
+        console.log(error);
+      });*/
+  }
+
   static async isNpmInstalled() {
     const response = await axios.get(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/NPM_INSTALLED',

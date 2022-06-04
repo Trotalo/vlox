@@ -36,7 +36,7 @@ export default {
   height: 100%;
   width: 100%;
   z-index: 9999;
-  padding-top: 50%;
+  padding-top: 10vh;
   margin-top: -60px;
 }
 </style>
