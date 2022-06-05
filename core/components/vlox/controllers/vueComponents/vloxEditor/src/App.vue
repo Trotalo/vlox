@@ -105,6 +105,7 @@ export default {
 
 .dg-content-cont--floating{
   top: 10vh !important;
+  transform: translateY(0%) !important;
 }
 
 

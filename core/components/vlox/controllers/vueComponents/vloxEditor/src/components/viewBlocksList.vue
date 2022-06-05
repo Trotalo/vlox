@@ -15,11 +15,17 @@
       <b-tabs content-class="mt-3">
         <b-tab title="Vlox" active>
           <p>Full width components to build pages</p>
-          <vlox-list-item :vlox-list="vloxList" @block-selected="selectBlock" button-text="Edit"></vlox-list-item>
+          <vlox-list-item :vlox-list="vloxList"
+                          @block-selected="selectBlock"
+                          @delete="deleteBlock"  button-text="Edit"></vlox-list-item>
         </b-tab>
         <b-tab title="Global Components">
           <p>Reusable visual components to build vlox</p>
-          <vlox-list-item :vlox-list="componentsList" @block-selected="selectBlock" button-text="Edit"></vlox-list-item>
+          <vlox-list-item
+              :vlox-list="componentsList"
+              @block-selected="selectBlock"
+              @delete="deleteBlock"
+              button-text="Edit"></vlox-list-item>
         </b-tab>
       </b-tabs>
     </b-container>

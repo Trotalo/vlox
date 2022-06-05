@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
   name: "VloxListItem",
@@ -57,28 +56,7 @@ export default {
       this.$emit('block-selected', blockData);
     },
     deleteBlock(block) {
-      this.$dialog
-          .confirm('Are your sure you want to delete ' + block.chunkName)
-          .then(dialog => {
-            console.log(dialog);
-            axios.delete(window.location.protocol + "//" + window.location.host +
-                this.$restRoute + '/rest/index.php?_rest=Blocks/' + block.id)
-                .then(response => {
-                  if (response.data.success) {
-                    this.$dialog.alert('Block deleted successfully');
-                    this.loadBLockList();
-                  } else {
-                    this.$dialog.alert(response.data.message);
-                  }
-                })
-                .catch(error => {
-                  this.$dialog.alert('Problems sending the petition: ' + error);
-                });
-          })
-          .catch(function() {
-            console.log('Clicked on cancel');
-          });
-
+      this.$emit('delete', block);
     },
     componentImage(componentName) {
       return 'vlox/assets/components/vlox/compoSnapshots/' + componentName + '.png?rnd=' + this.cacheKey;

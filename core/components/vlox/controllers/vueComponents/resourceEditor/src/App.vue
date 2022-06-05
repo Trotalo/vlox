@@ -26,5 +26,11 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+
+}
+
+.dg-content-cont--floating{
+  top: 10vh !important;
+  transform: translateY(0%) !important;
 }
 </style>
