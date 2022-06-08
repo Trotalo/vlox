@@ -164,7 +164,7 @@ class KrakenBlocks extends  modRestController {
       $vloxBlocks->save();
 
       //return $this->read($vloxBlocks->get('id'));
-    }
+    }//TODO aca epieza la trama para poner  quitar el parametro
     if ($vloxType === 1) {
       $this->modx->VloxController->generateGlobalComponents();
     }
@@ -174,7 +174,7 @@ class KrakenBlocks extends  modRestController {
     if (is_null($renderer)) {
       throw new Exception('vloxrenderer not found!');
     }
-    $this->modx->VloxController->generateVueComponentsFiles($renderer->get('id'));
+    $this->modx->VloxController->generateVueComponentsFiles($renderer->get('id'), true);
     $vloxBlocks = is_null($vloxBlocks) ? $chunk : $vloxBlocks;
     return $this->success('updated', $vloxBlocks);
   }
@@ -209,7 +209,6 @@ class KrakenBlocks extends  modRestController {
   public function post() {
 
     $assetsLocation = $this->modx->getOption('vlox.assets_path', null, $this->modx->getOption('assets_path') . 'components/vlox/');
-    $this->modx->log(modX::LOG_LEVEL_ERROR, "ESTMOS EN EL POOOST@@@@!!!: " . $assetsLocation. 'image.png');
 
     $id = $this->properties['id'];
     if (!is_null($id)) {
@@ -219,9 +218,8 @@ class KrakenBlocks extends  modRestController {
       if (!is_dir($assetsLocation . 'compoSnapshots')) {
         mkdir($assetsLocation . 'compoSnapshots');
       }
-      if (move_uploaded_file($_FILES["img"]["tmp_name"], $assetsLocation . 'compoSnapshots/' . $fileName)) {
-
-        $this->modx->log(modX::LOG_LEVEL_ERROR, "Y se guardo la iamgen!");
+      if (!move_uploaded_file($_FILES["img"]["tmp_name"], $assetsLocation . 'compoSnapshots/' . $fileName)) {
+        $this->modx->log(modX::LOG_LEVEL_ERROR, "Image failed to store!!!");
 
       }
     }

@@ -63,14 +63,14 @@ export default {
   mounted(){
     //  editor
     //this.editor = window.ace.edit(this.$el.id);
-    this.editor = ace.edit(this.$refs.ace); /*, {
-      maxLines: 20,//The maximum number of lines, scroll bars will appear automatically if exceeded
-      minLines: 10,//The minimum number of lines, when the maximum number of lines is not reached, the editor will automatically expand and contract
+    this.editor = ace.edit(this.$refs.ace, {
+      maxLines: 50,//The maximum number of lines, scroll bars will appear automatically if exceeded
+      minLines: 40,//The minimum number of lines, when the maximum number of lines is not reached, the editor will automatically expand and contract
       fontSize: 14,//Font size in the editor
       theme: this.themePath,//theme set by default
       mode: this.modePath,//Language mode set by default
       tabSize: 4//Tab is set to 4 spaces
-    })*/
+    });
 
     //  deprecation fix
     this.editor.$blockScrolling = Infinity;

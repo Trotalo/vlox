@@ -19,8 +19,7 @@
       <div class="vloxPreview" :class="[renderDesktop ? 'previewDesktop' : 'previewMobile']">
         <iframe id="componentPreview"
                 :src="localAddress"
-                sandbox="allow-same-origin allow-forms allow-scripts"
-                style="width: 100%;height: 400vh">
+                sandbox="allow-same-origin allow-forms allow-scripts">
         </iframe>
       </div>
     </div>
@@ -266,7 +265,7 @@ button, button i:after, button span {
   width: 97%;
   padding-top: 56.25%;
   margin: 1rem auto;
-  height: calc(100% - 5rem);
+  /*height: calc(100% - 5rem);*/
 
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;

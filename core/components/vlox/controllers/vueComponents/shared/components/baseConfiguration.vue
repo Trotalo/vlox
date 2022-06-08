@@ -121,11 +121,12 @@ export default {
             if (!response.data.object) {
               this.$dialog.alert('Errors installing '
                   + module
-                  + ' please check the name and try again')
+                  + ' please check the name and try again');
             } else {
               this.npmResponse = response.data.object;
               this.$bvModal.show("npm-response-modal");
             }
+            this.newModuleName = "";
           })
           .catch(function(error) {
             console.error(error);

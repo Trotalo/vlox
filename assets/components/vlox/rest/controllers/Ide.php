@@ -30,12 +30,13 @@ class KrakenIde extends  modRestController {
     if (!empty($resContent)) {
       $resId = $resContent['id'];
       if (isset($resId) && isset($resContent['oper'])) {
+        $isEditingVlox = $resContent['isEditingVlox'] === 0 ? true : false;
         if ($resContent['oper'] === 'RUN') {
           $this->modx->VloxController->updatePackage($resId);
-          $this->modx->VloxController->generateVueComponentsFiles($resId);
+          $this->modx->VloxController->generateVueComponentsFiles($resId, $isEditingVlox);
           $this->modx->VloxController->launchNodeServer($resId);
         } elseif ($resContent['oper'] === 'UPDATE') {
-          $this->modx->VloxController->generateVueComponentsFiles($resId);
+          $this->modx->VloxController->generateVueComponentsFiles($resId, $isEditingVlox);
         } elseif ($resContent['oper'] === 'STOP') {
           $this->modx->VloxController->stopServer();
         } elseif ($resContent['oper'] === 'NPM_MODULE') {
@@ -44,7 +45,7 @@ class KrakenIde extends  modRestController {
           return $this->success('success', $npmResponse);
         } elseif ($resContent['oper'] === 'BUILD') {
           $this->modx->VloxController->updatePackage($resId);
-          $this->modx->VloxController->generateVueComponentsFiles($resId);
+          $this->modx->VloxController->generateVueComponentsFiles($resId, $isEditingVlox);
           $npmResponse = $this->modx->
           VloxVueConfigurationController->buildResource($resId);
           return $this->success('success', $npmResponse);

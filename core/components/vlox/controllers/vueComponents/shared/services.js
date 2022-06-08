@@ -104,11 +104,12 @@ export default class Services {
       '/rest/index.php?_rest=blocks/' + blockId, axiosConfig);
   }
 
-  static async updateIde(resourceId){
+  static async updateIde(resourceId, isEditingVlox){
     const response = await axios.put(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/'
       + resourceId,
-      {'oper': 'UPDATE'},
+      {'oper': 'UPDATE',
+            'isEditingVlox': isEditingVlox},
       axiosConfig);
     return response;
   }
@@ -124,11 +125,12 @@ export default class Services {
     return response;
   }
 
-  static async startServer(resourceId) {
+  static async startServer(resourceId, isEditingVlox) {
     const response = await axios.put(window.location.protocol + "//" + window.location.host +
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Ide/'
       + resourceId,
-      {'oper': 'RUN'},
+      {'oper': 'RUN',
+            'isEditingVlox': isEditingVlox},
       axiosConfig);
     return response;
   }

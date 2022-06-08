@@ -104,6 +104,7 @@ export default {
           await this.$dialog.alert('The block with name ' + this.blockData.chunkName +
               ' exists! please chose another name!');
         } else {
+          await Services.stopServer();
           const response = await Services.saveBlockData(data);
           const storedBlock = await Services.getBlockData(response.data.object.id);
           this.$emit('block-selected', storedBlock.data.object);

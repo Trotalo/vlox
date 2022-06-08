@@ -9,7 +9,7 @@
 
 <template>
   <div id="app">
-    [[!vlox? &resId=`[[+resId]]`]]
+    [[!vlox? &resId=`[[+resId]]` &isEditingVlox=`[[+isEditingVlox]]`]]
   </div>
 </template>
 
@@ -27,7 +27,18 @@
     [[!vueImportRenderer? &resId=`[[+resId]]`]],
     mounted() {
       setTimeout(()=>{
-        html2canvas(document.getElementById("app").firstChild.firstChild).then(canvas => {
+        //Firt we pick the document
+        let doc = document.getElementById("app").firstChild.firstChild;
+        if (doc.offsetHeight === 0 || doc.offsetWidth === 0 ){
+          doc = document.getElementById("app").firstChild.firstChild.firstChild;
+        } else {
+          //check if we need to set the tmps style
+          const innerChild = document.getElementById("app").firstChild.firstChild.firstChild;
+          if (innerChild.offsetWidth !== doc.offsetWidth) {
+            doc.style['max-width'] = 'fit-content';
+          }
+        }
+        html2canvas(doc).then(canvas => {
           canvas.toBlob((blob) => {
             const formData = new FormData();
             formData.append('img', blob, 'snapshot.png');
@@ -43,6 +54,7 @@
               axiosConfig)
               .then(response => {
                 console.log(response);
+                doc.style['max-width'] = null;
               })
               .catch(error => {
                 console.log(error);
@@ -55,13 +67,62 @@
 </script>
 
 <style lang="scss">
-    #app {
-        font-family: Avenir, Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        color: #2c3e50;
-        display: contents;
-        margin-top: 60px;
-    }
+    @font-face {
+  font-family: Mount;
+  src: url("/assets/fonts/Mont-Book.otf") format("opentype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Mount;
+  font-weight: bold;
+  src: url("/assets/fonts/Mont-Bold.otf") format("opentype");
+  font-display: swap;
+}
+
+#app {
+  font-family: Mount, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: left;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+
+.small-width{
+  max-width: 85%;
+}
+
+.loading, .errorHandler {
+  margin-top: -60px;
+  position: fixed;
+  background: rgba(0,0,0,.65);
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+.loading{
+  span{
+    margin: 0 auto;
+    display: block;
+    color: red;
+  }
+}
+.loading .fa-spinner, .errorHandler .errorMessage {
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 2rem;
+  transform: translate(-50%, -50%);
+}
+
+:target::before {
+  content: "";
+  display: block;
+  height: 70px; /* fixed header height*/
+  margin: -70px 0 0; /* negative fixed header height */
+}
 </style>

@@ -51,7 +51,7 @@ class KrakenResources extends modRestController {
         ));
         $resBlock->save();
         VloxController::loadService($this->modx, 'VloxController');
-        $this->modx->VloxController->generateVueComponentsFiles($properties["resourceId"]);
+        $this->modx->VloxController->generateVueComponentsFiles($properties["resourceId"], false);
       } elseif (!is_null($properties['items'])) {
         $resId = $properties['id'];
         $blockId = $properties['blockId'];
@@ -69,7 +69,7 @@ class KrakenResources extends modRestController {
         if ($saveResponse) {
           $this->modx->cacheManager->refresh();
           VloxController::loadService($this->modx, 'VloxController');
-          $this->modx->VloxController->generateVueComponentsFiles($resId);
+          $this->modx->VloxController->generateVueComponentsFiles($resId, false);
           $this->success('Succesful call!');
         } else {
           $this->success('Issues storing yur info!');
@@ -99,7 +99,7 @@ class KrakenResources extends modRestController {
       }
       $this->modx->cacheManager->refresh();
       VloxController::loadService($this->modx, 'VloxController');
-      $this->modx->VloxController->generateVueComponentsFiles($resId);
+      $this->modx->VloxController->generateVueComponentsFiles($resId, false);
     }
   }
 
@@ -134,7 +134,7 @@ class KrakenResources extends modRestController {
    */
   public function afterDelete(array &$objectArray) {
     VloxController::loadService($this->modx, 'VloxController');
-    $this->modx->VloxController->generateVueComponentsFiles($objectArray['resourceId']);
+    $this->modx->VloxController->generateVueComponentsFiles($objectArray['resourceId'], false);
     $this->modx->cacheManager->refresh();
   }
 }

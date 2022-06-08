@@ -134,7 +134,10 @@ class VloxController extends  VloxBaseController{
    * @param $resId int
    * @return string
    */
-  public function generateVueComponentsFiles($resId) {
+  public function generateVueComponentsFiles($resId, $isEditingVlox) {
+    if(is_null($resId) || $resId === 'undefined') {
+      throw new Error("resId can't be null!");
+    }
     $query = $this->loadResourceBlocks($resId);
 
     if (!file_exists($this->COMPONENTS_ROUTE . $resId)) {
@@ -183,7 +186,13 @@ class VloxController extends  VloxBaseController{
       $this->modx->log(xPDO::LOG_LEVEL_WARN, 'no components found, deleting files');
       $this->deleteFilesFromFolder($this->COMPONENTS_ROUTE . $resId . '/src/components/*');
     }
-    $output = $this->modx->getChunk('defaultApp', array('resId'=> $resId));
+    //TODO here we need to set a TV that afects the defualtApp rendering
+    if (is_null($isEditingVlox)) {
+      $vloxType = false;
+    }
+
+    $output = $this->modx->getChunk('defaultApp', array('resId'=> $resId, 'isEditingVlox' => $isEditingVlox));
+
     $parser->processElementTags('', $output, false, false, '[[', ']]', [], $maxIterations);
     // Parse uncached tags and remove anything that could not be processed
     $parser->processElementTags('', $output, true, true, '[[', ']]', [], $maxIterations);
@@ -258,7 +267,9 @@ class VloxController extends  VloxBaseController{
     return $returnValue;
   }
 
-  public function renderComponentsTag($resId) {
+  //TODO ajustar este estilo, este se usa para ajustar el tamano en las ventana al imprimeir la iamgen del objeto pero luego
+  // ya se tira la pagina toca es aplicar esto dinamicamente en la vista de lista
+  public function renderComponentsTag($resId, $isEditingVlox) {
     $returnValue = "";
     $query = $this->loadResourceBlocks($resId);
 
@@ -267,7 +278,13 @@ class VloxController extends  VloxBaseController{
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
       $compName = strtolower($chunkName . '_' . $resBlockId);
-      $scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '" style="max-width: fit-content;">';
+      /*if (! is_null($isEditingVlox) && $isEditingVlox === '1' ) {
+        $scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '" style="max-width: fit-content;">';
+      } else {
+        $scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '">';
+      }*/
+      $scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '">';
+      //$scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '">';
       $returnValue .= $scrollDiv;
       //$returnValue .= "<$compName v-on:toggle-loading=\"toggleLoading\" v-on:show-error=\"toggleError\" ></$compName>";
       $returnValue .= "<$compName></$compName>";

@@ -40,8 +40,8 @@
     </b-container>
 
     <b-container fluid v-bind:class="{ previewBackground: showControls }">
+      <h1 v-if="blockData">Editing: {{blockData.chunkName}}</h1>
       <div class="previewButtons d-none d-md-block" v-if="showControls">
-        <h5 v-if="showControls">{{blockData.chunkName}} Block</h5>
         <button v-bind:class="[!renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(false)"><i class="fas fa-mobile-alt"></i> <span>576px</span></button>
         <button v-bind:class="[renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(true)"><i class="fas fa-desktop"></i> <span>1200px</span></button>
       </div>
@@ -50,12 +50,16 @@
                       :resource-id="31"></server-control>-->
       <b-row class="previewAreaWidth" :class="[renderDesktop ? 'previewDesktop' : 'previewMobile']">
         <b-col v-bind:class="{ previewExtraHeight: !showControls }" cols="12" class="previewArea">
-          <iframe v-if="showControls" id="componentPreview"
-                  :src="localAddress"
-                  style="
+          <div v-if="showControls">
+            <iframe id="componentPreview"
+                    :src="localAddress"
+                    style="
             width: 100%;
             height: 100%;
         "></iframe>
+            <br>
+            <b-button :href="localAddress" target="_blank">Open on new window</b-button>
+          </div>
           <div v-else class="firstScreen">
             <new-block-component v-on:block-selected="onSelectBlock"></new-block-component>
             <img src="./images/vlox.png" />
@@ -145,8 +149,8 @@ export default {
         highlightGutterLine: false,
         newLineMode: "auto",
         foldStyle: "manual",
-        maxLines: 500,
-        minLines: 20,
+        maxLines: 50,
+        minLines: 50,
         useSoftTabs: true,
         tabSize: 2
       },
@@ -256,7 +260,8 @@ h3 {
 }
 .previewArea {
   overflow: hidden;
-  height: 260px;
+  /*height: 260px;*/
+  height: 50vh;
   resize: both;
   border-top: 1px solid #c8c9ca;
   padding: 0;

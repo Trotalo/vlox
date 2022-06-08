@@ -10,7 +10,7 @@
 <template>
   <div class="previewButtons mt-4">
     <b-button :disabled="isRunning" variant="success" @click="runServer()" class="updatePrev mr-3">RUN</b-button>
-    <b-button v-if="vloxType === 0" :disabled="!isRunning" @click="saveChanges()" class="updatePrev">SAVE</b-button>
+    <b-button v-if="vloxType === 0" @click="saveChanges()" class="updatePrev">SAVE</b-button>
     <b-button :disabled="!isRunning" variant="danger" @click="stopServer()" class="updatePrev ml-3">STOP</b-button>
     <br>
     <b-button @click="reloadServerFiles" class="updatePrev ml-3">RELOAD</b-button>
@@ -64,7 +64,7 @@ export default {
     },
     async startServer(resourceId){
       this.showLoading();
-      const startResponse = await Services.startServer(resourceId);
+      const startResponse = await Services.startServer(resourceId, this.vloxType);
       console.log(startResponse);
       setTimeout(()=> {
         this.hideLoading();
@@ -102,19 +102,6 @@ export default {
       await Services.stopServer();
       this.refreshView();
       this.hideLoading();
-      /*axios.put(window.location.protocol + "//" + window.location.host +
-          this.$restRoute + '/rest/index.php?_rest=Ide/'
-          + this.resourceId,
-          {'oper': 'STOP'},
-          axiosConfig)
-          .then(response => {
-            console.log(response);
-            this.refreshView();
-            this.hideLoading();
-          })
-          .catch(error => {
-            console.log(error);
-          });*/
     },
     async saveChanges() {//
       if (this.vloxType === 0) {
@@ -127,7 +114,7 @@ export default {
         delete finalObject['properties'];
         await Services.saveResData(finalObject);
       }
-      const response = await Services.updateIde(this.resourceId);
+      const response = await Services.updateIde(this.resourceId, this.vloxType);
       return response;
     },
     async reloadServerFiles() {

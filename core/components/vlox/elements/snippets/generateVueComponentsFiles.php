@@ -24,4 +24,4 @@ if (empty($resId) || is_null($resId) ) {
   throw new Exception("Missing params for: getResourcesContent(resId: $resId)");
 }
 //TODO this must be changed go generate the tags
-return $modx->VloxController->generateVueComponentsFiles($resId);
+return $modx->VloxController->generateVueComponentsFiles($resId, false);

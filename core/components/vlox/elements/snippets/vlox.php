@@ -23,5 +23,9 @@ if (!isset($resId) || empty($resId)) {
 if (empty($resId) || is_null($resId) ) {
   throw new Exception("Missing params for: renderComponentsTag(resId: $resId)");
 }
+
+if (empty($isEditingVlox) || is_null($isEditingVlox) ) {
+  throw new Exception("Missing params for: renderComponentsTag(isEditingVlox)");
+}
 //TODO this must be changed go generate the tags
-return $modx->VloxController->renderComponentsTag($resId);
+return $modx->VloxController->renderComponentsTag($resId, $isEditingVlox);
