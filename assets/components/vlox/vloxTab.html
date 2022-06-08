@@ -18,8 +18,6 @@
     <style>
         iframe#content-frame {
             border: none;
-            width: 100%;
-            height: calc(100vh - 55px);
         }
     </style>
 </head>
@@ -32,10 +30,10 @@
         alert('Missing parameter!');
         throw new Error('Missing parameter!');
     }
-    url = "https://172.25.114.131:9090?resId=" + currentResId;
+    url = "https://172.25.70.202:8081?resId=" + currentResId;
     resIframe.src = url;
 </script>
-<iframe style="height: 400vh; width: 100%;" id="res-frame" src=""></iframe>
+<iframe style="height: 100vh; width: 100%;" id="res-frame" src=""></iframe>
 </body>
 
 </html>

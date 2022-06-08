@@ -9,17 +9,22 @@
 
 <template>
   <div class="previewButtons mt-4">
-    <b-button :disabled="isRunning" variant="success" @click="runServer()" class="updatePrev mr-3">RUN</b-button>
-    <b-button v-if="vloxType === 0" @click="saveChanges()" class="updatePrev">SAVE</b-button>
-    <b-button :disabled="!isRunning" variant="danger" @click="stopServer()" class="updatePrev ml-3">STOP</b-button>
-    <br>
-    <b-button @click="reloadServerFiles" class="updatePrev ml-3">RELOAD</b-button>
-    <p>is running: {{isRunning}}</p>
-    <b-button @click="refreshView()" class="updatePrev mb-2">Refresh</b-button>
-    <br>
-    <b-button @click="getNpmStatus()" class="updatePrev mr-2">NPM Status</b-button>
+
+<!--    <br>-->
+<!--    <b-button @click="getNpmStatus()" class="updatePrev mr-2">NPM Status</b-button>-->
     <b-button variant="outline-primary" v-b-modal.project_config type="button" class="updatePrev ml-2">Configuration</b-button>
+    <p>{{isRunning ? 'Is Running' : 'Stopped'}}</p>
+    <b-button v-if="!isRunning" :disabled="isRunning" variant="success" @click="runServer()" class="mr-3">RUN</b-button>
+    <b-button v-else variant="danger" @click="stopServer()" class="mr-3">STOP</b-button>
+
+    <b-button v-if="vloxType === 0" @click="saveChanges()" class="mr-3" variant="outline-primary">SAVE</b-button>
+
+    <b-button @click="reloadServerFiles">Refresh</b-button>
+
+    <br>
+<!--    <b-button @click="reloadServerFiles" class="updatePrev ml-3">RELOAD</b-button>-->
     <base-configuration :resource-id="resourceId"></base-configuration>
+
     <b-modal id="npm-status-modal" size="xl" title="NPM Status" ok-only>
       <p class="log-view">{{npmStatus}}</p>
     </b-modal>
@@ -100,6 +105,7 @@ export default {
     async stopServer() {
       this.showLoading();
       await Services.stopServer();
+      this.isRunning = false;
       this.refreshView();
       this.hideLoading();
     },
@@ -117,9 +123,10 @@ export default {
       const response = await Services.updateIde(this.resourceId, this.vloxType);
       return response;
     },
-    async reloadServerFiles() {
-      const response = await Services.buildResource(this.resourceId);
-      return response;
+    reloadServerFiles() {
+      //const response = await Services.buildResource(this.resourceId);
+      this.refreshView();
+      //return response;
     },
     async loadRunningStatus() {
       this.intervalId = setInterval(async() => {

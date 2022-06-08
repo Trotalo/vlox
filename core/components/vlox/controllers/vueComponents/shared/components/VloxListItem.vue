@@ -1,27 +1,38 @@
 <template>
-  <b-row v-if="vloxList" cols="2" no-gutters>
+  <b-row v-if="vloxList && !isResEditor" cols="2" no-gutters>
     <b-col v-for="block in vloxList" :key="block.id" class="p-1">
       <b-card
           tag="article"
+          :title="block.title"
           class="overflow-hidden" style="max-width: 540px;">
         <b-row no-gutters>
           <b-col  md="6">
             <b-img @error="replaceByDefault" thumbnail fluid :src="componentImage(block.title)" alt="Image 1"></b-img>
           </b-col>
           <b-col md="6">
-            <b-card-body class="text-center" :title="block.title">
-              <b-card-text>
-                {{block.description}}
-              </b-card-text>
+            <b-card-body class="text-center">
               <b-button v-on:click="selectBlock(block)"
                         variant="primary">{{buttonText}}</b-button>
-              <br>
               <br>
               <b-icon-trash
                   variant="danger"
                   v-on:click.stop="deleteBlock(block)"></b-icon-trash>
             </b-card-body>
           </b-col>
+        </b-row>
+      </b-card>
+    </b-col>
+  </b-row>
+  <b-row v-else-if="vloxList && isResEditor" cols="2" no-gutters>
+    <b-col v-for="block in vloxList" :key="block.id" class="p-1">
+      <b-card
+          tag="article"
+          :title="block.title"
+          class="overflow-hidden" style="max-width: 540px;">
+        <b-row no-gutters>
+          <b-card-body class="text-center">
+            <b-img @error="replaceByDefault" thumbnail fluid :src="componentImage(block.title)" alt="Image 1"></b-img>
+          </b-card-body>
         </b-row>
       </b-card>
     </b-col>
@@ -48,6 +59,10 @@ export default {
     buttonText: {
       type: String,
       required: true
+    },
+    isResEditor: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -84,5 +99,8 @@ export default {
 </script>
 
 <style scoped>
-
+.card-title{
+  white-space: nowrap;
+  overflow: hidden;
+}
 </style>

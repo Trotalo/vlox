@@ -109,14 +109,18 @@ class KrakenResources extends modRestController {
    */
   public function get() {
     $pk = $this->getProperty($this->primaryKeyField);
-
-    $this->modx->log(modX::LOG_LEVEL_INFO, "LoadingRespoure $pk");
     if (empty($pk)) {
       return $this->getList();
     }
-    $objects = $this->modx->getCollection(
-            'vloxResourceContent',
-                      ['resourceId'=> $pk]);
+    $vloxId = $this->getProperty('vloxId');
+    $query = null;
+    if (!empty($vloxId)) {
+      $query = ['resourceId'=> $pk, 'blockId' => $vloxId];
+    } else {
+      $query = ['resourceId'=> $pk];
+    }
+
+    $objects = $this->modx->getCollection( 'vloxResourceContent', $query);
     //$string = print_r($objects, true);
     //$this->modx->log(modX::LOG_LEVEL_ERROR, "database info $string");
     if (empty($objects)) $objects = array();

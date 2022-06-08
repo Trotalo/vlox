@@ -8,26 +8,14 @@
   -->
 
 <template>
-  <b-modal id="add-content" title="Add Block" size="xl" scrollable :hide-footer="true">
+  <b-modal id="add-content" title="Add Vlox (Clikc item to add to current resource)" size="xl" scrollable :hide-footer="true">
     <div class="content">
       <div class="row" v-if="vloxList">
         <vlox-list-item
             :vlox-list="vloxList"
+            :is-res-editor="true"
             @block-selected="addComponentToResource"
             button-text="Add to page"></vlox-list-item>
-<!--        <div class="vloxBlockListContainer col-12 col-xl-6 p-1" v-for="block in vloxList" :key="block.id">
-          <button class="vloxBlockList my-2" v-on:click="addComponentToResource(block)">
-            <div class="row h-100 align-items-center">
-              <div class="col-4">
-                <h5>{{block.title}}</h5>
-                <p>{{block.description}}</p>
-              </div>
-              <div class="col-8 h-100">
-                <img class="img-fluid blockPrev" src="" />
-              </div>
-            </div>
-          </button>
-        </div>-->
       </div>
     </div>
   </b-modal>
@@ -36,6 +24,7 @@
 <script>
 import axios from "axios";
 import VloxListItem from "../../../shared/components/VloxListItem";
+import Services from '@shared/services';
 
 export default {
   name: "add-content-modal",
@@ -56,37 +45,43 @@ export default {
     showAjaxError() {
       alert('The ajax petition has problem doing a GET request, please verify the blocks Controller.')
     },
-    addComponentToResource(blockData) {
+    async addComponentToResource(blockData) {
       let finalObject = new Object();
       finalObject.title = blockData.title;
       finalObject.blockId = blockData.id;
       finalObject.properties = blockData.properties;
       finalObject.resourceId = this.resinputid;
-      let axiosConfig = {
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Apache-HttpClient/4.1.1',
-          "Access-Control-Allow-Origin": "*",
-        }
-      };
-      const modalRef = this.$bvModal;
-      // TODO reenable to use rigth api endpoint instead of this
-      //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
-      axios.post(window.location.protocol + "//" + window.location.host + this.$restRoute +
-          '/rest/index.php?_rest=Resources',
-          finalObject,
-          axiosConfig)
-          .then(response => {
-            this.$emit('updated');
-            modalRef.hide('add-content');
-            document.getElementById('componentPreview').src =
-                document.getElementById('componentPreview').src;
-            console.log(response);
-          })
-          .catch(error => {
-            console.log(error);
-            this.showErrorAjax();
-          });
+      //First we check if the vlox is already added to the
+      const isVloxOnRes = await Services.isVloxOnRes(finalObject.blockId, finalObject.resourceId);
+      if (isVloxOnRes) {
+        this.$dialog.alert("The current version doesn't allow the same vlox twice on the same resource");
+      } else {
+        let axiosConfig = {
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'Apache-HttpClient/4.1.1',
+            "Access-Control-Allow-Origin": "*",
+          }
+        };
+        const modalRef = this.$bvModal;
+        // TODO reenable to use rigth api endpoint instead of this
+        //  axios.post(window.location.protocol + "//" + window.location.host + '/modxMonster/rest/Resources/'
+        axios.post(window.location.protocol + "//" + window.location.host + this.$restRoute +
+            '/rest/index.php?_rest=Resources',
+            finalObject,
+            axiosConfig)
+            .then(response => {
+              this.$emit('updated');
+              modalRef.hide('add-content');
+              document.getElementById('componentPreview').src =
+                  document.getElementById('componentPreview').src;
+              console.log(response);
+            })
+            .catch(error => {
+              console.log(error);
+              this.showErrorAjax();
+            });
+      }
     }
   },
   mounted() {

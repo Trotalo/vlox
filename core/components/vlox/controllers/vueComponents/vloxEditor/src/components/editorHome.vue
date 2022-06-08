@@ -40,7 +40,7 @@
     </b-container>
 
     <b-container fluid v-bind:class="{ previewBackground: showControls }">
-      <h1 v-if="blockData">Editing: {{blockData.chunkName}}</h1>
+
       <div class="previewButtons d-none d-md-block" v-if="showControls">
         <button v-bind:class="[!renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(false)"><i class="fas fa-mobile-alt"></i> <span>576px</span></button>
         <button v-bind:class="[renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(true)"><i class="fas fa-desktop"></i> <span>1200px</span></button>
@@ -55,7 +55,7 @@
                     :src="localAddress"
                     style="
             width: 100%;
-            height: 100%;
+            height: 40vh;
         "></iframe>
             <br>
             <b-button :href="localAddress" target="_blank">Open on new window</b-button>

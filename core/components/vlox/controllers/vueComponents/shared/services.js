@@ -166,6 +166,13 @@ export default class Services {
     return response.data;
   }
 
+  static async isVloxOnRes(vloxId, resId) {
+    const response = await axios.get(window.location.protocol + "//" + window.location.host +
+      Vue.prototype.$restRoute + '/rest/index.php?_rest=Resources/' + resId + '&vloxId=' + vloxId,
+      axiosConfig);
+    return (response.data && response.data.results && response.data.results.length > 0);
+  }
+
 }
 
 //export default new Services();

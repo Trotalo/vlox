@@ -8,8 +8,8 @@
   -->
 
 <template>
-  <section class="row vloxOptionView">
-    <div class="col-8 col-xl-9">
+  <b-row class="vloxOptionView">
+    <b-col cols="8" class="col-xl-9">
       <div class="previewButtons">
         <button v-bind:class="[!renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(false)"><i class="fas fa-mobile-alt"></i> <span>576px</span></button>
         <button v-bind:class="[renderDesktop ? 'icon-active' : 'icon', 'btn']" v-on:click="setUpSizePreview(true)"><i class="fas fa-desktop"></i> <span>1200px</span></button>
@@ -22,22 +22,21 @@
                 sandbox="allow-same-origin allow-forms allow-scripts">
         </iframe>
       </div>
-    </div>
+    </b-col>
 
-    <div class="col-4 col-xl-3">
-      <div class="mb-4 saveAddButtonsWrap">
-        <div class="col-12">
-          <button class="btn btn-outline-primary vloxSaveDraft" @click="buildResource()">Build resource</button>
-          <b-button
-              v-b-modal.add-content
-              class="btn btn-success addvloxBlock"
-              type="button">Add Block
-          </b-button>
-          <add-content-modal v-bind:resinputid="resourceId"
-                                    @updated="updated()">
-          </add-content-modal>
-
-        </div>
+    <b-col cols="4" class="col-xl-3 components-scroll">
+      <div class="mb-4 mt-4 saveAddButtonsWrap">
+        <b-button size="lg" variant="light" @click="buildResource()">Build resource</b-button>
+        <b-button
+            size="lg"
+            v-b-modal.add-content
+            variant="success">Add Block
+        </b-button>
+        <br>
+        <b-button :href="localAddress" target="_blank" class="mt-2">Open on new window</b-button>
+        <add-content-modal v-bind:resinputid="resourceId"
+                           @updated="updated()">
+        </add-content-modal>
       </div>
       <div class="vloxContainer">
         <div class="col-12 vloxWrap">
@@ -57,8 +56,8 @@
           </draggable>
         </div>
       </div>
-    </div>
-  </section>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -283,6 +282,7 @@ button, button i:after, button span {
 }
 .previewDesktop {
   max-width: 1200px;
+  height: 70%;
 }
 .previewMobile {
   max-width: 576px;
@@ -294,7 +294,7 @@ button, button i:after, button span {
   bottom: 0;
   right: 0;
   width: 100%;
-  height: 100%;
+  height: 80%;
   margin: 0 auto;
 }
 .addvloxBlock {
@@ -302,6 +302,9 @@ button, button i:after, button span {
 }
 .blockSelected {
   border: 2px solid red;
+}
+.components-scroll{
+  overflow: auto;
 }
 
 </style>
