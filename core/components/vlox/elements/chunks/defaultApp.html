@@ -14,18 +14,21 @@
 </template>
 
 <script>
-  import html2canvas from 'html2canvas';
-  import axios from "axios";
+  [[+isEditingVlox:is=`1`:then=`
+    import html2canvas from 'html2canvas';
+    import axios from "axios";
+    `]]
   import Vue from "vue";
 
   [[!vueImportRenderer? &imp=`true` &resId=`[[+resId]]`]]
 
-  Vue.prototype.$restRoute = '/vlox/assets/components/vlox';
+  Vue.prototype.$restRoute = '/assets/components/vlox';
 
   export default {
     name: 'App',
     [[!vueImportRenderer? &resId=`[[+resId]]`]],
-    mounted() {
+    [[+isEditingVlox:is=`1`:then=`
+      mounted() {
       setTimeout(()=>{
         //Firt we pick the document
         let doc = document.getElementById("app").firstChild.firstChild;
@@ -63,6 +66,7 @@
         });
       }, 1000);
     },
+    `]]
   }
 </script>
 

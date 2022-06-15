@@ -15,7 +15,16 @@ switch ($modx->event->name) {
     if ($mode === "upd") {
       $template = $modx->getObject('modTemplate', array('templatename' => 'vloxTemplate'));
       if ($template->id === $resource->template) {
-        //$assetsLocation = $modx->getOption('vlox.assets_url');
+        //Before moving on, we make sure friendly url si enabled
+        $setting = $modx->getObject('modSystemSetting', 'friendly_urls');
+        //check the locked status
+        if($setting->get('value') !== 1) {
+          $setting->set('value', 1);
+          $setting->save();
+          $cacheRefreshOptions =  array( 'system_settings' => array() );
+          $modx->cacheManager-> refresh($cacheRefreshOptions);
+        }
+
         $assetsLocation =  $modx->getOption('vlox.assets_url', null,
                         $modx->getOption('assets_url') . 'components/vlox/');
         $url = $assetsLocation. 'vloxTab.html' ;

@@ -28,7 +28,8 @@
       <b-card
           tag="article"
           :title="block.title"
-          class="overflow-hidden" style="max-width: 540px;">
+          class="overflow-hidden" style="max-width: 540px;"
+          @click="selectBlock(block)">
         <b-row no-gutters>
           <b-card-body class="text-center">
             <b-img @error="replaceByDefault" thumbnail fluid :src="componentImage(block.title)" alt="Image 1"></b-img>
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 
 export default {
   name: "VloxListItem",
@@ -74,10 +76,10 @@ export default {
       this.$emit('delete', block);
     },
     componentImage(componentName) {
-      return 'vlox/assets/components/vlox/compoSnapshots/' + componentName + '.png?rnd=' + this.cacheKey;
+      return Vue.prototype.$restRoute + '/compoSnapshots/' + componentName + '.png?rnd=' + this.cacheKey;
     },
     replaceByDefault(e) {
-      e.target.src = 'vlox/assets/components/vlox/images/circulo.png';
+      e.target.src = Vue.prototype.$restRoute + '/images/circulo.png';
     },
     doesFileExist(urlToFile) {
       var xhr = new XMLHttpRequest();

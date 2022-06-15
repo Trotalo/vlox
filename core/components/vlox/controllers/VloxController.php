@@ -470,4 +470,11 @@ class VloxController extends  VloxBaseController{
     }
     closedir($directory);
   }
+
+  function parseInt($value) {
+    if (is_null($value) || empty($value) ) {
+      throw new Error('Cant parse empty values1');
+    }
+    return intval($value);
+  }
 }

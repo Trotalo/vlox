@@ -30,7 +30,9 @@
         alert('Missing parameter!');
         throw new Error('Missing parameter!');
     }
-    url = "https://172.25.70.202:8081?resId=" + currentResId;
+    //url = "https://localhost:9090?resId=" + currentResId;
+    url = "../reseditor.html?resId=" + currentResId;
+
     resIframe.src = url;
 </script>
 <iframe style="height: 100vh; width: 100%;" id="res-frame" src=""></iframe>

@@ -90,8 +90,10 @@ class VloxVueConfigurationController extends  VloxBaseController {
   public function installNpm() {
     $currentWorkingDir = getcwd();
     chdir($this->COMPONENTS_ROUTE);
+    $this->modx->log(MODX_LOG_LEVEL_ERROR, "About to install npm at: $this->COMPONENTS_ROUTE");
     $cmd = "npm install";
     $npmRespose = shell_exec($cmd);
+    $this->modx->log(MODX_LOG_LEVEL_ERROR, "Install response was: $npmRespose");
     chdir($currentWorkingDir);
     if( is_null($npmRespose)) {
       var_dump(shell_exec("$cmd 2>&1"));

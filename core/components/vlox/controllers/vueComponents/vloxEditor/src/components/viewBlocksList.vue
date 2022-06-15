@@ -46,6 +46,7 @@
 import axios from 'axios';
 import VloxListItem from "../../../shared/components/VloxListItem";
 import Services from "../../../shared/services";
+import Vue from "vue";
 
 export default {
   name: "view-block-list",
@@ -127,10 +128,10 @@ export default {
     componentImage(componentName) {
       //debugger;
       if (this.doesFileExist(window.location.protocol + "//" + window.location.host +
-          '/vlox/assets/components/vlox/compoSnapshots/' + componentName + '.png')) {
-        return 'vlox/assets/components/vlox/compoSnapshots/' + componentName + '.png';
+          Vue.prototype.$restRoute + '/compoSnapshots/' + componentName + '.png')) {
+        return Vue.prototype.$restRoute + '/compoSnapshots/' + componentName + '.png';
       } else {
-        return 'vlox/assets/components/vlox/images/circulo.png';
+        return Vue.prototype.$restRoute + '/images/circulo.png';
       }
     },
     doesFileExist(urlToFile) {

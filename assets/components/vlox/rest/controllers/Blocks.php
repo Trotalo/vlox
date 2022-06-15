@@ -95,6 +95,15 @@ class KrakenBlocks extends  modRestController {
         $this->modx->cacheManager-> refresh($cacheRefreshOptions);*/
 
       }
+      //We check if the friendUrl setting is enabled
+      $setting = $this->modx->getObject('modSystemSetting', 'friendly_urls');
+      //check the locked status
+      if($setting->get('value') !== 1) {
+        $setting->set('value', 1);
+        $setting->save();
+        $cacheRefreshOptions =  array( 'system_settings' => array() );
+        $this->modx->cacheManager-> refresh($cacheRefreshOptions);
+      }
 
       $this->modx->removeCollection('vloxResourceContent', array('resourceId'=> $renderer->id));
       /** @var vloxResourceContent $blockPreviewObj */

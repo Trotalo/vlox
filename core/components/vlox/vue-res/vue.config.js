@@ -34,12 +34,12 @@ module.exports = {
       "cert": fs.readFileSync('./certs/ssl.crt')
     },
     proxy: {
-      '^/vlox': {
-        target: 'https://172.25.114.131',
+      '^/assets/components/vlox': {
+        target: 'https://localhost',
         changeOrigin: true
       },
       '^/assets/images': {
-        target: 'https://172.25.114.131',
+        target: 'https://localhost',
         changeOrigin: true
       },
     }
