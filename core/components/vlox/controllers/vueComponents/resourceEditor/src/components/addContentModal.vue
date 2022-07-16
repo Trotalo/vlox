@@ -8,7 +8,7 @@
   -->
 
 <template>
-  <b-modal id="add-content" title="Add Vlox (Clikc item to add to current resource)" size="xl" scrollable :hide-footer="true">
+  <b-modal id="add-content" title="Add Vlox (Click an item to add to current resource)" size="xl" scrollable :hide-footer="true">
     <div class="content">
       <div class="row" v-if="vloxList">
         <vlox-list-item
@@ -25,6 +25,7 @@
 import axios from "axios";
 import VloxListItem from "../../../shared/components/VloxListItem";
 import Services from '@shared/services';
+import {mapActions} from "vuex";
 
 export default {
   name: "add-content-modal",
@@ -42,6 +43,8 @@ export default {
     },
   },
   methods: {
+    ...mapActions([
+      'showLoading', 'hideLoading']),
     showAjaxError() {
       alert('The ajax petition has problem doing a GET request, please verify the blocks Controller.')
     },
@@ -52,8 +55,10 @@ export default {
       finalObject.properties = blockData.properties;
       finalObject.resourceId = this.resinputid;
       //First we check if the vlox is already added to the
+      this.showLoading();
       const isVloxOnRes = await Services.isVloxOnRes(finalObject.blockId, finalObject.resourceId);
       if (isVloxOnRes) {
+        this.hideLoading();
         this.$dialog.alert("The current version doesn't allow the same vlox twice on the same resource");
       } else {
         let axiosConfig = {
@@ -71,6 +76,7 @@ export default {
             finalObject,
             axiosConfig)
             .then(response => {
+              this.hideLoading();
               this.$emit('updated');
               modalRef.hide('add-content');
               document.getElementById('componentPreview').src =
@@ -78,6 +84,7 @@ export default {
               console.log(response);
             })
             .catch(error => {
+              this.hideLoading();
               console.log(error);
               this.showErrorAjax();
             });
@@ -85,15 +92,21 @@ export default {
     }
   },
   mounted() {
-    axios.get(window.location.protocol + "//" + window.location.host +
-                this.$restRoute + '/rest/index.php?_rest=blocks&limit=100')
+    this.$root.$on('bv::modal::show', (/*bvEvent, modalId*/) => {
+      //console.log('Opening', bvEvent, modalId)
+      this.showLoading();
+      axios.get(window.location.protocol + "//" + window.location.host +
+        this.$restRoute + '/rest/index.php?_rest=blocks&limit=100')
         .then(response => {
+          this.hideLoading();
           this.blockList = response.data;
         })
         .catch(error => {
           console.error(error);
+          this.hideLoading();
           this.$dialog.alert('Error contacting webservice, check server logs!');
         });
+    })
   }
 }
 </script>

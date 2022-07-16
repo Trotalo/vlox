@@ -63,13 +63,10 @@ class VloxController extends  VloxBaseController{
         $jsonObject[$blockContents['name']] = $blockContents['content'];
       }
     }
-
     $dynamicPlaceholder = json_encode(array());
     */
-    return $this->modx->getChunk($chunkName, [
-      'blockContent' => json_encode(array()),
-      'componentName' => $componentName
-    ]);
+    $properties['componentName'] = $componentName;
+    return $this->modx->getChunk($chunkName, $properties);
   }
 
   /**
@@ -148,6 +145,16 @@ class VloxController extends  VloxBaseController{
     $parser = $this->modx->getParser();
     $maxIterations= (integer) $this->modx->getOption('parser_max_iterations', null, 10);
 
+    $currentResource = $this->modx->getObject('modDocument', $resId);
+    $vloxTemplate = $this->modx->getObject('modTemplate', ['templatename' =>'vloxTemplate']);
+    //Prepare resource tv's
+    $pdoTvs = $currentResource->getTemplateVars();
+    $resTvs = array();
+    foreach ($pdoTvs as $tv) {
+      $tvKey = $tv->get('name');
+      $value = $tv->get('value');
+      $resTvs[$tvKey] = $value;
+    }
     while ($row = $query->fetch()) {
       //remove folder contents the first time we fetch files
       if (!$hasComponents) {
@@ -159,7 +166,22 @@ class VloxController extends  VloxBaseController{
       $resBlockId = $row['id'];
       $compName = strtolower($chunkName . '_' . $resBlockId);
       //TODO we need to get rid of this, this was the original idea for data admin, but we are using TVs and MIGx
-      $blockContent = $this->buildJsonContent($chunkName, $row['properties'], $compName);
+      $blockContent = $this->buildJsonContent($chunkName, $resTvs, $compName);
+
+      $vloxRenderer = $this->modx->getObject('modResource', array('pagetitle' => 'vloxrenderer'));
+      if (empty($vloxTemplate) || empty($vloxRenderer)) {
+        throw new Error("Basic Vlox elements missing, please reinstall!");
+      }
+        //$this->modx->newObject('modResource');
+      $vloxRenderer->set('template', $vloxTemplate->get('id'));
+      $vloxRenderer->set('content', $blockContent);
+      //set TVs
+      foreach ( $resTvs as $tvKey => $tvVal){
+        $vloxRenderer->setTVValue($tvKey, $tvVal);
+      }
+      $retVal =  $vloxRenderer->setContent($blockContent);
+
+      $blockContent =  $vloxRenderer->parseContent();
       if (empty($blockContent)) {
         throw new Exception($chunkName . ' snippet not found, check your manager configuration!');
       }
@@ -196,7 +218,6 @@ class VloxController extends  VloxBaseController{
     $parser->processElementTags('', $output, false, false, '[[', ']]', [], $maxIterations);
     // Parse uncached tags and remove anything that could not be processed
     $parser->processElementTags('', $output, true, true, '[[', ']]', [], $maxIterations);
-    //echo $output;
     $vueFileName = $this->COMPONENTS_ROUTE . $resId . '/src/App.vue';
     $vueFile = fopen($vueFileName, "w+");
     if (!$vueFile) {

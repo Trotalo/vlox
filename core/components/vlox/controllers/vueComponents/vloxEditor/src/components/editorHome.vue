@@ -14,7 +14,7 @@
         <b-col cols="12" lg="3" class="mb-3">
           <img v-if="showControls" src="./images/vlox.png" class="vloxLogo" />
         </b-col>
-        <b-col v-if="showControls" cols="12" md="6" lg="5">
+        <b-col v-if="showControls" cols="12" md="6" lg="5" class="mx-auto">
           <b-button
               variant="outline-primary"
               v-b-modal.new-block
@@ -33,9 +33,6 @@
           <b-button variant="success" v-on:click="save()">Save & Publish</b-button>
         </b-col>-->
         <view-block-list v-on:block-selected="onSelectBlock"></view-block-list>
-        <!--      <b-col class="mt-4 mt-lg-0">-->
-        <!--        <h5 v-if="showControls" class="lightGrey">Preview Area for {{blockData.chunkName}}</h5>-->
-        <!--      </b-col>-->
       </b-row>
     </b-container>
 
@@ -49,6 +46,9 @@
                       :save-method="save"
                       :resource-id="31"></server-control>-->
       <b-row class="previewAreaWidth" :class="[renderDesktop ? 'previewDesktop' : 'previewMobile']">
+        <b-col class="mt-4 mt-lg-0">
+          <h5 v-if="showControls">{{blockData.chunkName}}</h5>
+        </b-col>
         <b-col v-bind:class="{ previewExtraHeight: !showControls }" cols="12" class="previewArea">
           <div v-if="showControls">
             <iframe id="componentPreview"
@@ -76,7 +76,7 @@
         <a href="https://trotalo.com" target="_blank">
           <img class="img-fluid" src="./images/logoMenu.svg" />
         </a>
-        <p>All Rights Reserved © 2020</p>
+        <p>All Rights Reserved © 2022</p>
       </div>
     </b-container>
 
@@ -134,6 +134,7 @@ export default {
       showInput: false,
       showControls: false,
       inputFieldData: {},
+      //localAddress: window.location.protocol + "//" + "192.168.0.107" + ':8080',
       localAddress: window.location.protocol + "//" + window.location.hostname + ':8080',
       renderDesktop: true,
       rendererId: 0,

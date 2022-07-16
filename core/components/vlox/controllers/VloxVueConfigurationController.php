@@ -72,14 +72,32 @@ class VloxVueConfigurationController extends  VloxBaseController {
       }
     }
     //if we could delete the assets folder or it didnt exists, copy the generated resources
-    $cmd = sprintf("cp -r %s %s",
+    /*$cmd = sprintf("cp -r %s %s",
       $this->COMPONENTS_ROUTE . $resId . '/dist/assets/' . $resId,
-      $localAssets . $resId);
+      $localAssets . $resId);*/
     $this->recurseCopy($this->COMPONENTS_ROUTE . $resId . '/dist/assets/' . $resId,
       $localAssets . $resId, '');
 
-    $this->modx->log(xPDO::LOG_LEVEL_INFO, "Copied and finished: $npmRespose");
-    return $npmRespose;
+    //Copy the images
+    $this->recurseCopy($this->COMPONENTS_ROUTE . $resId . '/dist/img',
+      $this->basePath . '/img', '');
+
+    $this->modx->log(xPDO::LOG_LEVEL_INFO, "Copied elements $npmRespose");
+    //finally, create the zip and return it to the client for downloading
+    $pageName = $resource->get('pagetitle');
+    $zipLocation = $localAssets . $resId . '/' . $pageName . '.zip';
+    $this->modx->log(xPDO::LOG_LEVEL_WARN, "trying with: $zipLocation");
+    //fir we check if the zip exists, and if it does, we delete it
+    if (file_exists($zipLocation)) {
+      unlink($zipLocation);
+    }
+    $zip = new ZipArchive();
+    if ($zip->open($zipLocation, ZipArchive::CREATE)!==TRUE) {
+      exit("cannot open <$this->COMPONENTS_ROUTE . $resId . '/dist'>\n");
+    }
+    $this->zipFolder($this->COMPONENTS_ROUTE . $resId . '/dist', $zip);
+    $zip->close();
+    return "assets/$resId/$pageName.zip";
   }
 
   public function isNpmInstalled() {
@@ -120,6 +138,24 @@ class VloxVueConfigurationController extends  VloxBaseController {
     return rmdir($dir);
   }
 
+  private function zipFolder(string $dir, ZipArchive $zip, string $parentFolder = "") {
+    if(!isset($dir) || is_null($dir)) {
+      return false;
+    }
+    $files = array_diff(scandir($dir), array('.','..'));
+    foreach ($files as $file) {
+      $tmpParent = (!empty($parentFolder) ? "$parentFolder/" : "");
+      if (is_dir("$dir/$file")) {
+        $zip->addEmptyDir( $tmpParent . $file);
+        $this->zipFolder("$dir/$file/", $zip, $tmpParent . $file);
+      } else {
+        $zip->addFile("$dir/$file", $tmpParent . $file);
+      }
+      //(is_dir("$dir/$file")) ? $this->delTree("$dir/$file") : unlink("$dir/$file");
+    }
+    return true;
+
+  }
   /**
    * taken from
    * @param string $sourceDirectory

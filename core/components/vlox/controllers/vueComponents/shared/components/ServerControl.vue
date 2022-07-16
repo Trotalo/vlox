@@ -120,18 +120,23 @@ export default {
         delete finalObject['properties'];
         await Services.saveResData(finalObject);
       }
-      const response = await Services.updateIde(this.resourceId, this.vloxType);
-      return response;
+      //const response = await Services.updateIde(this.resourceId, this.vloxType);
+      return true;
     },
-    reloadServerFiles() {
+    async reloadServerFiles() {
       //const response = await Services.buildResource(this.resourceId);
+      await Services.updateIde(this.resourceId, this.vloxType);
       this.refreshView();
       //return response;
     },
     async loadRunningStatus() {
       this.intervalId = setInterval(async() => {
-        const response = await Services.getNpmStatus(this.resourceId);
-        this.isRunning = response.object;
+        try {
+          const response = await Services.getNpmStatus(this.resourceId);
+          this.isRunning = response.object;
+        } catch (e) {
+          await this.$dialog.alert('Error contacting server!');
+        }
       }, 3000);
 
     },

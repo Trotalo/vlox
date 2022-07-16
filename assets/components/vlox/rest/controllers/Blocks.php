@@ -17,23 +17,19 @@ class KrakenBlocks extends  modRestController {
   public $defaultSortDirection = 'ASC';
 
   private $defaultContent = <<<STR
-      <template>
-      <p>Create some content!</p>
-      </template>
-      <script>
-      export default {
-        name: "[[+componentName]]",
-        /*data() {
-          return {
-            vloxBlock: [[+blockContent]]
-          };
-        },*/
-      };
-      </script>
-      <style scope lang="scss">
-      //Place styles here
-      </style>
-    STR;
+<template>
+  <p>Create some content!</p>
+</template>
+<script>
+export default {
+  name: "[[+componentName]]",
+  
+};
+</script>
+<style scope lang="scss">
+//Place styles here
+</style>
+STR;
 
   public function __construct(modX $modx,modRestServiceRequest $request,array $config = array()){
     parent::__construct($modx, $request, $config);
@@ -132,7 +128,11 @@ class KrakenBlocks extends  modRestController {
     $resContent = $this->getProperties();
     $chunkName = $resContent['chunkName'];
     $description = $resContent['description'];
-    $vloxType = $resContent['vloxType'];
+    $properties = json_decode( $resContent['properties'], true);
+    $vloxType = 0;
+    if (!empty($properties)){
+      $vloxType = $properties['type'];
+    }
     $coreLocation = $this->modx->getOption('vlox.core_path', null,
       $this->modx->getOption('core_path') . 'components/vlox/');
     require_once($coreLocation . 'controllers/VloxController.php');

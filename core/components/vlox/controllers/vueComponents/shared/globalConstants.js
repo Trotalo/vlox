@@ -10,5 +10,5 @@ import Vue from "vue";
 
 //TODO places to automate vars
 //Vue.prototype.$restRoute = '/vlox/assets/components/vlox';
-Vue.prototype.$restRoute = '/assets/components/vlox';
+Vue.prototype.$restRoute = '/vlox/assets/components/vlox';
 

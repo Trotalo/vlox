@@ -13,6 +13,8 @@ import "vuejs-dialog/dist/vuejs-dialog.min.css";
 import VueAwesomeSwiper from "vue-awesome-swiper";
 
 import VueCalendly from 'vue-calendly';
+
+import Argon from "/plugins/argon-kit";
 //import Tawk from 'vue-tawk'
 
 
@@ -23,6 +25,7 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueAwesomeSwiper);
 Vue.use(VueCalendly);
+Vue.use(Argon);
 /*Vue.use(Tawk, {
   tawkSrc: 'https://embed.tawk.to/5ea77dce69e9320caac7e615/default'
 })*/

@@ -16,6 +16,7 @@ class VloxBaseController {
   /** @var string $assetsLocation */
   protected $assetsLocation;
 
+  protected $basePath;
   protected $COMPONENTS_ROUTE;
 
   function __construct() {
@@ -38,6 +39,8 @@ class VloxBaseController {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
+
+    $this->basePath = $this->modx->config['base_path'];
   }
 
   /** @param modX $modx */

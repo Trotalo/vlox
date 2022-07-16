@@ -15,7 +15,7 @@
           id="input-group-1"
           label="Block name"
           label-for="input-1">
-        <validation-provider name="Name" rules="min:5|alpha_dash" v-slot="{ errors }">
+        <validation-provider name="Name" rules="min:4|alpha_dash" v-slot="{ errors }">
           <b-form-input
               id="input-1"
               v-model="blockData.chunkName"
@@ -96,6 +96,7 @@ export default {
     },
     async save(data) {
       const modalRef = this.$bvModal;
+      debugger;
       try {
         this.showLoading();
         const existingChunk = await Services.getBlockData(this.blockData.chunkName);
@@ -105,12 +106,16 @@ export default {
               ' exists! please chose another name!');
         } else {
           await Services.stopServer();
+          data.properties = JSON.stringify({'type': this.blockData.vloxType});
           const response = await Services.saveBlockData(data);
           const storedBlock = await Services.getBlockData(response.data.object.id);
           this.$emit('block-selected', storedBlock.data.object);
           this.$store.commit('change', true);
-          this.blockData.chunkName = '';
-          this.blockData.description = '';
+          this.blockData = {
+                  chunkName: '',
+                  description: '',
+                  vloxType: 0
+          }
           modalRef.hide('new-block');
           this.hideLoading();
         }

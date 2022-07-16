@@ -91,6 +91,7 @@ export default {
       frontPreview: '',
       resultsList: [],
       renderDesktop: true,
+      //localAddress: window.location.protocol + "//" + "192.168.0.107"/*window.location.hostname*/ + ':8080',
       localAddress: window.location.protocol + "//" + window.location.hostname + ':8080',
     }
   },
@@ -120,7 +121,6 @@ export default {
           }
           return 0;
         });
-        console.log(this.resultsList);
       } else {
         this.$dialog.alert('Problems reaching the webservice!');
       }
@@ -170,6 +170,7 @@ export default {
         .then(async ()=> {
           this.showLoading();
           const response = await Services.buildResource(this.resourceId);
+          await Services.downloadCompiledResource(response.data.object);
           this.hideLoading();
           console.log(response);
         })

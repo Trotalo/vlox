@@ -17,6 +17,7 @@ const appDir = process.env.APP_TYPE;
 module.exports = {
   outputDir: path.resolve(__dirname, `${appDir}/dist`),
   assetsDir: `assets/${appDir}`,
+  //publicPath: path.resolve(__dirname, `${appDir}/dist`),
   chainWebpack: config => {
     config.resolve.alias.set('@I', path.resolve(__dirname, '../interfaces'))
     config.resolve.alias.set('@shared', path.resolve(__dirname, './shared'))
@@ -27,19 +28,28 @@ module.exports = {
     })
 
   },
+  pwa: {
+    name: 'Vue Argon Design',
+    themeColor: '#172b4d',
+    msTileColor: '#172b4d',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: '#172b4d'
+  },
   devServer: {
-    "port": 8080,
-    "https": {
-      "key": fs.readFileSync('./certs/ssl.key'),
-      "cert": fs.readFileSync('./certs/ssl.crt')
-    },
+    port: 8080,
+    https: true,
+    host: '0.0.0.0',
     proxy: {
-      '^/assets/components/vlox': {
-        target: 'https://localhost',
+      '^/vlox/assets/components/vlox': {
+        target: 'https://172.20.230.26',
+        changeOrigin: true
+      },
+      '^/vlox/assets/images': {
+        target: 'https://172.20.230.26',
         changeOrigin: true
       },
       '^/assets/images': {
-        target: 'https://localhost',
+        target: 'https://172.20.230.26',
         changeOrigin: true
       },
     }

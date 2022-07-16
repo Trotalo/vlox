@@ -141,14 +141,6 @@ export default class Services {
       {'oper': 'STOP'},
       axiosConfig);
     return response;
-      /*.then(response => {
-        console.log(response);
-        this.refreshView();
-        this.hideLoading();
-      })
-      .catch(error => {
-        console.log(error);
-      });*/
   }
 
   static async isNpmInstalled() {
@@ -171,6 +163,24 @@ export default class Services {
       Vue.prototype.$restRoute + '/rest/index.php?_rest=Resources/' + resId + '&vloxId=' + vloxId,
       axiosConfig);
     return (response.data && response.data.results && response.data.results.length > 0);
+  }
+
+  static async downloadCompiledResource(resLocation) {
+    const response = await axios.get(window.location.protocol + "//" + window.location.host +
+      "/" + resLocation,
+      {
+        responseType: 'blob',
+        'Content-Type': 'blob',
+        'Access-Control-Allow-Origin': "*",
+      });
+    var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+    var fileLink = document.createElement('a');
+    fileLink.href = fileURL;
+    const fileName = resLocation.substr(resLocation.lastIndexOf('/') + 1);
+    fileLink.setAttribute('download', fileName);
+    document.body.appendChild(fileLink);
+    fileLink.click();
+    return true;
   }
 
 }
