@@ -9,7 +9,11 @@
 
 <template>
   <div id="app">
+    <div v-show="showLoading" class="loading">
+      <b-spinner variant="success" label="Spinning"></b-spinner>
+    </div>
     [[!vlox? &resId=`[[+resId]]` &isEditingVlox=`[[+isEditingVlox]]`]]
+    <book-consultation @loaded="loaded" @opened="opened"></book-consultation>
   </div>
 </template>
 
@@ -30,6 +34,13 @@
     [[+isEditingVlox:is=`1`:then=`
       mounted() {
       setTimeout(()=>{
+        //Tawk section
+        const interval = setInterval(function() {
+          if (window.$_Tawk && window.$_Tawk.downloaded && window.$_Tawk.showWidget instanceof Function) {
+            window.$_Tawk.showWidget()
+            clearInterval(interval);
+          }
+        }, 500);
         //Firt we pick the document
         let doc = document.getElementById("app").firstChild.firstChild;
         if (doc.offsetHeight === 0 || doc.offsetWidth === 0 ){
@@ -66,23 +77,41 @@
         });
       }, 1000);
     },
+    `:else=`
+        mounted() {
+            //wait for the tawk api to load
+            const interval = setInterval(function() {
+              if (window.$_Tawk && window.$_Tawk.downloaded && window.$_Tawk.showWidget instanceof Function) {
+                window.$_Tawk.showWidget()
+                clearInterval(interval);
+              }
+            }, 500);
+        
+          },
     `]]
+    data(){
+      return{
+        showLoading: false
+      }
+    },
+    methods: {
+      loaded(){
+        this.showLoading = false;
+      },
+      opened() {
+        this.showLoading = true;
+        setTimeout(() => {
+          this.showLoading = false;
+        }, 5000);
+      }
+    }
   }
 </script>
 
 <style lang="scss">
-/*    @font-face {
-  font-family: Mount;
-  src: url("/assets/fonts/Mont-Book.otf") format("opentype");
-  font-display: swap;
+html {
+	scroll-behavior: smooth;
 }
-
-@font-face {
-  font-family: Mount;
-  font-weight: bold;
-  src: url("/assets/fonts/Mont-Bold.otf") format("opentype");
-  font-display: swap;
-}*/
 
 #app {
   font-family: Mount, Helvetica, Arial, sans-serif;

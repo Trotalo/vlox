@@ -53,18 +53,6 @@ class VloxController extends  VloxBaseController{
 
 
   public function buildJsonContent($chunkName, $properties, $componentName) {
-    /*
-     * This is obsolete and neds to work with modx tvs
-     * $jsonObject = array();
-
-    $jsonProps = !is_array($properties) ? json_decode($properties, true) : $properties;
-    foreach ($jsonProps['items'] as $blockContents) {
-      if ($blockContents['name']) {
-        $jsonObject[$blockContents['name']] = $blockContents['content'];
-      }
-    }
-    $dynamicPlaceholder = json_encode(array());
-    */
     $properties['componentName'] = $componentName;
     return $this->modx->getChunk($chunkName, $properties);
   }
@@ -101,7 +89,7 @@ class VloxController extends  VloxBaseController{
       $resBlockId = $row['id'];
       $compName = $chunkName;
       //TODO we need to get rid of this, this was the original idea for data admin, but we are using TVs and MIGx
-      $blockContent = $this->buildJsonContent($chunkName, $row['properties'], $compName);
+      $blockContent = $this->buildJsonContent($chunkName, [], $compName);
       if (empty($blockContent)) {
         throw new Exception($chunkName . ' snippet not found, check your manager configuration!');
       }

@@ -6,6 +6,7 @@ import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import ace from 'ace-builds'
 import '../../shared/globalConstants';
 import { ValidationProvider } from 'vee-validate';
+import { ValidationObserver } from 'vee-validate';
 //import { required } from 'vee-validate/dist/rules';
 
 import '../../shared/css/style.css'
@@ -34,6 +35,7 @@ new Vue({
   store,
   render: h => h(App),
   components: {
-    'validation-provider': ValidationProvider
+    'validation-provider': ValidationProvider,
+    'validation-observer': ValidationObserver
   },
 }).$mount('#app')

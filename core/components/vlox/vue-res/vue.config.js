@@ -41,15 +41,15 @@ module.exports = {
     host: '0.0.0.0',
     proxy: {
       '^/vlox/assets/components/vlox': {
-        target: 'https://172.20.230.26',
+        target: 'https://172.18.122.86',
         changeOrigin: true
       },
       '^/vlox/assets/images': {
-        target: 'https://172.20.230.26',
+        target: 'https://172.18.122.86',
         changeOrigin: true
       },
       '^/assets/images': {
-        target: 'https://172.20.230.26',
+        target: 'https://172.18.122.86',
         changeOrigin: true
       },
     }

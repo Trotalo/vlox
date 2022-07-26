@@ -15,7 +15,7 @@ import VueAwesomeSwiper from "vue-awesome-swiper";
 import VueCalendly from 'vue-calendly';
 
 import Argon from "/plugins/argon-kit";
-//import Tawk from 'vue-tawk'
+import Tawk from 'vue-tawk'
 
 
 
@@ -26,9 +26,9 @@ Vue.use(IconsPlugin);
 Vue.use(VueAwesomeSwiper);
 Vue.use(VueCalendly);
 Vue.use(Argon);
-/*Vue.use(Tawk, {
+Vue.use(Tawk, {
   tawkSrc: 'https://embed.tawk.to/5ea77dce69e9320caac7e615/default'
-})*/
+})
 Vue.config.productionTip = false
 
 new Vue({
