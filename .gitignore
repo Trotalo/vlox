@@ -1,3 +1,11 @@
 assets/components/vlox/renderedBlocks/*.vue
 /_packages/vlox-0.0.1-pl
 vendor
+dist
+node_modules
+[0-9]*
+/core/components/vlox/vue-res/node_modules/
+/core/components/vlox/vue-res/npmOutPut
+/core/components/vlox/vue-res/pidFile
+/core/components/vlox/vue-res/resId
+/core/components/vlox/vue-res/shared/

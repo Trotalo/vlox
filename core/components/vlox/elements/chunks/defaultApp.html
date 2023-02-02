@@ -1,0 +1,161 @@
+<!--
+  ~ This file is part of VloX.
+  ~
+  ~ Copyright (c) TROTALO, SAS. All Rights Reserved.
+  ~
+  ~ For complete copyright and license information, see the COPYRIGHT and LICENSE
+  ~ files found in the top-level directory of this distribution.
+  -->
+
+<template>
+  <div id="app">
+    <div v-show="showLoading" class="loading">
+      <b-spinner variant="success" label="Spinning"></b-spinner>
+    </div>
+    [[!vlox? &resId=`[[+resId]]` &isEditingVlox=`[[+isEditingVlox]]`]]
+    <book-consultation @loaded="loaded" @opened="opened"></book-consultation>
+  </div>
+</template>
+
+<script>
+  [[+isEditingVlox:is=`1`:then=`
+    import html2canvas from 'html2canvas';
+    import axios from "axios";
+    `]]
+  import Vue from "vue";
+
+  [[!vueImportRenderer? &imp=`true` &resId=`[[+resId]]`]]
+
+  Vue.prototype.$restRoute = '/vlox/assets/components/vlox';
+
+  export default {
+    name: 'App',
+    [[!vueImportRenderer? &resId=`[[+resId]]`]],
+    [[+isEditingVlox:is=`1`:then=`
+      mounted() {
+      setTimeout(()=>{
+        //Tawk section
+        const interval = setInterval(function() {
+          if (window.$_Tawk && window.$_Tawk.downloaded && window.$_Tawk.showWidget instanceof Function) {
+            window.$_Tawk.showWidget()
+            clearInterval(interval);
+          }
+        }, 500);
+        //Firt we pick the document
+        let doc = document.getElementById("app").firstChild.firstChild;
+        if (doc.offsetHeight === 0 || doc.offsetWidth === 0 ){
+          doc = document.getElementById("app").firstChild.firstChild.firstChild;
+        } else {
+          //check if we need to set the tmps style
+          const innerChild = document.getElementById("app").firstChild.firstChild.firstChild;
+          if (innerChild.offsetWidth !== doc.offsetWidth) {
+            doc.style['max-width'] = 'fit-content';
+          }
+        }
+        html2canvas(doc).then(canvas => {
+          canvas.toBlob((blob) => {
+            const formData = new FormData();
+            formData.append('img', blob, 'snapshot.png');
+
+            let axiosConfig = {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            };
+            axios.post(window.location.protocol + "//" + window.location.host + this.$restRoute +
+              '/rest/index.php?_rest=Blocks/' + "[[+resId]]",
+              formData,
+              axiosConfig)
+              .then(response => {
+                console.log(response);
+                doc.style['max-width'] = null;
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          });
+        });
+      }, 1000);
+    },
+    `:else=`
+        mounted() {
+            //wait for the tawk api to load
+            const interval = setInterval(function() {
+              if (window.$_Tawk && window.$_Tawk.downloaded && window.$_Tawk.showWidget instanceof Function) {
+                window.$_Tawk.showWidget()
+                clearInterval(interval);
+              }
+            }, 500);
+        
+          },
+    `]]
+    data(){
+      return{
+        showLoading: false
+      }
+    },
+    methods: {
+      loaded(){
+        this.showLoading = false;
+      },
+      opened() {
+        this.showLoading = true;
+        setTimeout(() => {
+          this.showLoading = false;
+        }, 5000);
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+html {
+	scroll-behavior: smooth;
+}
+
+#app {
+  font-family: Mount, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: left;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+
+.small-width{
+  max-width: 85%;
+}
+
+.loading, .errorHandler {
+  margin-top: -60px;
+  position: fixed;
+  background: rgba(0,0,0,.65);
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+.loading{
+  span{
+    margin: 0 auto;
+    display: block;
+    color: red;
+  }
+}
+.loading .fa-spinner, .errorHandler .errorMessage {
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 2rem;
+  transform: translate(-50%, -50%);
+}
+
+:target::before {
+  content: "";
+  display: block;
+  height: 70px; /* fixed header height*/
+  margin: -70px 0 0; /* negative fixed header height */
+}
+</style>

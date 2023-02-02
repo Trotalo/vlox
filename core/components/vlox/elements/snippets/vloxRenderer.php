@@ -19,7 +19,7 @@ require_once($coreLocation . 'controllers/VloxController.php');
   require_once($modx->getOption('core_path') . '/components/vlox/controllers/VloxController.php');
 }*/
 
-VloxController::loadService($modx);
+VloxController::loadService($modx, 'VloxController');
 
 $resId = $_GET['resId'];
 $blockId = $_GET['blockId'];

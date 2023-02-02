@@ -16,14 +16,16 @@ $coreLocation = $modx->getOption('vlox.core_path', null,
 
 require_once($coreLocation . 'controllers/VloxController.php');
 
-VloxController::loadService($modx);
-
-$resIdStr = $modx->resource->get('id');
-$resId = $resIdStr + 0;
-
+VloxController::loadService($modx, 'VloxController');
 
 if (empty($resId) || is_null($resId) ) {
-  throw new Exception("Missing params for: renderComponentImports(resId: $resId)");
+  $resIdStr = $modx->resource->get('id');
+  $resId = $resIdStr + 0;
+  //throw new Exception("Missing params for: renderComponentImports(resId: $resId)");
 }
 //TODO this must be changed go generate the tags
-return $modx->VloxController->renderComponentImports($resId);
+if (isset($imp) && !empty($imp) ) {
+  return $modx->VloxController->renderComponentImports($resId);
+}else {
+  return $modx->VloxController->renderComponentDef($resId);
+}

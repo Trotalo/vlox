@@ -17,12 +17,20 @@ class VloxInitManagerController  extends modExtraManagerController {
   public function process(array $scriptProperties = array()) {}
 
   public function getPageTitle() {
-    return 'ModxMonster Blocks editor';
+    return 'Vlox editor';
   }
   public function getTemplateFile() {
-    //return '/var/www/html/vlox/assets/components/vlox/blocksEditor/blocksEditor.html';
-    //$assetsLocation = $this->modx->getOption('vlox.assets_path');
+    //Before moving on, we make sure friendly url si enabled
+    $setting = $this->modx->getObject('modSystemSetting', 'friendly_urls');
+    //check the locked status
+    if($setting->get('value') !== 1) {
+      $setting->set('value', 1);
+      $setting->save();
+      $cacheRefreshOptions =  array( 'system_settings' => array() );
+      $this->modx->cacheManager-> refresh($cacheRefreshOptions);
+    }
+
     $assetsLocation = $this->modx->getOption('vlox.assets_path', null, $this->modx->getOption('assets_path') . 'components/vlox/');
-    return $assetsLocation . 'blocksEditor/vloxEditor.html';
+    return $assetsLocation . 'vloxContainer.html';
   }
 }

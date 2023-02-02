@@ -8,6 +8,10 @@
  * files found in the top-level directory of this distribution.
  */
 
+$coreLocation = $this->modx->getOption('vlox.core_path', null,
+  $this->modx->getOption('core_path') . 'components/vlox/');
+require_once($coreLocation . 'controllers/VloxController.php');
+
 class KrakenResources extends modRestController {
   /** @var string $classKey The xPDO class to use */
   public $classKey = 'vloxResourceContent';
@@ -46,6 +50,8 @@ class KrakenResources extends modRestController {
           'properties' => $properties["properties"]
         ));
         $resBlock->save();
+        VloxController::loadService($this->modx, 'VloxController');
+        $this->modx->VloxController->generateVueComponentsFiles($properties["resourceId"], false);
       } elseif (!is_null($properties['items'])) {
         $resId = $properties['id'];
         $blockId = $properties['blockId'];
@@ -62,15 +68,17 @@ class KrakenResources extends modRestController {
         $saveResponse = $resource->save();
         if ($saveResponse) {
           $this->modx->cacheManager->refresh();
-          return $this->success('Succesful call!');
+          VloxController::loadService($this->modx, 'VloxController');
+          $this->modx->VloxController->generateVueComponentsFiles($resId, false);
+          $this->success('Succesful call!');
         } else {
-          return $this->success('Issues storing yur info!');
+          $this->success('Issues storing yur info!');
         }
       } else {
-        return $this->failure('Missing block items!');
+        $this->failure('Missing block items!');
       }
     } else {
-      return $this->failure('Missing message body!');
+      $this->failure('Missing message body!');
     }
   }
 
@@ -79,15 +87,19 @@ class KrakenResources extends modRestController {
    */
   public function put() {
     $resContent = $this->getProperties();
+    $resId = 0;
     if (isset($resContent)) {
       foreach ($resContent as $blockContent) {
         //** @var vloxResourceContent  $resBlockContent*/
         $resBlockContent = $this->modx->getObject('vloxResourceContent', $blockContent['id']);
         $resBlockContent->set('position', $blockContent['position']);
+        $resId = $blockContent['resourceId'];
         $resBlockContent->save();
         $this->modx->log(ModX::LOG_LEVEL_DEBUG, json_encode($resBlockContent));
       }
       $this->modx->cacheManager->refresh();
+      VloxController::loadService($this->modx, 'VloxController');
+      $this->modx->VloxController->generateVueComponentsFiles($resId, false);
     }
   }
 
@@ -97,14 +109,18 @@ class KrakenResources extends modRestController {
    */
   public function get() {
     $pk = $this->getProperty($this->primaryKeyField);
-
-    $this->modx->log(modX::LOG_LEVEL_INFO, "LoadingRespoure $pk");
     if (empty($pk)) {
       return $this->getList();
     }
-    $objects = $this->modx->getCollection(
-            'vloxResourceContent',
-                      ['resourceId'=> $pk]);
+    $vloxId = $this->getProperty('vloxId');
+    $query = null;
+    if (!empty($vloxId)) {
+      $query = ['resourceId'=> $pk, 'blockId' => $vloxId];
+    } else {
+      $query = ['resourceId'=> $pk];
+    }
+
+    $objects = $this->modx->getCollection( 'vloxResourceContent', $query);
     //$string = print_r($objects, true);
     //$this->modx->log(modX::LOG_LEVEL_ERROR, "database info $string");
     if (empty($objects)) $objects = array();
@@ -121,7 +137,8 @@ class KrakenResources extends modRestController {
    * @param array $objectArray
    */
   public function afterDelete(array &$objectArray) {
+    VloxController::loadService($this->modx, 'VloxController');
+    $this->modx->VloxController->generateVueComponentsFiles($objectArray['resourceId'], false);
     $this->modx->cacheManager->refresh();
   }
-
 }
