@@ -9,12 +9,18 @@
  */
 
 
-class KrakenIde extends  modRestController {
 
-  public function __construct(modX $modx,modRestServiceRequest $request,array $config = array()) {
+class VloxIde extends  \MODX\Revolution\Rest\modRestController {
+
+  private string $classPrefix = '';
+
+  public function __construct(modX $modx,\MODX\Revolution\Rest\modRestServiceRequest $request,array $config = array()) {
     $this->modx =& $modx;
     $this->request =& $request;
     $this->config = array_merge($this->config,$config);
+
+    $isMODX3 = $modx->getVersionData()['version'] >= 3;
+    $this->classPrefix = $isMODX3 ? 'MODX\Revolution\\' : '';
 
     $coreLocation = $this->modx->getOption('vlox.core_path', null,
       $this->modx->getOption('core_path') . 'components/vlox/');
@@ -67,7 +73,7 @@ class KrakenIde extends  modRestController {
   public function read($id) {
     if (!is_numeric($id)) {
       if ($id === 'RENDERER') {
-        $renderer = $this->modx->getObject('modResource', array('pagetitle' => 'vloxrenderer'));
+        $renderer = $this->modx->getObject($this->classPrefix . 'modResource', array('pagetitle' => 'vloxrenderer'));
         return $this->success('Ok', $renderer->get('id'));
       } elseif ($id === 'NPM') {
         $npmModules =  $this->modx->VloxController->getNpmModules();

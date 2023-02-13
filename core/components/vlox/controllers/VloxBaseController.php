@@ -24,8 +24,8 @@ class VloxBaseController {
     $this->modx->initialize('web');
     //$packagePath = $this->modx->getOption('vlox.core_path') . 'model/';
     $packagePath = $this->modx->getOption('vlox.core_path', null,
-        $this->modx->getOption('core_path') . 'components/vlox/'). 'model/';
-    if (!$this->modx->addPackage('vlox', $packagePath)) {
+        $this->modx->getOption('core_path') . 'components/vlox/'). 'src/Model/';
+    if (!$this->modx->addPackage('Vlox', $packagePath)) {
       $this->modx->log(xPDO::LOG_LEVEL_ERROR, "vlox package not found");
       throw new Exception("vlox package not found");
     }

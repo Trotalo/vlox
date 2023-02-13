@@ -1,0 +1,81 @@
+name: Vlox
+version: 0.2.0
+lowCaseName: vlox
+namespace: Vlox
+description: 'webpack integration extra for MOX3'
+author: camicase82
+
+menus:
+  - text: vlox.menu
+    description: vlox.menu_desc
+    action: manage
+
+systemSettings:
+  - key: build_path
+    area: build
+    value: _packages
+  - key: enable_debug
+    area: system
+    type: combo-boolean
+    value: 0
+
+database:
+  tables:
+    - Vlox\Model\VloxResourceContent
+    - Vlox\Model\VloxFragments
+
+templates:
+  - name: 'vloxTemplate'
+    file: 'vloxTemplate.html'
+
+resources:
+  - pagetitle: 'resEditor'
+    type: 'document'
+    content: 'hola mundo'
+    template: 0
+  - pagetitle: 'vloxEditor'
+    type: 'document'
+    content: 'hola mundo2'
+    template: 0
+  - pagetitle: 'vloxrenderer'
+    type: 'document'
+    content: 'hola mundo3'
+    template: 0
+
+snippets:
+  - name: 'generateVueComponentsFiles'
+    file: 'generateVueComponentsFiles.php'
+  - name: 'vloxRenderer'
+    file: 'vloxRenderer.php'
+  - name: 'vlox'
+    file: 'vlox.php'
+  - name: 'vueImportRenderer'
+    file: 'vueImportRenderer.php'
+  - name: 'updateAndRun'
+    file: 'updateAndRun.php'
+  - name: 'generateAppBody'
+    file: 'generateAppBody.php'
+
+chunks:
+  - name: 'head'
+    file: 'head.html'
+  - name: 'defaultApp'
+    file: 'defaultApp.html'
+  - name: 'mainJs'
+    file: 'main.js'
+  - name: 'editingAppChunk'
+    file: 'editingAppChunk.js'
+  - name: 'liveAppChunk'
+    file: 'liveAppChunk.js'
+
+plugins:
+  - name: 'vuexBlocksTab'
+    file: 'vuexBlocksTab.php'
+    events:
+      - OnDocFormPrerender
+
+
+
+
+
+

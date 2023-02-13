@@ -17,7 +17,7 @@ require_once 'VloxBaseController.php';
 /**
  * Loads the json from vlox_resource_content table
  */
-class VloxController extends  VloxBaseController{
+class VloxController extends  VloxBaseController {
 
 
 
@@ -420,7 +420,7 @@ class VloxController extends  VloxBaseController{
   private function loadResourceBlocks($resId) {
     $query = $this->modx->query(" 
       select blocks.chunkName, resourceContent.*
-      from modx_vlox_blocks as blocks, modx_vlox_resource_content as resourceContent
+      from modx_vlox_fragments as blocks, modx_vlox_resource_content as resourceContent
       where blocks.id = resourceContent.blockId
       and resourceContent.resourceId = $resId 
       order by resourceContent.position");

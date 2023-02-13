@@ -9,3 +9,8 @@ node_modules
 /core/components/vlox/vue-res/pidFile
 /core/components/vlox/vue-res/resId
 /core/components/vlox/vue-res/shared/
+/assets/components/vlox/compoSnapshots/
+/assets/components/vlox/resourceEditor/
+/assets/components/vlox/vloxEditor/
+/assets/components/vlox/ace-editor-modes/
+
