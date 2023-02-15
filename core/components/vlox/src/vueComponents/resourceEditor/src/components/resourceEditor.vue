@@ -92,7 +92,7 @@ export default {
       resultsList: [],
       renderDesktop: true,
       //localAddress: window.location.protocol + "//" + "192.168.0.107"/*window.location.hostname*/ + ':8080',
-      localAddress: window.location.protocol + "//" + window.location.hostname + ':8080',
+      localAddress: window.location.protocol + "//" + window.location.hostname + ':5173',
     }
   },
   methods: {

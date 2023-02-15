@@ -36,13 +36,7 @@ class VloxBlocks extends  modRestController {
 <template>
   <p>Create some content!</p>
 </template>
-<script>
-export default {
-  name: "[[+componentName]]",
-  
-};
-</script>
-<style scope lang="scss">
+<style scoped lang="scss">
 //Place styles here
 </style>
 STR;

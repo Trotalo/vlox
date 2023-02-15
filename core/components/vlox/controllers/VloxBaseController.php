@@ -10,6 +10,12 @@
 
 class VloxBaseController {
 
+  /** @var string $classPrefix */
+  public $vloxPrefix;
+
+  /** @var string $classPrefix */
+  public $modxPrefix;
+
   /** @var modX $modx */
   protected $modx;
 
@@ -34,13 +40,17 @@ class VloxBaseController {
       $this->modx->getOption('assets_path') . 'components/vlox/');
     $coreLocation = $this->modx->getOption('vlox.core_path', null,
       $this->modx->getOption('core_path') . 'components/vlox/');
-    $this->COMPONENTS_ROUTE = $coreLocation . 'vue-res/';
+    $this->COMPONENTS_ROUTE = $coreLocation . 'vue3-res/';
     //TODO delete this section after development
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
     $this->basePath = $this->modx->config['base_path'];
+
+    $isMODX3 = $this->modx->getVersionData()['version'] >= 3;
+    $this->vloxPrefix = $isMODX3 ? 'Vlox\Model\\' : '';
+    $this->modxPrefix = $isMODX3 ? 'MODX\Revolution\\' : '';
   }
 
   /** @param modX $modx */

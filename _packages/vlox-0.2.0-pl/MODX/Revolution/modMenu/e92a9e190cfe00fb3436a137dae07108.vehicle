@@ -1,0 +1,21 @@
+<?php return array (
+  'preserve_keys' => true,
+  'update_object' => true,
+  'unique_key' => 'text',
+  'related_object_attributes' => 
+  array (
+    'Children' => 
+    array (
+      'preserve_keys' => true,
+      'update_object' => true,
+      'unique_key' => 'text',
+    ),
+  ),
+  'vehicle_class' => 'xPDO\\Transport\\xPDOObjectVehicle',
+  'guid' => '616684f55069a0a77a44dda8e4501529',
+  'package' => '',
+  'class' => 'MODX\\Revolution\\modMenu',
+  'signature' => 'e92a9e190cfe00fb3436a137dae07108',
+  'native_key' => 'vlox.menu',
+  'object' => '{"text":"vlox.menu","parent":"components","action":"manage","description":"vlox.menu_desc","icon":"","menuindex":0,"params":"","handler":"","permissions":"","namespace":"vlox","menundex":"","permission":""}',
+);

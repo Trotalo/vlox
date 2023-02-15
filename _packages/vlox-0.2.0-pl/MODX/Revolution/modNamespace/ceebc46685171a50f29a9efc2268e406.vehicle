@@ -1,0 +1,35 @@
+<?php return array (
+  'unique_key' => 'name',
+  'preserve_keys' => true,
+  'update_object' => true,
+  'resolve' => 
+  array (
+    0 => 
+    array (
+      'type' => 'file',
+      'body' => '{"source":"vlox-0.2.0-pl\\/MODX\\/Revolution\\/modNamespace\\/ceebc46685171a50f29a9efc2268e406\\/0\\/","target":"return MODX_CORE_PATH . \'components\\/\';","name":"vlox"}',
+    ),
+    1 => 
+    array (
+      'type' => 'file',
+      'body' => '{"source":"vlox-0.2.0-pl\\/MODX\\/Revolution\\/modNamespace\\/ceebc46685171a50f29a9efc2268e406\\/1\\/","target":"return MODX_ASSETS_PATH . \'components\\/\';","name":"vlox"}',
+    ),
+    2 => 
+    array (
+      'type' => 'php',
+      'body' => '{"type":"php","source":"vlox-0.2.0-pl\\/MODX\\/Revolution\\/modNamespace\\/ceebc46685171a50f29a9efc2268e406.gpm.resolve.bootstrap.resolver","name":"gpm.resolve.bootstrap"}',
+    ),
+    3 => 
+    array (
+      'type' => 'file',
+      'body' => '{"source":"vlox-0.2.0-pl\\/MODX\\/Revolution\\/modNamespace\\/ceebc46685171a50f29a9efc2268e406\\/3\\/","target":"return MODX_CORE_PATH . \'components\\/vlox\\/docs\\/\';","name":"README.md"}',
+    ),
+  ),
+  'vehicle_class' => 'xPDO\\Transport\\xPDOObjectVehicle',
+  'guid' => 'dca922d707c290cea513ff3e1844e51e',
+  'package' => '',
+  'class' => 'MODX\\Revolution\\modNamespace',
+  'signature' => 'ceebc46685171a50f29a9efc2268e406',
+  'native_key' => 'vlox',
+  'object' => '{"name":"vlox","path":"{core_path}components\\/vlox\\/","assets_path":"{assets_path}components\\/vlox\\/"}',
+);

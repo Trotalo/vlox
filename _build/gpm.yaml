@@ -67,6 +67,8 @@ chunks:
     file: 'editingAppChunk.js'
   - name: 'liveAppChunk'
     file: 'liveAppChunk.js'
+  - name: 'vite.config'
+    file: 'vite.config.js'
 
 plugins:
   - name: 'vuexBlocksTab'

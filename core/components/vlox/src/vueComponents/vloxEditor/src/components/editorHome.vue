@@ -135,7 +135,8 @@ export default {
       showControls: false,
       inputFieldData: {},
       //localAddress: window.location.protocol + "//" + "192.168.0.107" + ':8080',
-      localAddress: window.location.protocol + "//" + window.location.hostname + ':8080',
+      //localAddress: window.location.protocol + "//" + window.location.hostname + ':5173',
+      localAddress: "http://" + window.location.hostname + ':5173',
       renderDesktop: true,
       rendererId: 0,
       //Ace editor section

@@ -32,7 +32,7 @@ class VloxController extends  VloxBaseController {
 
     $query = $this->modx->query(" 
       select blocks.chunkName, resourceContent.*
-      from modx_vlox_blocks as blocks, modx_vlox_resource_content as resourceContent
+      from modx_vlox_fragments as blocks, modx_vlox_resource_content as resourceContent
       where blocks.id = resourceContent.blockId
       and resourceContent.resourceId = $resId
       and resourceContent.blockId = $blockId 
@@ -63,7 +63,7 @@ class VloxController extends  VloxBaseController {
   public function generateGlobalComponents() {
     $query = $this->modx->query(' 
                               SELECT *
-                        FROM modx.modx_vlox_blocks
+                        FROM modx.modx_vlox_fragments
                         WHERE JSON_EXTRACT(properties, "$.type") = 1');
 
     if (is_null($query)) {
@@ -133,8 +133,8 @@ class VloxController extends  VloxBaseController {
     $parser = $this->modx->getParser();
     $maxIterations= (integer) $this->modx->getOption('parser_max_iterations', null, 10);
 
-    $currentResource = $this->modx->getObject('modDocument', $resId);
-    $vloxTemplate = $this->modx->getObject('modTemplate', ['templatename' =>'vloxTemplate']);
+    $currentResource = $this->modx->getObject($this->modxPrefix . 'modDocument', $resId);
+    $vloxTemplate = $this->modx->getObject($this->modxPrefix . 'modTemplate', ['templatename' =>'vloxTemplate']);
     //Prepare resource tv's
     $pdoTvs = $currentResource->getTemplateVars();
     $resTvs = array();
@@ -156,7 +156,7 @@ class VloxController extends  VloxBaseController {
       //TODO we need to get rid of this, this was the original idea for data admin, but we are using TVs and MIGx
       $blockContent = $this->buildJsonContent($chunkName, $resTvs, $compName);
 
-      $vloxRenderer = $this->modx->getObject('modResource', array('pagetitle' => 'vloxrenderer'));
+      $vloxRenderer = $this->modx->getObject($this->modxPrefix . 'modResource', array('pagetitle' => 'vloxrenderer'));
       if (empty($vloxTemplate) || empty($vloxRenderer)) {
         throw new Error("Basic Vlox elements missing, please reinstall!");
       }
@@ -271,7 +271,7 @@ class VloxController extends  VloxBaseController {
       $compName = strtolower($chunkName . '_' . $resBlockId);
       //$fileName = str_replace('.vue', $resBlockId . '.vue', $chunkName);
       $fileName = $compName;
-      $returnValue .= "import $compName from './components/$compName';\n";
+      $returnValue .= "import $compName from './components/$compName.vue';\n";
     }
     return $returnValue;
   }
@@ -307,6 +307,7 @@ class VloxController extends  VloxBaseController {
 
   /**
    * Method in charge of updating the package.json file to run a given component
+   * THIS IS FOR VUE2
    * @param $resId
    * @throws Exception
    */
@@ -325,6 +326,23 @@ class VloxController extends  VloxBaseController {
       file_put_contents($packageFileLocation, $newJsonString);
     } else {
       throw new Exception('Wrong permissions for: ' + $packageFileLocation);
+    }
+  }
+
+  /**
+   * updatePackage for vite on VUE3
+   * @param $resId
+   * @throws Exception
+   */
+  public function updateViteConfig($resId) {
+    $packageFileLocation = $this->COMPONENTS_ROUTE . 'vite.config.js';
+
+    $fileContents = $this->modx->getChunk('vite.config',array("project" => $resId));
+    //check if the file can be writen is_writable
+    if (is_writable($packageFileLocation)) {
+      file_put_contents($packageFileLocation, $fileContents);
+    } else {
+      throw new Exception('Wrong permissions for: ' . $packageFileLocation);
     }
   }
 
@@ -359,9 +377,14 @@ class VloxController extends  VloxBaseController {
       return false;
     }
   }
+  //TODO aca es el cambio para arranca el servidor de vue
+  public function launchViteServer($resId) {
+
+  }
 
   public function launchNodeServer($resId) {
-    $cmd = "npm --prefix $this->COMPONENTS_ROUTE run serve:$resId";
+    //$cmd = "npm --prefix $this->COMPONENTS_ROUTE run serve:$resId";
+    $cmd = "npm --prefix $this->COMPONENTS_ROUTE run dev";
     $outputfile = $this->COMPONENTS_ROUTE . 'npmOutPut';
     $pidfile = $this->COMPONENTS_ROUTE . 'pidFile';
     $resIdFile = $this->COMPONENTS_ROUTE . 'resId';

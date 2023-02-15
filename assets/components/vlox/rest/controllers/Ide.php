@@ -38,7 +38,8 @@ class VloxIde extends  \MODX\Revolution\Rest\modRestController {
       if (isset($resId) && isset($resContent['oper'])) {
         $isEditingVlox = $resContent['isEditingVlox'] === 0 ? true : false;
         if ($resContent['oper'] === 'RUN') {
-          $this->modx->VloxController->updatePackage($resId);
+          //$this->modx->VloxController->updatePackage($resId);
+          $this->modx->VloxController->updateViteConfig($resId);
           $this->modx->VloxController->generateVueComponentsFiles($resId, $isEditingVlox);
           $this->modx->VloxController->launchNodeServer($resId);
         } elseif ($resContent['oper'] === 'UPDATE') {
@@ -50,7 +51,8 @@ class VloxIde extends  \MODX\Revolution\Rest\modRestController {
                 VloxVueConfigurationController->modifyNpmModule($resContent['module'], $resId, $resContent['action']);
           return $this->success('success', $npmResponse);
         } elseif ($resContent['oper'] === 'BUILD') {
-          $this->modx->VloxController->updatePackage($resId);
+          //$this->modx->VloxController->updatePackage($resId);
+          $this->modx->VloxController->updateViteConfig($resId);
           $this->modx->VloxController->generateVueComponentsFiles($resId, $isEditingVlox);
           $npmResponse = $this->modx->
           VloxVueConfigurationController->buildResource($resId);
