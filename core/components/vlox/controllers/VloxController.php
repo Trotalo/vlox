@@ -152,7 +152,7 @@ class VloxController extends  VloxBaseController {
       //$this->modx->log(xPDO::LOG_LEVEL_ERROR, json_encode($row));
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
-      $compName = strtolower($chunkName . '_' . $resBlockId);
+      $compName = $chunkName . '_' . $resBlockId; //strtolower($chunkName . '_' . $resBlockId);
       //TODO we need to get rid of this, this was the original idea for data admin, but we are using TVs and MIGx
       $blockContent = $this->buildJsonContent($chunkName, $resTvs, $compName);
 
@@ -247,7 +247,7 @@ class VloxController extends  VloxBaseController {
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
       //$compName = strtolower(str_replace('.vue', '-' . $resBlockId, $chunkName));\
-      $compName = strtolower($chunkName . '_' . $resBlockId);
+      $compName = $chunkName . '_' . $resBlockId; //strtolower($chunkName . '_' . $resBlockId);
       //$fileName = str_replace('.vue', $resBlockId . '.vue', $chunkName);
       //$fileName = $compName . '.vue';
       $returnValue .= "$compName,\n";
@@ -268,7 +268,7 @@ class VloxController extends  VloxBaseController {
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
       //$compName = strtolower(str_replace('.vue', '-' . $resBlockId, $chunkName));\
-      $compName = strtolower($chunkName . '_' . $resBlockId);
+      $compName = $chunkName . '_' . $resBlockId; //strtolower($chunkName . '_' . $resBlockId);
       //$fileName = str_replace('.vue', $resBlockId . '.vue', $chunkName);
       $fileName = $compName;
       $returnValue .= "import $compName from './components/$compName.vue';\n";
@@ -286,7 +286,7 @@ class VloxController extends  VloxBaseController {
       //$this->modx->log(xPDO::LOG_LEVEL_ERROR, json_encode($row));
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
-      $compName = strtolower($chunkName . '_' . $resBlockId);
+      $compName = $chunkName . '_' . $resBlockId; //strtolower($chunkName . '_' . $resBlockId);
       /*if (! is_null($isEditingVlox) && $isEditingVlox === '1' ) {
         $scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '" style="max-width: fit-content;">';
       } else {
@@ -294,10 +294,10 @@ class VloxController extends  VloxBaseController {
       }*/
       $scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '">';
       //$scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '">';
-      $returnValue .= $scrollDiv;
+      //$returnValue .= $scrollDiv;
       //$returnValue .= "<$compName v-on:toggle-loading=\"toggleLoading\" v-on:show-error=\"toggleError\" ></$compName>";
-      $returnValue .= "<$compName></$compName>";
-      $returnValue .= "</div>";
+      $returnValue .= "<$compName />";
+      //$returnValue .= "</div>";
     }
     if (empty($returnValue)) {
       $returnValue = "<h1>There aren't any blocks assigned to this resource</h1>";
