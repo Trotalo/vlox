@@ -45,8 +45,10 @@ class VloxVueConfigurationController extends  VloxBaseController {
     return $npmRespose;
   }
 
+  //TODO ajustar para hacer el build basado en el parametro del proyecto, si no hay, el build tal como esta
+  //si esta, debe mandarlo es a la carpeta del otro extra
   public function buildResource($resId){
-    $cmd = "npm --prefix $this->COMPONENTS_ROUTE run build:$resId";
+    $cmd = "npm --prefix $this->COMPONENTS_ROUTE run build";
     $npmRespose = shell_exec($cmd);
     if( is_null($npmRespose)) {
       throw new Exception("The command $cmd failed! check your server logs");
@@ -168,6 +170,8 @@ class VloxVueConfigurationController extends  VloxBaseController {
     string $childFolder = ''
   ): void {
     $directory = opendir($sourceDirectory);
+    if (!$directory)
+      return;
 
     if (is_dir($destinationDirectory) === false) {
       mkdir($destinationDirectory);

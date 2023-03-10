@@ -3,11 +3,10 @@
 > vite
 
 
-  VITE v4.1.1  ready in 972 ms
+  VITE v4.1.1  ready in 909 ms
 
-  ➜  Local:   http://localhost:5173/
-  ➜  Network: http://172.20.0.3:5173/
-6:40:29 AM [vite] hmr update /src/components/GestionarSupervisores_14.vue
-6:40:54 AM [vite] hmr update /src/components/GestionarSupervisores_14.vue
-6:43:03 AM [vite] hmr update /src/components/GestionarSupervisores_14.vue
-6:44:08 AM [vite] hmr update /src/components/GestionarSupervisores_14.vue
+  ➜  Local:   https://localhost:5173/
+  ➜  Network: https://172.18.0.3:5173/
+8:10:34 PM [vite] http proxy error at /cronos/assets/components/cronos/images/users.jpg:
+Error: connect ETIMEDOUT 172.17.3.95:443
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1187:16)

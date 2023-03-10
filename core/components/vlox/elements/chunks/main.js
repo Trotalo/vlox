@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
-import { Quasar } from 'quasar'
+import { Quasar, Dialog, Loading } from 'quasar'
 
 import './assets/main.css'
 import '@quasar/extras/roboto-font/roboto-font.css'
@@ -17,7 +17,10 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(Quasar, {
-  plugins: {}, // import Quasar plugins and add here
+  plugins: {
+      Dialog,
+      Loading
+  }, // import Quasar plugins and add here
 })
 
 app.mount('#q-app')

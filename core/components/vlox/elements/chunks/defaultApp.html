@@ -13,7 +13,7 @@
     <q-header elevated class="bg-black">
       <q-toolbar>
         <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
-        <q-toolbar-title>Header</q-toolbar-title>
+        <q-toolbar-title>Height Access</q-toolbar-title>
       </q-toolbar>
     </q-header>
 
@@ -29,7 +29,7 @@
         <q-list>
 
           <template v-for="(menuItem, index) in menuList" :key="index">
-            <q-item clickable :active="menuItem.label === 'Outbox'" v-ripple>
+            <q-item clickable :active="menuItem.label === 'Outbox'" v-ripple @click="executeMethod(menuItem.method)">
               <q-item-section avatar>
                 <q-icon :name="menuItem.icon" />
               </q-item-section>
@@ -45,7 +45,8 @@
     </q-drawer>
 
     <q-page-container>
-      <q-page padding>
+      <!--<q-page padding>-->
+      <q-page padding class="q-gutter-md">
         <!--          <p v-for="n in 15" :key="n">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit nihil praesentium molestias a adipisci, dolore vitae odit, quidem consequatur optio voluptates asperiores pariatur eos numquam rerum delectus commodi perferendis voluptate?
                   </p>-->
@@ -58,26 +59,42 @@
 
 <script>
   import { ref } from 'vue'
+  import axios from 'axios'
+  import { useQuasar } from 'quasar'
   [[!vueImportRenderer? &imp=`true` &resId=`[[+resId]]`]]
   
+  const $q = useQuasar()
+  
   const menuList = [
-    {
+    /*{
       icon: 'settings',
       label: 'Settings',
       separator: false
-    },
+    },*/
     {
       icon: 'feedback',
       label: 'Ayuda',
-      separator: false
+      separator: false,
+      target: ''
     },
     {
       icon: 'logout',
       iconColor: 'primary',
-      label: 'Help',
-      separator: false
+      label: 'Salir',
+      separator: false,
+      method: 'logout'
     }
   ]
+  
+  const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': '*'
+      }
+    }
+    
   export default {
     setup () {
       return {
@@ -85,6 +102,45 @@
         menuList
       }
     },
+    methods: {
+      executeMethod(method) {
+          if (method){
+              this[method]();
+          }
+        
+      },
+      async logout() {
+          this.$q.loading.show({
+              delay: 400, // ms
+              message: 'Cerrando sesion...'
+            })
+          try {
+            const response = await axios({
+              method: "delete",
+              url: window.location.protocol + "//" + window.location.hostname  + "/cronos/assets/components/cronos/rest/index.php?_rest=Login"
+            }, axiosConfig)
+            /*formState.value = {
+              username: '',
+              password: '',
+            }*/
+            this.$q.loading.hide()
+            window.location.href = '/'
+            
+        
+          } catch (er) {
+            this.$q.loading.hide()
+            //showMessage(error.response.data.message)
+            alert(er)
+          }
+        }
+    },
     [[!vueImportRenderer? &resId=`[[+resId]]`]],
   }
 </script>
+
+<style lang="scss">
+.q-parallax__media > img {
+  min-width: 50% !important;
+}
+
+</style>

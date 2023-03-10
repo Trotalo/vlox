@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import fs from 'fs';
 
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 
@@ -24,7 +25,37 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: '5173'
+    https: {
+      key:  fs.readFileSync("./certs/ssl.key"),
+      cert: fs.readFileSync("./certs/ssl.crt"),
+      //ca: fs.readFileSync("../.local/share/mkcert/rootCA.pem")
 
-  }
+    },
+    port: '5173',
+    proxy: {
+      '^/cronos': {
+        target: 'https://172.17.3.95',
+        changeOrigin: true
+      },
+      '^/assets': {
+        target: 'https://172.17.3.95',
+        changeOrigin: true
+      },
+    }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        assetFileNames: (assetInfo) => {
+          let extType = assetInfo.name.split('.').at(1);
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
+            extType = 'img';
+          }
+          return `assets/[[+project]]/${extType}/[name]-[hash][extname]`;
+        },
+        chunkFileNames: 'assets/[[+project]]/js/[name]-[hash].js',
+        entryFileNames: 'assets/[[+project]]/js/[name]-[hash].js',
+      },
+    },
+  },
 })

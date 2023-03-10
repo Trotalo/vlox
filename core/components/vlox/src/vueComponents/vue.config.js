@@ -37,11 +37,11 @@ module.exports = {
     },
     proxy: {
       '^/vlox': {
-        target: 'https://172.17.3.91',
+        target: 'https://172.21.72.209',
         changeOrigin: true
       },
       '^/assets': {
-        target: 'https://172.17.3.91',
+        target: 'https://172.21.72.209',
         changeOrigin: true
       },
     }
