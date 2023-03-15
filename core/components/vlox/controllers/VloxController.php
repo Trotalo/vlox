@@ -334,10 +334,20 @@ class VloxController extends  VloxBaseController {
    * @param $resId
    * @throws Exception
    */
-  public function updateViteConfig($resId) {
+  public function updateViteConfig($resId, $build = false) {
     $packageFileLocation = $this->COMPONENTS_ROUTE . 'vite.config.js';
 
-    $fileContents = $this->modx->getChunk('vite.config',array("project" => $resId));
+
+    $fileContents = $this->modx->getChunk('vite.config',
+      array('project' => $resId, 'build' => $build));
+
+    $parser = $this->modx->getParser();
+    $maxIterations= (integer) $this->modx->getOption('parser_max_iterations', null, 10);
+    $parser->processElementTags('', $fileContents, false, false, '[[', ']]', [], $maxIterations);
+    // Parse uncached tags and remove anything that could not be processed
+    $parser->processElementTags('', $fileContents, true, true, '[[', ']]', [], $maxIterations);
+    //$finalBlock = $blockContent;
+
     //check if the file can be writen is_writable
     if (is_writable($packageFileLocation)) {
       file_put_contents($packageFileLocation, $fileContents);

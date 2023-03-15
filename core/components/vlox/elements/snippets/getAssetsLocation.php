@@ -1,4 +1,11 @@
 <?php
-
+$projectId = $scriptProperties['project'];
 $currentProject = $modx->getOption('vlox.project');
-return !empty($currentProject) ? "/$currentProject/" : '';
+
+if ($scriptProperties['build'] === '1' && !empty($currentProject)) {
+    return "assets/components/$currentProject/$projectId";
+} else {
+    return "assets/$projectId";
+}
+//assets/[[+project]]
+return;

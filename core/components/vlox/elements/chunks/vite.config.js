@@ -34,12 +34,14 @@ export default defineConfig({
     port: '5173',
     proxy: {
       '^/cronos': {
-        target: 'https://172.17.3.95',
-        changeOrigin: true
+        target: 'https://192.168.0.221',
+        changeOrigin: true,
+        secure: false,
       },
       '^/assets': {
-        target: 'https://172.17.3.95',
-        changeOrigin: true
+        target: 'https://192.168.0.221',
+        changeOrigin: true,
+        secure: false
       },
     }
   },
@@ -51,10 +53,13 @@ export default defineConfig({
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
             extType = 'img';
           }
-          return `assets/[[+project]]/${extType}/[name]-[hash][extname]`;
+          //return `assets/[[+project]]/${extType}/[name]-[hash][extname]`;
+          return `[[!getAssetsLocation? &project=`[[+project]]` &build=`[[+build]]`]]/${extType}/[name]-[hash][extname]`;
         },
-        chunkFileNames: 'assets/[[+project]]/js/[name]-[hash].js',
-        entryFileNames: 'assets/[[+project]]/js/[name]-[hash].js',
+        //chunkFileNames: 'assets/[[+project]]/js/[name]-[hash].js',
+        //entryFileNames: 'assets/[[+project]]/js/[name]-[hash].js',
+        chunkFileNames: '[[!getAssetsLocation? &project=`[[+project]]` &build=`[[+build]]`]]/js/[name]-[hash].js',
+        entryFileNames: '[[!getAssetsLocation? &project=`[[+project]]` &build=`[[+build]]`]]/js/[name]-[hash].js',
       },
     },
   },

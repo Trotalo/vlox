@@ -14,7 +14,8 @@ import '@quasar/extras/fontawesome-v6/fontawesome-v6.css'
 import 'quasar/src/css/index.sass'
 
 const app = createApp(App)
-
+app.provide('wsroute', '/assets/components/cronos/rest/index.php')
+app.provide('assetsRoute', '/assets/components/cronos/')
 app.use(createPinia())
 app.use(Quasar, {
   plugins: {

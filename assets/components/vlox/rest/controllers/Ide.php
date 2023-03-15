@@ -54,7 +54,7 @@ class VloxIde extends  \MODX\Revolution\Rest\modRestController {
           return $this->success('success', $npmResponse);
         } elseif ($resContent['oper'] === 'BUILD') {
           //$this->modx->VloxController->updatePackage($resId);
-          $this->modx->VloxController->updateViteConfig($resId);
+          $this->modx->VloxController->updateViteConfig($resId, true);
           $this->modx->VloxController->generateVueComponentsFiles($resId, $isEditingVlox);
           $npmResponse = $this->modx->
           VloxVueConfigurationController->buildResource($resId);
