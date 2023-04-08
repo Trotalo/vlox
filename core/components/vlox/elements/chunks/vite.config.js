@@ -1,10 +1,13 @@
 import { fileURLToPath, URL } from 'node:url'
+import { resolve, dirname } from "node:path";
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import fs from 'fs';
 
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
+
+import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,6 +18,9 @@ export default defineConfig({
     }),
     quasar({
       sassVariables: '[[+project]]/src/quasar-variables.sass'
+    }),
+    VueI18nPlugin({
+      include: resolve(dirname(fileURLToPath(import.meta.url)), './locales/**'),
     })
   ],
   resolve: {
@@ -34,12 +40,12 @@ export default defineConfig({
     port: '5173',
     proxy: {
       '^/cronos': {
-        target: 'https://192.168.0.221',
+        target: 'https://192.168.0.103',
         changeOrigin: true,
         secure: false,
       },
       '^/assets': {
-        target: 'https://192.168.0.221',
+        target: 'https://192.168.0.103',
         changeOrigin: true,
         secure: false
       },

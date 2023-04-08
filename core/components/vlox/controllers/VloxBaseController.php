@@ -48,9 +48,15 @@ class VloxBaseController {
 
     $this->basePath = $this->modx->config['base_path'];
 
-    $isMODX3 = $this->modx->getVersionData()['version'] >= 3;
-    $this->vloxPrefix = $isMODX3 ? 'Vlox\Model\\' : '';
-    $this->modxPrefix = $isMODX3 ? 'MODX\Revolution\\' : '';
+    if (!is_bool($this->modx->getVersionData()) ) {
+      $isMODX3 = $this->modx->getVersionData()['version'] >= 3;
+      $this->vloxPrefix = $isMODX3 ? 'Vlox\Model\\' : '';
+      $this->modxPrefix = $isMODX3 ? 'MODX\Revolution\\' : '';
+    } else {
+      $this->vloxPrefix = 'Vlox\Model\\';
+      $this->modxPrefix = 'MODX\Revolution\\';
+    }
+
   }
 
   /** @param modX $modx */

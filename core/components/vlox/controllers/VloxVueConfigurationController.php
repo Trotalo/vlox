@@ -68,6 +68,8 @@ class VloxVueConfigurationController extends  VloxBaseController {
     $localAssets = '';
     $assetsOrigin = '';
     $currentProject = $this->modx->getOption('vlox.project');
+    $defaultAssets = '';
+    $folderToDelete = '';
     //TODO pending to modify to make it both available rigth rigth away and inside the external project
     if ($deploy && !empty($currentProject)) {
       $baseAssets = $this->modx->getOption('assets_path');
@@ -75,6 +77,23 @@ class VloxVueConfigurationController extends  VloxBaseController {
       $last_slash = strrpos($baseAssets, '/');
       $localAssets = substr($baseAssets, 0, $last_slash)  . "/$currentProject/assets/components/$currentProject/";
       $assetsOrigin = $this->COMPONENTS_ROUTE . $resId . "/dist/assets/components/$currentProject/$resId";
+      $defaultAssets = $this->modx->getOption('assets_path') . "components/$currentProject/";
+
+      //in this section we copy to the default modx assets location to have it working locally
+      $folderToDelete = $defaultAssets . $resId;
+      $this->modx->log(xPDO::LOG_LEVEL_WARN, "Deleting: $folderToDelete is dir: " . is_dir($folderToDelete));
+      if(is_dir($folderToDelete)) {
+        if(!$this->delTree($folderToDelete)) {
+          throw new Exception('Failed to remove: ' . $localAssets . '/' . $resId);
+        }
+      }
+      //if we could delete the assets folder or it didnt exists, copy the generated resources
+
+      $this->recurseCopy($assetsOrigin, $defaultAssets . $resId, '');
+
+      //Copy the images
+      /*$this->recurseCopy($this->COMPONENTS_ROUTE . $resId . '/dist/img',
+        $defaultAssets . '/img', '');*/
     }else {
       $localAssets = $this->modx->getOption('assets_path');
       $assetsOrigin = $this->COMPONENTS_ROUTE . $resId . '/dist/assets/' . $resId;
@@ -187,7 +206,7 @@ class VloxVueConfigurationController extends  VloxBaseController {
       return;
 
     if (is_dir($destinationDirectory) === false) {
-      mkdir($destinationDirectory);
+      mkdir($destinationDirectory, 0777, true);
     }
 
     if ($childFolder !== '') {

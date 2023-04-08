@@ -39,7 +39,13 @@
             </q-item>
             <q-separator :key="'sep' + index"  v-if="menuItem.separator" />
           </template>
-
+          
+          <div>
+            <label for="locale">Locale: </label>
+            <select @change="changeLocale" id="locale">
+              <option v-for="locale in $i18n.availableLocales" :value="locale">{{ locale }}</option>
+            </select>
+          </div>
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -47,9 +53,6 @@
     <q-page-container>
       <!--<q-page padding>-->
       <q-page padding class="q-gutter-md">
-        <!--          <p v-for="n in 15" :key="n">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit nihil praesentium molestias a adipisci, dolore vitae odit, quidem consequatur optio voluptates asperiores pariatur eos numquam rerum delectus commodi perferendis voluptate?
-                  </p>-->
         [[!vlox? &resId=`[[+resId]]` &isEditingVlox=`[[+isEditingVlox]]`]]
       </q-page>
     </q-page-container>
@@ -57,15 +60,31 @@
 
 </template>
 
-<script>
-  import { ref } from 'vue'
+<script setup>
+  import { ref, inject } from 'vue'
+  import { getCurrentInstance } from '@vue/runtime-core';
+  import { toRaw } from '@vue/reactivity';
   import axios from 'axios'
   import { useQuasar } from 'quasar'
+  import { useI18n } from 'vue-i18n'
   [[!vueImportRenderer? &imp=`true` &resId=`[[+resId]]`]]
   
   const $q = useQuasar()
+  const { t, locale } = useI18n()
   
-  const menuList = [
+  const wsRoute = inject('wsroute')
+  
+  axios.defaults.withCredentials = true
+  
+  const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    }
+  
+  const menuList = ref([
     /*{
       icon: 'settings',
       label: 'Settings',
@@ -84,61 +103,49 @@
       separator: false,
       method: 'logout'
     }
-  ]
+  ])
   
-  const axiosConfig = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Origin': '*'
-      }
+  
+  const drawer = ref(false)
+  
+  const executeMethod = (methodName) => {
+    console.log('will try to call logiut!')
+    if (methods && methods[methodName]) {
+      methods[methodName]();
     }
-    
-  export default {
-    setup () {
-      return {
-        drawer: ref(false),
-        menuList
-      }
-    },
-    methods: {
-      executeMethod(method) {
-          if (method){
-              this[method]();
-          }
-        
-      },
-      async logout() {
-          this.$q.loading.show({
-              delay: 400, // ms
-              message: 'Cerrando sesion...'
-            })
-          try {
-            const response = await axios({
-              method: "delete",
-              url: window.location.protocol + "//" + window.location.hostname  + "/cronos/assets/components/cronos/rest/index.php?_rest=Login"
-            }, axiosConfig)
-            /*formState.value = {
-              username: '',
-              password: '',
-            }*/
-            this.$q.loading.hide()
-            window.location.href = '/'
-            
-        
-          } catch (er) {
-            this.$q.loading.hide()
-            //showMessage(error.response.data.message)
-            alert(er)
-          }
+  }
+  
+  function changeLocale(event) {
+      const newLocale = event.target.value
+      locale.value = newLocale
+    }
+  
+  const methods = {
+     async logout() {
+      $q.loading.show({
+        delay: 400, // ms
+        message: 'Cerrando sesion...'
+      })
+      try {
+        const response = await axios({
+          method: "delete",
+          url: window.location.protocol + "//" + window.location.hostname  + wsRoute + "?_rest=Login"
+        }, axiosConfig)
+        window.location.href = '/'
+        } catch (er) {
+          $q.loading.hide()
+          alert(er)
         }
-    },
-    [[!vueImportRenderer? &resId=`[[+resId]]`]],
+      }
   }
 </script>
 
 <style lang="scss">
+body.body--light {
+  color: black
+}
+
+
 .q-parallax__media > img {
   min-width: 50% !important;
 }
