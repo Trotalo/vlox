@@ -39,13 +39,18 @@
             </q-item>
             <q-separator :key="'sep' + index"  v-if="menuItem.separator" />
           </template>
-          
-          <div>
-            <label for="locale">Locale: </label>
-            <select @change="changeLocale" id="locale">
-              <option v-for="locale in $i18n.availableLocales" :value="locale">{{ locale }}</option>
+          <q-separator/>
+          <q-item>
+              <q-item-section avatar>
+                <q-icon name="flag" />
+              </q-item-section>
+              <q-item-section>
+                <select @change="changeLocale" id="locale">
+                <option v-for="locale in $i18n.availableLocales" :value="locale">{{ locale }}</option>
             </select>
-          </div>
+              </q-item-section>
+            </q-item>
+          
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -70,7 +75,7 @@
   [[!vueImportRenderer? &imp=`true` &resId=`[[+resId]]`]]
   
   const $q = useQuasar()
-  const { t, locale } = useI18n()
+  const { t, locale, availableLocales } = useI18n()
   
   const wsRoute = inject('wsroute')
   
@@ -92,14 +97,14 @@
     },*/
     {
       icon: 'feedback',
-      label: 'Ayuda',
+      label: t('main_menu_help'),
       separator: false,
       target: ''
     },
     {
       icon: 'logout',
       iconColor: 'primary',
-      label: 'Salir',
+      label: t('main_menu_exit'),
       separator: false,
       method: 'logout'
     }
