@@ -25,6 +25,9 @@
   "mng_act_confim_exit_text": "¿Estás seguro que quieres registrar esta salida?",
   "mng_act_entry_success": "Registro exitoso",
   "mng_act_select_person_picture_error": "Por favor selecciona una persona y una foto para el registro!",
+  "mng_act_select_create_entry_error": "Porfavor complete todos los datos del formulario",
+  "mng_act_select_project": "Selecciona un proyecto",
+
   "users_mgmnt": "XXXXX lexicons para seccion de gestion de usuario XXXXXXX",
   "users_mgmnt_card_title": "Gestionar Usuarios",
   "users_mgmnt_card_subtitle": "Crear o elimina supervisores y operarios",
@@ -53,5 +56,25 @@
 
   "login": "XXXXXXXXXXXXXXXXXXXXX Login section XXXXXXXXXXXXXXXXXXX",
   "login_title": "Gestion de ingresos y salidas",
-  "login_ok_button": "Ingresar"
+  "login_ok_button": "Ingresar",
+  "login_valid_email": "Ingresa un mail valido!.",
+  "login_valid_pass": "Ingresa tu password!.",
+
+  "main_menu": "XXXXXXXXXXXXXXXXXXXXX Main menu section XXXXXXXXXXXXXXXXXXX",
+  "main_menu_help": "Ayuda",
+  "main_menu_exit": "Salir",
+
+  "projects_mgmnt": "XXXXX lexicons para seccion de gestion de proyectos XXXXXXX",
+  "projects_mgmnt_card_title": "Gestionar Proyectos",
+  "projects_mgmnt_card_subtitle": "Crear proyectos",
+  "projects_mgmnt_list_title": "Administrar Proyectos",
+  "projects_mgmnt_new_usr_btn": "Nuevo Proyecto",
+  "projects_mgmnt_modal_title": "Crear Nuevo Proyecto",
+  "projects_mgmnt_modal_subtitle": "Digita un nombre para crear un nuevo proyecto.",
+  "projects_mgmnt_modal_val_name": "Ingresa un nombre!",
+  "projects_mgmnt_modal_val_dupname": "No puede haber nombres duplicados",
+  "projects_mgmnt_modal_confirm": "¿Estás seguro que quieres crear el proyecto {fullname}?",
+
+  "loading_location": "Cargando ubicacion...",
+  "failed_location": "No se pudo cargar la ubicacion, asegurate de tener el GPS encendido y de dar permisos"
 }

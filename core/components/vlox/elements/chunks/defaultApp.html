@@ -45,9 +45,11 @@
                 <q-icon name="flag" />
               </q-item-section>
               <q-item-section>
-                <select @change="changeLocale" id="locale">
-                <option v-for="locale in $i18n.availableLocales" :value="locale">{{ locale }}</option>
-            </select>
+                <select v-model="locale" id="locale">
+                  <!--<option v-for="locale in $i18n.availableLocales" :value="locale">{{ locale }}</option>-->
+                  <option value="en">English</option>
+                  <option value="es">Español</option>
+                </select>
               </q-item-section>
             </q-item>
           
@@ -99,7 +101,8 @@
       icon: 'feedback',
       label: t('main_menu_help'),
       separator: false,
-      target: ''
+      target: '',
+      method: 'openHelp'
     },
     {
       icon: 'logout',
@@ -141,6 +144,9 @@
           $q.loading.hide()
           alert(er)
         }
+      },
+      openHelp() {
+        window.open('https://wa.link/5bfj98', '_blank').focus();
       }
   }
 </script>

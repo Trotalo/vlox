@@ -21,14 +21,16 @@ const app = createApp(App)
 const i18n = createI18n({
   legacy: false,
   globalInjection: true,
-  locale: "en",
-  fallbackLocale: "es",
+  locale: "es",
+  fallbackLocale: "en",
   availableLocales: ["en", "es"],
   messages: messages,
 })
 
 app.provide('wsroute', '/assets/components/cronos/rest/index.php')
 app.provide('assetsRoute', '/assets/components/cronos/')
+app.provide('mapBoxKey' , 'pk.eyJ1IjoiY2FtaWNhc2U4MiIsImEiOiJja3lld3Z2eTcwZzlsMnFxa2t5eTd6d254In0.XEkd9yfN7-iEVR8FB-bUyQ')
+
 app.use(createPinia())
 app.use(Quasar, {
   plugins: {
