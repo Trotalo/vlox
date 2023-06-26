@@ -8,7 +8,7 @@
  * files found in the top-level directory of this distribution.
  */
 
-class KrakenFiles extends  modRestController {
+class VloxFiles extends  \MODX\Revolution\Rest\modRestController {
   /** @var string $classKey The xPDO class to use */
   public $classKey = 'none';
   /** @var string $defaultSortField The default field to sort by in the getList method */

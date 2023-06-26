@@ -1,0 +1,134 @@
+name: Vlox
+version: 0.2.0
+lowCaseName: vlox
+namespace: Vlox
+description: 'webpack integration extra for MOX3'
+author: camicase82
+
+menus:
+  - text: vlox.menu
+    description: vlox.menu_desc
+    action: manage
+
+systemSettings:
+  - key: build_path
+    area: build
+    value: _packages
+  - key: enable_debug
+    area: system
+    type: combo-boolean
+    value: 0
+
+database:
+  tables:
+    - Vlox\Model\VloxResourceContent
+    - Vlox\Model\VloxFragments
+
+templates:
+  - name: 'vloxTemplate'
+    file: 'vloxTemplate.html'
+
+resources:
+  - pagetitle: 'resEditor'
+    type: 'document'
+    content: '
+      <!DOCTYPE html>
+      <html lang="">
+      <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="icon" href="/favicon.ico">
+        <title>multi-code-project</title>
+        <link href="/assets/components/vlox/resourceEditor/css/app.02475123.css" rel="preload" as="style">
+        <link href="/assets/components/vlox/resourceEditor/css/chunk-vendors.b3e5da29.css" rel="preload" as="style">
+        <link href="/assets/components/vlox/resourceEditor/js/app.52fd5f73.js" rel="preload" as="script">
+        <link href="/assets/components/vlox/resourceEditor/js/chunk-vendors.f60dced2.js" rel="preload" as="script">
+        <link href="/assets/components/vlox/resourceEditor/css/chunk-vendors.b3e5da29.css" rel="stylesheet">
+        <link href="/assets/components/vlox/resourceEditor/css/app.02475123.css" rel="stylesheet">
+      </head>
+      <body>
+      <noscript><strong>We''re sorry but multi-code-project doesn''t work properly without JavaScript enabled. Please enable it
+               to continue.</strong></noscript>
+               <div id="app"></div>
+               <script src="/assets/components/vlox/resourceEditor/js/chunk-vendors.f60dced2.js"></script>
+               <script src="/assets/components/vlox/resourceEditor/js/app.52fd5f73.js"></script>
+               </body>
+               </html>
+    '
+    template: 0
+  - pagetitle: 'vloxEditor'
+    type: 'document'
+    content: '
+    <!DOCTYPE html>
+    <html lang="">
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <link rel="icon" href="/favicon.ico">
+      <title>multi-code-project</title>
+      <link href="/assets/components/vlox/vloxEditor/css/app.ecbcb3f7.css" rel="preload" as="style">
+      <link href="/assets/components/vlox/vloxEditor/css/chunk-vendors.be14c58f.css" rel="preload" as="style">
+      <link href="/assets/components/vlox/vloxEditor/js/app.9a0f5636.js" rel="preload" as="script">
+      <link href="/assets/components/vlox/vloxEditor/js/chunk-vendors.659475e9.js" rel="preload" as="script">
+      <link href="/assets/components/vlox/vloxEditor/css/chunk-vendors.be14c58f.css" rel="stylesheet">
+      <link href="/assets/components/vlox/vloxEditor/css/app.ecbcb3f7.css" rel="stylesheet">
+    </head>
+    <body>
+    <noscript><strong>We''re sorry but multi-code-project doesn''t work properly without JavaScript enabled. Please enable it
+               to continue.</strong></noscript>
+    <div id="app"></div>
+    <script src="/assets/components/vlox/vloxEditor/js/chunk-vendors.659475e9.js"></script>
+    <script src="/assets/components/vlox/vloxEditor/js/app.9a0f5636.js"></script>
+    </body>
+    </html>
+    '
+    template: 0
+  - pagetitle: 'vloxrenderer'
+    type: 'document'
+    content: 'hola mundo3'
+    template: 0
+
+snippets:
+  - name: 'generateVueComponentsFiles'
+    file: 'generateVueComponentsFiles.php'
+  - name: 'vloxRenderer'
+    file: 'vloxRenderer.php'
+  - name: 'vlox'
+    file: 'vlox.php'
+  - name: 'vueImportRenderer'
+    file: 'vueImportRenderer.php'
+  - name: 'updateAndRun'
+    file: 'updateAndRun.php'
+  - name: 'generateAppBody'
+    file: 'generateAppBody.php'
+  - name: 'getAssetsLocation'
+    file: 'getAssetsLocation.php'
+  - name: 'getWebservicesLocation'
+    file: 'getWebservicesLocation.php'
+chunks:
+  - name: 'head'
+    file: 'head.html'
+  - name: 'defaultApp'
+    file: 'defaultApp.html'
+  - name: 'mainJs'
+    file: 'main.js'
+  - name: 'editingAppChunk'
+    file: 'editingAppChunk.js'
+  - name: 'liveAppChunk'
+    file: 'liveAppChunk.js'
+  - name: 'vite.config'
+    file: 'vite.config.js'
+
+plugins:
+  - name: 'vuexBlocksTab'
+    file: 'vuexBlocksTab.php'
+    events:
+      - OnDocFormPrerender
+
+
+
+
+
+

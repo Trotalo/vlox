@@ -17,7 +17,7 @@ require_once 'VloxBaseController.php';
 /**
  * Loads the json from vlox_resource_content table
  */
-class VloxController extends  VloxBaseController{
+class VloxController extends  VloxBaseController {
 
 
 
@@ -32,7 +32,7 @@ class VloxController extends  VloxBaseController{
 
     $query = $this->modx->query(" 
       select blocks.chunkName, resourceContent.*
-      from modx_vlox_blocks as blocks, modx_vlox_resource_content as resourceContent
+      from modx_vlox_fragments as blocks, modx_vlox_resource_content as resourceContent
       where blocks.id = resourceContent.blockId
       and resourceContent.resourceId = $resId
       and resourceContent.blockId = $blockId 
@@ -63,7 +63,7 @@ class VloxController extends  VloxBaseController{
   public function generateGlobalComponents() {
     $query = $this->modx->query(' 
                               SELECT *
-                        FROM modx.modx_vlox_blocks
+                        FROM modx.modx_vlox_fragments
                         WHERE JSON_EXTRACT(properties, "$.type") = 1');
 
     if (is_null($query)) {
@@ -133,8 +133,8 @@ class VloxController extends  VloxBaseController{
     $parser = $this->modx->getParser();
     $maxIterations= (integer) $this->modx->getOption('parser_max_iterations', null, 10);
 
-    $currentResource = $this->modx->getObject('modDocument', $resId);
-    $vloxTemplate = $this->modx->getObject('modTemplate', ['templatename' =>'vloxTemplate']);
+    $currentResource = $this->modx->getObject($this->modxPrefix . 'modDocument', $resId);
+    $vloxTemplate = $this->modx->getObject($this->modxPrefix . 'modTemplate', ['templatename' =>'vloxTemplate']);
     //Prepare resource tv's
     $pdoTvs = $currentResource->getTemplateVars();
     $resTvs = array();
@@ -152,11 +152,11 @@ class VloxController extends  VloxBaseController{
       //$this->modx->log(xPDO::LOG_LEVEL_ERROR, json_encode($row));
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
-      $compName = strtolower($chunkName . '_' . $resBlockId);
+      $compName = $chunkName . '_' . $resBlockId; //strtolower($chunkName . '_' . $resBlockId);
       //TODO we need to get rid of this, this was the original idea for data admin, but we are using TVs and MIGx
       $blockContent = $this->buildJsonContent($chunkName, $resTvs, $compName);
 
-      $vloxRenderer = $this->modx->getObject('modResource', array('pagetitle' => 'vloxrenderer'));
+      $vloxRenderer = $this->modx->getObject($this->modxPrefix . 'modResource', array('pagetitle' => 'vloxrenderer'));
       if (empty($vloxTemplate) || empty($vloxRenderer)) {
         throw new Error("Basic Vlox elements missing, please reinstall!");
       }
@@ -247,7 +247,7 @@ class VloxController extends  VloxBaseController{
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
       //$compName = strtolower(str_replace('.vue', '-' . $resBlockId, $chunkName));\
-      $compName = strtolower($chunkName . '_' . $resBlockId);
+      $compName = $chunkName . '_' . $resBlockId; //strtolower($chunkName . '_' . $resBlockId);
       //$fileName = str_replace('.vue', $resBlockId . '.vue', $chunkName);
       //$fileName = $compName . '.vue';
       $returnValue .= "$compName,\n";
@@ -268,10 +268,10 @@ class VloxController extends  VloxBaseController{
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
       //$compName = strtolower(str_replace('.vue', '-' . $resBlockId, $chunkName));\
-      $compName = strtolower($chunkName . '_' . $resBlockId);
+      $compName = $chunkName . '_' . $resBlockId; //strtolower($chunkName . '_' . $resBlockId);
       //$fileName = str_replace('.vue', $resBlockId . '.vue', $chunkName);
       $fileName = $compName;
-      $returnValue .= "import $compName from './components/$compName';\n";
+      $returnValue .= "import $compName from './components/$compName.vue';\n";
     }
     return $returnValue;
   }
@@ -286,7 +286,7 @@ class VloxController extends  VloxBaseController{
       //$this->modx->log(xPDO::LOG_LEVEL_ERROR, json_encode($row));
       $chunkName = $row['chunkName'];
       $resBlockId = $row['id'];
-      $compName = strtolower($chunkName . '_' . $resBlockId);
+      $compName = $chunkName . '_' . $resBlockId; //strtolower($chunkName . '_' . $resBlockId);
       /*if (! is_null($isEditingVlox) && $isEditingVlox === '1' ) {
         $scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '" style="max-width: fit-content;">';
       } else {
@@ -294,10 +294,10 @@ class VloxController extends  VloxBaseController{
       }*/
       $scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '">';
       //$scrollDiv = '<div id="' . $row['id'] . '_' . $row['title'] . '">';
-      $returnValue .= $scrollDiv;
+      //$returnValue .= $scrollDiv;
       //$returnValue .= "<$compName v-on:toggle-loading=\"toggleLoading\" v-on:show-error=\"toggleError\" ></$compName>";
-      $returnValue .= "<$compName></$compName>";
-      $returnValue .= "</div>";
+      $returnValue .= "<$compName />";
+      //$returnValue .= "</div>";
     }
     if (empty($returnValue)) {
       $returnValue = "<h1>There aren't any blocks assigned to this resource</h1>";
@@ -307,6 +307,7 @@ class VloxController extends  VloxBaseController{
 
   /**
    * Method in charge of updating the package.json file to run a given component
+   * THIS IS FOR VUE2
    * @param $resId
    * @throws Exception
    */
@@ -325,6 +326,33 @@ class VloxController extends  VloxBaseController{
       file_put_contents($packageFileLocation, $newJsonString);
     } else {
       throw new Exception('Wrong permissions for: ' + $packageFileLocation);
+    }
+  }
+
+  /**
+   * updatePackage for vite on VUE3
+   * @param $resId
+   * @throws Exception
+   */
+  public function updateViteConfig($resId, $build = false) {
+    $packageFileLocation = $this->COMPONENTS_ROUTE . 'vite.config.js';
+
+
+    $fileContents = $this->modx->getChunk('vite.config',
+      array('project' => $resId, 'build' => $build));
+
+    $parser = $this->modx->getParser();
+    $maxIterations= (integer) $this->modx->getOption('parser_max_iterations', null, 10);
+    $parser->processElementTags('', $fileContents, false, false, '[[', ']]', [], $maxIterations);
+    // Parse uncached tags and remove anything that could not be processed
+    $parser->processElementTags('', $fileContents, true, true, '[[', ']]', [], $maxIterations);
+    //$finalBlock = $blockContent;
+
+    //check if the file can be writen is_writable
+    if (is_writable($packageFileLocation)) {
+      file_put_contents($packageFileLocation, $fileContents);
+    } else {
+      throw new Exception('Wrong permissions for: ' . $packageFileLocation);
     }
   }
 
@@ -359,9 +387,14 @@ class VloxController extends  VloxBaseController{
       return false;
     }
   }
+  //TODO aca es el cambio para arranca el servidor de vue
+  public function launchViteServer($resId) {
+
+  }
 
   public function launchNodeServer($resId) {
-    $cmd = "npm --prefix $this->COMPONENTS_ROUTE run serve:$resId";
+    //$cmd = "npm --prefix $this->COMPONENTS_ROUTE run serve:$resId";
+    $cmd = "npm --prefix $this->COMPONENTS_ROUTE run dev";
     $outputfile = $this->COMPONENTS_ROUTE . 'npmOutPut';
     $pidfile = $this->COMPONENTS_ROUTE . 'pidFile';
     $resIdFile = $this->COMPONENTS_ROUTE . 'resId';
@@ -420,7 +453,7 @@ class VloxController extends  VloxBaseController{
   private function loadResourceBlocks($resId) {
     $query = $this->modx->query(" 
       select blocks.chunkName, resourceContent.*
-      from modx_vlox_blocks as blocks, modx_vlox_resource_content as resourceContent
+      from modx_vlox_fragments as blocks, modx_vlox_resource_content as resourceContent
       where blocks.id = resourceContent.blockId
       and resourceContent.resourceId = $resId 
       order by resourceContent.position");

@@ -1,5 +1,6 @@
 assets/components/vlox/renderedBlocks/*.vue
 /_packages/vlox-0.0.1-pl
+_packages/vlox-0.2.0-pl
 vendor
 dist
 node_modules
@@ -9,3 +10,10 @@ node_modules
 /core/components/vlox/vue-res/pidFile
 /core/components/vlox/vue-res/resId
 /core/components/vlox/vue-res/shared/
+/assets/components/vlox/compoSnapshots/
+/assets/components/vlox/resourceEditor/
+/assets/components/vlox/vloxEditor/
+/assets/components/vlox/ace-editor-modes/
+/_build/gpm_resolvers/
+/_build/gpm_scripts/
+

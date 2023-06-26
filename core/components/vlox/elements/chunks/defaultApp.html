@@ -8,154 +8,157 @@
   -->
 
 <template>
-  <div id="app">
-    <div v-show="showLoading" class="loading">
-      <b-spinner variant="success" label="Spinning"></b-spinner>
-    </div>
-    [[!vlox? &resId=`[[+resId]]` &isEditingVlox=`[[+isEditingVlox]]`]]
-    <book-consultation @loaded="loaded" @opened="opened"></book-consultation>
-  </div>
+
+  <q-layout view="hHh Lpr lff" container style="height: 60em" class="shadow-2 rounded-borders">
+    <q-header elevated class="bg-black">
+      <q-toolbar>
+        <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+        <q-toolbar-title>Height Access</q-toolbar-title>
+      </q-toolbar>
+    </q-header>
+
+    <q-drawer
+      v-model="drawer"
+      show-if-above
+      :width="200"
+      :breakpoint="500"
+      bordered
+      class="bg-grey-3"
+    >
+      <q-scroll-area class="fit">
+        <q-list>
+
+          <template v-for="(menuItem, index) in menuList" :key="index">
+            <q-item clickable :active="menuItem.label === 'Outbox'" v-ripple @click="executeMethod(menuItem.method)">
+              <q-item-section avatar>
+                <q-icon :name="menuItem.icon" />
+              </q-item-section>
+              <q-item-section>
+                {{ menuItem.label }}
+              </q-item-section>
+            </q-item>
+            <q-separator :key="'sep' + index"  v-if="menuItem.separator" />
+          </template>
+          <q-separator/>
+          <q-item>
+              <q-item-section avatar>
+                <q-icon name="flag" />
+              </q-item-section>
+              <q-item-section>
+                <select v-model="locale" id="locale">
+                  <!--<option v-for="locale in $i18n.availableLocales" :value="locale">{{ locale }}</option>-->
+                  <option value="en">English</option>
+                  <option value="es">Español</option>
+                </select>
+              </q-item-section>
+            </q-item>
+          
+        </q-list>
+      </q-scroll-area>
+    </q-drawer>
+
+    <q-page-container>
+      <!--<q-page padding>-->
+      <q-page padding class="q-gutter-md">
+        [[!vlox? &resId=`[[+resId]]` &isEditingVlox=`[[+isEditingVlox]]`]]
+      </q-page>
+    </q-page-container>
+  </q-layout>
+
 </template>
 
-<script>
-  [[+isEditingVlox:is=`1`:then=`
-    import html2canvas from 'html2canvas';
-    import axios from "axios";
-    `]]
-  import Vue from "vue";
-
+<script setup>
+  import { ref, inject } from 'vue'
+  import { getCurrentInstance } from '@vue/runtime-core';
+  import { toRaw } from '@vue/reactivity';
+  import axios from 'axios'
+  import { useQuasar } from 'quasar'
+  import { useI18n } from 'vue-i18n'
   [[!vueImportRenderer? &imp=`true` &resId=`[[+resId]]`]]
-
-  Vue.prototype.$restRoute = '/vlox/assets/components/vlox';
-
-  export default {
-    name: 'App',
-    [[!vueImportRenderer? &resId=`[[+resId]]`]],
-    [[+isEditingVlox:is=`1`:then=`
-      mounted() {
-      setTimeout(()=>{
-        //Tawk section
-        const interval = setInterval(function() {
-          if (window.$_Tawk && window.$_Tawk.downloaded && window.$_Tawk.showWidget instanceof Function) {
-            window.$_Tawk.showWidget()
-            clearInterval(interval);
-          }
-        }, 500);
-        //Firt we pick the document
-        let doc = document.getElementById("app").firstChild.firstChild;
-        if (doc.offsetHeight === 0 || doc.offsetWidth === 0 ){
-          doc = document.getElementById("app").firstChild.firstChild.firstChild;
-        } else {
-          //check if we need to set the tmps style
-          const innerChild = document.getElementById("app").firstChild.firstChild.firstChild;
-          if (innerChild.offsetWidth !== doc.offsetWidth) {
-            doc.style['max-width'] = 'fit-content';
-          }
-        }
-        html2canvas(doc).then(canvas => {
-          canvas.toBlob((blob) => {
-            const formData = new FormData();
-            formData.append('img', blob, 'snapshot.png');
-
-            let axiosConfig = {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
-            };
-            axios.post(window.location.protocol + "//" + window.location.host + this.$restRoute +
-              '/rest/index.php?_rest=Blocks/' + "[[+resId]]",
-              formData,
-              axiosConfig)
-              .then(response => {
-                console.log(response);
-                doc.style['max-width'] = null;
-              })
-              .catch(error => {
-                console.log(error);
-              });
-          });
-        });
-      }, 1000);
-    },
-    `:else=`
-        mounted() {
-            //wait for the tawk api to load
-            const interval = setInterval(function() {
-              if (window.$_Tawk && window.$_Tawk.downloaded && window.$_Tawk.showWidget instanceof Function) {
-                window.$_Tawk.showWidget()
-                clearInterval(interval);
-              }
-            }, 500);
-        
-          },
-    `]]
-    data(){
-      return{
-        showLoading: false
-      }
-    },
-    methods: {
-      loaded(){
-        this.showLoading = false;
-      },
-      opened() {
-        this.showLoading = true;
-        setTimeout(() => {
-          this.showLoading = false;
-        }, 5000);
+  
+  const $q = useQuasar()
+  const { t, locale, availableLocales } = useI18n()
+  
+  const wsRoute = inject('wsroute')
+  
+  axios.defaults.withCredentials = true
+  
+  const axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     }
+  
+  const menuList = ref([
+    /*{
+      icon: 'settings',
+      label: 'Settings',
+      separator: false
+    },*/
+    {
+      icon: 'feedback',
+      label: t('main_menu_help'),
+      separator: false,
+      target: '',
+      method: 'openHelp'
+    },
+    {
+      icon: 'logout',
+      iconColor: 'primary',
+      label: t('main_menu_exit'),
+      separator: false,
+      method: 'logout'
+    }
+  ])
+  
+  
+  const drawer = ref(false)
+  
+  const executeMethod = (methodName) => {
+    console.log('will try to call logiut!')
+    if (methods && methods[methodName]) {
+      methods[methodName]();
+    }
+  }
+  
+  function changeLocale(event) {
+      const newLocale = event.target.value
+      locale.value = newLocale
+    }
+  
+  const methods = {
+     async logout() {
+      $q.loading.show({
+        delay: 400, // ms
+        message: 'Cerrando sesion...'
+      })
+      try {
+        const response = await axios({
+          method: "delete",
+          url: window.location.protocol + "//" + window.location.hostname  + wsRoute + "?_rest=Login"
+        }, axiosConfig)
+        window.location.href = '/'
+        } catch (er) {
+          $q.loading.hide()
+          alert(er)
+        }
+      },
+      openHelp() {
+        window.open('https://wa.link/5bfj98', '_blank').focus();
+      }
   }
 </script>
 
 <style lang="scss">
-html {
-	scroll-behavior: smooth;
+body.body--light {
+  color: black
 }
 
-#app {
-  font-family: Mount, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: left;
-  color: #2c3e50;
-  margin-top: 60px;
+
+.q-parallax__media > img {
+  min-width: 50% !important;
 }
 
-.small-width{
-  max-width: 85%;
-}
-
-.loading, .errorHandler {
-  margin-top: -60px;
-  position: fixed;
-  background: rgba(0,0,0,.65);
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
-}
-.loading{
-  span{
-    margin: 0 auto;
-    display: block;
-    color: red;
-  }
-}
-.loading .fa-spinner, .errorHandler .errorMessage {
-  color: white;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  font-size: 2rem;
-  transform: translate(-50%, -50%);
-}
-
-:target::before {
-  content: "";
-  display: block;
-  height: 70px; /* fixed header height*/
-  margin: -70px 0 0; /* negative fixed header height */
-}
 </style>

@@ -21,7 +21,7 @@
         <aggregate alias="EditedBy" class="modUser" local="editedby" foreign="id" cardinality="one" owner="foreign"/>
     </object>
 	
-	<object class="vloxBlocks" table="vlox_blocks" extends="xPDOSimpleObject">
+	<object class="vloxBlocks" table="vlox_fragments" extends="xPDOSimpleObject">
 	    <field key="chunkName" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
         <field key="title" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
         <field key="description" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>

@@ -9,12 +9,20 @@
  */
 
 
-class KrakenIde extends  modRestController {
 
-  public function __construct(modX $modx,modRestServiceRequest $request,array $config = array()) {
+
+
+class VloxIde extends  \MODX\Revolution\Rest\modRestController {
+
+  private string $classPrefix = '';
+
+  public function __construct(modX $modx,\MODX\Revolution\Rest\modRestServiceRequest $request,array $config = array()) {
     $this->modx =& $modx;
     $this->request =& $request;
     $this->config = array_merge($this->config,$config);
+
+    $isMODX3 = $modx->getVersionData()['version'] >= 3;
+    $this->classPrefix = $isMODX3 ? 'MODX\Revolution\\' : '';
 
     $coreLocation = $this->modx->getOption('vlox.core_path', null,
       $this->modx->getOption('core_path') . 'components/vlox/');
@@ -32,7 +40,8 @@ class KrakenIde extends  modRestController {
       if (isset($resId) && isset($resContent['oper'])) {
         $isEditingVlox = $resContent['isEditingVlox'] === 0 ? true : false;
         if ($resContent['oper'] === 'RUN') {
-          $this->modx->VloxController->updatePackage($resId);
+          //$this->modx->VloxController->updatePackage($resId);
+          $this->modx->VloxController->updateViteConfig($resId);
           $this->modx->VloxController->generateVueComponentsFiles($resId, $isEditingVlox);
           $this->modx->VloxController->launchNodeServer($resId);
         } elseif ($resContent['oper'] === 'UPDATE') {
@@ -44,7 +53,8 @@ class KrakenIde extends  modRestController {
                 VloxVueConfigurationController->modifyNpmModule($resContent['module'], $resId, $resContent['action']);
           return $this->success('success', $npmResponse);
         } elseif ($resContent['oper'] === 'BUILD') {
-          $this->modx->VloxController->updatePackage($resId);
+          //$this->modx->VloxController->updatePackage($resId);
+          $this->modx->VloxController->updateViteConfig($resId, true);
           $this->modx->VloxController->generateVueComponentsFiles($resId, $isEditingVlox);
           $npmResponse = $this->modx->
           VloxVueConfigurationController->buildResource($resId);
@@ -67,7 +77,7 @@ class KrakenIde extends  modRestController {
   public function read($id) {
     if (!is_numeric($id)) {
       if ($id === 'RENDERER') {
-        $renderer = $this->modx->getObject('modResource', array('pagetitle' => 'vloxrenderer'));
+        $renderer = $this->modx->getObject($this->classPrefix . 'modResource', array('pagetitle' => 'vloxrenderer'));
         return $this->success('Ok', $renderer->get('id'));
       } elseif ($id === 'NPM') {
         $npmModules =  $this->modx->VloxController->getNpmModules();

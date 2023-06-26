@@ -23,5 +23,6 @@ if (empty($resId) || is_null($resId) ) {
   throw new Exception("Missing params for: renderComponentsTag(resId: $resId)");
 }
 //TODO this must be changed go generate the tags
-$modx->VloxController->updatePackage($resId);
+//$modx->VloxController->updatePackage($resId);
+$modx->VloxController->updateViteConfig($resId);
 $modx->VloxController->launchNodeServer($resId);

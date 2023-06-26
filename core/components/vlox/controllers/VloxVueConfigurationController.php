@@ -45,8 +45,10 @@ class VloxVueConfigurationController extends  VloxBaseController {
     return $npmRespose;
   }
 
-  public function buildResource($resId){
-    $cmd = "npm --prefix $this->COMPONENTS_ROUTE run build:$resId";
+  //TODO ajustar para hacer el build basado en el parametro del proyecto, si no hay, el build tal como esta
+  //si esta, debe mandarlo es a la carpeta del otro extra
+  public function buildResource($resId, $deploy = true){
+    $cmd = "npm --prefix $this->COMPONENTS_ROUTE run build";
     $npmRespose = shell_exec($cmd);
     if( is_null($npmRespose)) {
       throw new Exception("The command $cmd failed! check your server logs");
@@ -63,7 +65,40 @@ class VloxVueConfigurationController extends  VloxBaseController {
       throw new Exception('Resource '.$resId.'not found');
     }
     //once the resource its updated copy the asset folders
-    $localAssets = $this->modx->getOption('assets_path');
+    $localAssets = '';
+    $assetsOrigin = '';
+    $currentProject = $this->modx->getOption('vlox.project');
+    $defaultAssets = '';
+    $folderToDelete = '';
+    //TODO pending to modify to make it both available rigth rigth away and inside the external project
+    if ($deploy && !empty($currentProject)) {
+      $baseAssets = $this->modx->getOption('assets_path');
+      $baseAssets = substr($baseAssets, 0 , strlen($baseAssets) - 1);
+      $last_slash = strrpos($baseAssets, '/');
+      $localAssets = substr($baseAssets, 0, $last_slash)  . "/$currentProject/assets/components/$currentProject/";
+      $assetsOrigin = $this->COMPONENTS_ROUTE . $resId . "/dist/assets/components/$currentProject/$resId";
+      $defaultAssets = $this->modx->getOption('assets_path') . "components/$currentProject/";
+
+      //in this section we copy to the default modx assets location to have it working locally
+      $folderToDelete = $defaultAssets . $resId;
+      $this->modx->log(xPDO::LOG_LEVEL_WARN, "Deleting: $folderToDelete is dir: " . is_dir($folderToDelete));
+      if(is_dir($folderToDelete)) {
+        if(!$this->delTree($folderToDelete)) {
+          throw new Exception('Failed to remove: ' . $localAssets . '/' . $resId);
+        }
+      }
+      //if we could delete the assets folder or it didnt exists, copy the generated resources
+
+      $this->recurseCopy($assetsOrigin, $defaultAssets . $resId, '');
+
+      //Copy the images
+      /*$this->recurseCopy($this->COMPONENTS_ROUTE . $resId . '/dist/img',
+        $defaultAssets . '/img', '');*/
+    }else {
+      $localAssets = $this->modx->getOption('assets_path');
+      $assetsOrigin = $this->COMPONENTS_ROUTE . $resId . '/dist/assets/' . $resId;
+    }
+
     $folderToDelete = $localAssets . $resId;
     $this->modx->log(xPDO::LOG_LEVEL_WARN, "Deleting: $folderToDelete is dir: " . is_dir($folderToDelete));
     if(is_dir($folderToDelete)) {
@@ -72,15 +107,14 @@ class VloxVueConfigurationController extends  VloxBaseController {
       }
     }
     //if we could delete the assets folder or it didnt exists, copy the generated resources
-    /*$cmd = sprintf("cp -r %s %s",
-      $this->COMPONENTS_ROUTE . $resId . '/dist/assets/' . $resId,
-      $localAssets . $resId);*/
-    $this->recurseCopy($this->COMPONENTS_ROUTE . $resId . '/dist/assets/' . $resId,
-      $localAssets . $resId, '');
+
+    $this->recurseCopy($assetsOrigin, $localAssets . $resId, '');
 
     //Copy the images
     $this->recurseCopy($this->COMPONENTS_ROUTE . $resId . '/dist/img',
       $this->basePath . '/img', '');
+
+    //finally if
 
     $this->modx->log(xPDO::LOG_LEVEL_INFO, "Copied elements $npmRespose");
     //finally, create the zip and return it to the client for downloading
@@ -97,7 +131,7 @@ class VloxVueConfigurationController extends  VloxBaseController {
     }
     $this->zipFolder($this->COMPONENTS_ROUTE . $resId . '/dist', $zip);
     $zip->close();
-    return "assets/$resId/$pageName.zip";
+    return str_replace('/var/www/html/', '', $zipLocation);
   }
 
   public function isNpmInstalled() {
@@ -168,9 +202,11 @@ class VloxVueConfigurationController extends  VloxBaseController {
     string $childFolder = ''
   ): void {
     $directory = opendir($sourceDirectory);
+    if (!$directory)
+      return;
 
     if (is_dir($destinationDirectory) === false) {
-      mkdir($destinationDirectory);
+      mkdir($destinationDirectory, 0777, true);
     }
 
     if ($childFolder !== '') {

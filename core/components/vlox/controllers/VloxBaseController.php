@@ -10,6 +10,12 @@
 
 class VloxBaseController {
 
+  /** @var string $classPrefix */
+  public $vloxPrefix;
+
+  /** @var string $classPrefix */
+  public $modxPrefix;
+
   /** @var modX $modx */
   protected $modx;
 
@@ -24,8 +30,8 @@ class VloxBaseController {
     $this->modx->initialize('web');
     //$packagePath = $this->modx->getOption('vlox.core_path') . 'model/';
     $packagePath = $this->modx->getOption('vlox.core_path', null,
-        $this->modx->getOption('core_path') . 'components/vlox/'). 'model/';
-    if (!$this->modx->addPackage('vlox', $packagePath)) {
+        $this->modx->getOption('core_path') . 'components/vlox/'). 'src/Model/';
+    if (!$this->modx->addPackage('Vlox', $packagePath)) {
       $this->modx->log(xPDO::LOG_LEVEL_ERROR, "vlox package not found");
       throw new Exception("vlox package not found");
     }
@@ -34,13 +40,23 @@ class VloxBaseController {
       $this->modx->getOption('assets_path') . 'components/vlox/');
     $coreLocation = $this->modx->getOption('vlox.core_path', null,
       $this->modx->getOption('core_path') . 'components/vlox/');
-    $this->COMPONENTS_ROUTE = $coreLocation . 'vue-res/';
+    $this->COMPONENTS_ROUTE = $coreLocation . 'vue3-res/';
     //TODO delete this section after development
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
     $this->basePath = $this->modx->config['base_path'];
+
+    if (!is_bool($this->modx->getVersionData()) ) {
+      $isMODX3 = $this->modx->getVersionData()['version'] >= 3;
+      $this->vloxPrefix = $isMODX3 ? 'Vlox\Model\\' : '';
+      $this->modxPrefix = $isMODX3 ? 'MODX\Revolution\\' : '';
+    } else {
+      $this->vloxPrefix = 'Vlox\Model\\';
+      $this->modxPrefix = 'MODX\Revolution\\';
+    }
+
   }
 
   /** @param modX $modx */

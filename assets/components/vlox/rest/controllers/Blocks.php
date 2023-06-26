@@ -8,31 +8,44 @@
  * files found in the top-level directory of this distribution.
  */
 
-class KrakenBlocks extends  modRestController {
+use MODX\Revolution\Rest\modRestController;
+use MODX\Revolution\Rest\modRestServiceRequest;
+
+class VloxBlocks extends  modRestController {
+
+  /** @var string $classPrefix */
+  public $vloxPrefix;
+
+  /** @var string $classPrefix */
+  public $modxPrefix;
+
   /** @var string $classKey The xPDO class to use */
-  public $classKey = 'vloxBlocks';
+  public $classKey = 'Vlox\Model\VloxFragments';
+
+  /** @var string $classAlias The alias of the class when used in the getList method */
+  public $classAlias  = 'VloxFragments';
+
   /** @var string $defaultSortField The default field to sort by in the getList method */
   public $defaultSortField = 'id';
   /** @var string $defaultSortDirection The default direction to sort in the getList method */
   public $defaultSortDirection = 'ASC';
 
+  public $primaryKeyField = 'id';
+
   private $defaultContent = <<<STR
 <template>
   <p>Create some content!</p>
 </template>
-<script>
-export default {
-  name: "[[+componentName]]",
-  
-};
-</script>
-<style scope lang="scss">
+<style scoped lang="scss">
 //Place styles here
 </style>
 STR;
 
   public function __construct(modX $modx,modRestServiceRequest $request,array $config = array()){
     parent::__construct($modx, $request, $config);
+    $isMODX3 = $modx->getVersionData()['version'] >= 3;
+    $this->vloxPrefix = $isMODX3 ? 'Vlox\Model\\' : '';
+    $this->modxPrefix = $isMODX3 ? 'MODX\Revolution\\' : '';
   }
 
 
@@ -51,7 +64,7 @@ STR;
       parent::read($id);
       //with the stored block we read the file and retrieve ewach section to be editable on the front
       $chunkName = $this->object->get('chunkName');
-      $chunk = $this->modx->getObject('modChunk', array('name'=>$chunkName));
+      $chunk = $this->modx->getObject($this->modxPrefix . 'modChunk', array('name'=>$chunkName));
       $blockContent = $chunk->get('snippet');
 
       $returnObject = array(
@@ -62,7 +75,7 @@ STR;
       $returnObject =  array_merge( $returnObject, (array) $this->object->_fields);
       //Before creating a new registry, we make sure the respurce its clean
       //first we make sure that the vlox renderer exists
-      $renderer = $this->modx->getObject('modResource', array('pagetitle' => 'vloxrenderer'));
+      $renderer = $this->modx->getObject($this->modxPrefix . 'modResource', array('pagetitle' => 'vloxrenderer'));
       if (empty($renderer)) {
         throw new Error("FATAL: RENDERER NOT FOUND!!!!!");
         //If the resources isn't crated
@@ -92,7 +105,7 @@ STR;
 
       }
       //We check if the friendUrl setting is enabled
-      $setting = $this->modx->getObject('modSystemSetting', 'friendly_urls');
+      $setting = $this->modx->getObject($this->modxPrefix . 'modSystemSetting', 'friendly_urls');
       //check the locked status
       if($setting->get('value') !== 1) {
         $setting->set('value', 1);
@@ -101,9 +114,9 @@ STR;
         $this->modx->cacheManager-> refresh($cacheRefreshOptions);
       }
 
-      $this->modx->removeCollection('vloxResourceContent', array('resourceId'=> $renderer->id));
-      /** @var vloxResourceContent $blockPreviewObj */
-      $blockPreviewObj = $this->modx->newObject('vloxResourceContent',
+      $this->modx->removeCollection( $this->vloxPrefix . 'VloxResourceContent', array('resourceId'=> $renderer->id));
+      /** @var VloxResourceContent $blockPreviewObj */
+      $blockPreviewObj = $this->modx->newObject($this->vloxPrefix . 'VloxResourceContent',
         array('position'=> 1,
           'title'=> 'compoRenderer',
           'description'=>'compoRenderer',
@@ -138,7 +151,7 @@ STR;
     require_once($coreLocation . 'controllers/VloxController.php');
 
     VloxController::loadService($this->modx, 'VloxController');
-
+    //TODO here we must change to the new loading stratey and have the load in a seprate function
     $chunk = $this->modx->getObject('modChunk', array('name'=>$chunkName));
     if (isset($chunk)) {
       //With te stored chunck now we
@@ -164,7 +177,7 @@ STR;
       $chunk->save();
       //and now we store the data into the vlox table
       /** @var vloxBlocks $vloxBlocks */
-      $vloxBlocks = $this->modx->newObject('vloxBlocks');
+      $vloxBlocks = $this->modx->newObject('Vlox\Model\VloxFragments');
       $vloxBlocks->set('chunkName',$chunkName);
       $vloxBlocks->set('title',$chunkName);
       $vloxBlocks->set('description',$description);

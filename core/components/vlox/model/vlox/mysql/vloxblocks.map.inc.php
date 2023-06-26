@@ -11,7 +11,7 @@
 $xpdo_meta_map['vloxBlocks']= array (
   'package' => 'vlox',
   'version' => '1.0',
-  'table' => 'vlox_blocks',
+  'table' => 'vlox_fragments',
   'extends' => 'xPDOSimpleObject',
   'tableMeta' => 
   array (

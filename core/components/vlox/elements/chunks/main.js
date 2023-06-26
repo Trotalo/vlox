@@ -1,36 +1,43 @@
-import Vue from 'vue'
-import App from "./App.vue";
-import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import { createI18n } from "vue-i18n"
+import App from './App.vue'
+import { Quasar, Dialog, Loading } from 'quasar'
 
-// Import Bootstrap an BootstrapVue CSS files (order is important)
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
+import './assets/main.css'
+import '@quasar/extras/roboto-font/roboto-font.css'
+import '@quasar/extras/material-icons/material-icons.css'
+import '@quasar/extras/material-icons-outlined/material-icons-outlined.css'
+import '@quasar/extras/material-icons-round/material-icons-round.css'
+import '@quasar/extras/fontawesome-v6/fontawesome-v6.css'
 
-// IMports for vuejs-dialog
-import VuejsDialog from "vuejs-dialog";
-// include the default style
-import "vuejs-dialog/dist/vuejs-dialog.min.css";
-import VueAwesomeSwiper from "vue-awesome-swiper";
+import messages from "@intlify/unplugin-vue-i18n/messages";
 
-import VueCalendly from 'vue-calendly';
+// Import Quasar css
+import 'quasar/src/css/index.sass'
 
-import Argon from "/plugins/argon-kit";
-import Tawk from 'vue-tawk'
+const app = createApp(App)
 
-
-
-// Tell Vue to install the plugin.
-Vue.use(VuejsDialog);
-Vue.use(BootstrapVue);
-Vue.use(IconsPlugin);
-Vue.use(VueAwesomeSwiper);
-Vue.use(VueCalendly);
-Vue.use(Argon);
-Vue.use(Tawk, {
-  tawkSrc: 'https://embed.tawk.to/5ea77dce69e9320caac7e615/default'
+const i18n = createI18n({
+  legacy: false,
+  globalInjection: true,
+  locale: "es",
+  fallbackLocale: "en",
+  availableLocales: ["en", "es"],
+  messages: messages,
 })
-Vue.config.productionTip = false
 
-new Vue({
-  render: h => h(App)
-}).$mount('#app')
+app.provide('wsroute', '/assets/components/cronos/rest/index.php')
+app.provide('assetsRoute', '/assets/components/cronos/')
+app.provide('mapBoxKey' , 'pk.eyJ1IjoiY2FtaWNhc2U4MiIsImEiOiJja3lld3Z2eTcwZzlsMnFxa2t5eTd6d254In0.XEkd9yfN7-iEVR8FB-bUyQ')
+
+app.use(createPinia())
+app.use(Quasar, {
+  plugins: {
+      Dialog,
+      Loading
+  }, // import Quasar plugins and add here
+})
+app.use(i18n)
+
+app.mount('#q-app')
