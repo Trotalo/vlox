@@ -14,10 +14,17 @@ systemSettings:
   - key: build_path
     area: build
     value: _packages
+  - key: project
+    area: build
+    type: combo-boolean
+    value: 0
   - key: enable_debug
     area: system
     type: combo-boolean
     value: 0
+
+
+
 
 database:
   tables:
