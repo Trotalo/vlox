@@ -11,13 +11,13 @@ import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  root: '23',
+  root: '20',
   plugins: [
     vue({
       template: { transformAssetUrls }
     }),
     quasar({
-      sassVariables: '23/src/quasar-variables.sass'
+      sassVariables: '20/src/quasar-variables.sass'
     }),
     VueI18nPlugin({
       include: resolve(dirname(fileURLToPath(import.meta.url)), './locales/**'),
@@ -25,8 +25,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./23/src', import.meta.url))
-      //'@': path.resolve(__dirname, '/23/src'),
+      '@': fileURLToPath(new URL('./20/src', import.meta.url))
+      //'@': path.resolve(__dirname, '/20/src'),
     }
   },
   server: {
@@ -59,13 +59,13 @@ export default defineConfig({
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
             extType = 'img';
           }
-          //return `assets/23/${extType}/[name]-[hash][extname]`;
-          return `assets/components/cronos/23/${extType}/[name]-[hash][extname]`;
+          //return `assets/20/${extType}/[name]-[hash][extname]`;
+          return `assets/20/${extType}/[name]-[hash][extname]`;
         },
-        //chunkFileNames: 'assets/23/js/[name]-[hash].js',
-        //entryFileNames: 'assets/23/js/[name]-[hash].js',
-        chunkFileNames: 'assets/components/cronos/23/js/[name]-[hash].js',
-        entryFileNames: 'assets/components/cronos/23/js/[name]-[hash].js',
+        //chunkFileNames: 'assets/20/js/[name]-[hash].js',
+        //entryFileNames: 'assets/20/js/[name]-[hash].js',
+        chunkFileNames: 'assets/20/js/[name]-[hash].js',
+        entryFileNames: 'assets/20/js/[name]-[hash].js',
       },
     },
   },

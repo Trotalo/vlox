@@ -23,9 +23,6 @@ systemSettings:
     type: combo-boolean
     value: 0
 
-
-
-
 database:
   tables:
     - Vlox\Model\VloxResourceContent
