@@ -33,11 +33,21 @@ class VloxBlocks extends  modRestController {
   public $primaryKeyField = 'id';
 
   private $defaultContent = <<<STR
+<script setup>
+  import {ref} from 'vue'
+  
+  const cont = ref(1)
+</script>
+
 <template>
-  <p>Create some content!</p>
+  <h1>Hello world of vue {{cont}}</h1>
+  <q-btn flat label="Count" color="primary"  @click="cont = cont + 1" />
+
 </template>
+
+
 <style scoped lang="scss">
-//Place styles here
+
 </style>
 STR;
 
