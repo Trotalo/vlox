@@ -1,5 +1,6 @@
 assets/components/vlox/renderedBlocks/*.vue
 /_packages/vlox-0.0.1-pl
+/_packages
 _packages/vlox-0.2.0-pl
 vendor
 dist
